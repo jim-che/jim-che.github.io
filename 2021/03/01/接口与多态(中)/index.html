@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="接口与多态(中)让我们来看看常见而实用的接口，下面的接口一定要理解并弄明白。 1. Serializable一个对象序列化的接口，一个类只有实现了Serializable接口，它的对象才能被序列化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接口与多态(中)">
+<meta property="og:url" content="http://example.com/2021/03/01/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81(%E4%B8%AD)/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="接口与多态(中)让我们来看看常见而实用的接口，下面的接口一定要理解并弄明白。 1. Serializable一个对象序列化的接口，一个类只有实现了Serializable接口，它的对象才能被序列化。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-01T02:19:48.000Z">
+<meta property="article:modified_time" content="2022-01-29T08:56:15.674Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="Java基础">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>接口与多态(中) - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="接口与多态(中)">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-01 10:19" pubdate>
+        2021年3月1日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      58 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">接口与多态(中)</h1>
+            
+            <div class="markdown-body">
+              <h2 id="接口与多态-中"><a href="#接口与多态-中" class="headerlink" title="接口与多态(中)"></a>接口与多态(中)</h2><p>让我们来看看常见而实用的接口，下面的接口一定要理解并弄明白。</p>
+<h3 id="1-Serializable"><a href="#1-Serializable" class="headerlink" title="1. Serializable"></a>1. Serializable</h3><p>一个对象序列化的接口，一个类只有实现了Serializable接口，它的对象才能被序列化。</p>
+<span id="more"></span>
+
+<h4 id="什么是序列化？"><a href="#什么是序列化？" class="headerlink" title="什么是序列化？"></a>什么是序列化？</h4><p>序列化是将对象状态转换为可保持或传输的格式的过程。与序列化相对的是反序列化，它将流转换为对象。这两个过程结合起来，可以轻松地存储和传输数据。</p>
+<p>当我们需要把对象的状态信息通过网络进行传输，或者需要将对象的状态信息持久化，以便将来使用时都需要把对象进行序列化。</p>
+<p><code>Serializable</code> 在源码上也只是一个声明，就是告知JVM，让JVM帮助这个类进行序列化，而自己不用具体去写方法。</p>
+<h4 id="为什么要定义serialversionUID变量"><a href="#为什么要定义serialversionUID变量" class="headerlink" title="为什么要定义serialversionUID变量"></a>为什么要定义serialversionUID变量</h4><p>如果我们标识了 <code>Serializable</code> 却没有具体实现，接口会默认生成一个 <code>serialVersionUID</code> 变量，但是接口端的 <code>serialVersionUID</code> 异常敏感，反序列化可能导致异常，所以建议自己定义一个 <code>serialVersionUID</code>。</p>
+<p>下面看一段示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></div></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">long</span> serialVersionUID = <span class="hljs-number">1L</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> salary;<br>    <span class="hljs-keyword">private</span> String name;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setSalary</span><span class="hljs-params">(<span class="hljs-keyword">int</span> salary)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.salary = salary;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Employee&#123;&quot;</span> +<br>                <span class="hljs-string">&quot;age=&quot;</span> + age +<br>                <span class="hljs-string">&quot;, salary=&quot;</span> + salary +<br>                <span class="hljs-string">&quot;, name=&#x27;&quot;</span> + name + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&#x27;&#125;&#x27;</span>;<br>    &#125;<br>&#125;<br><br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">writeEmployee</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">try</span>&#123;<br><br>            Employee em = <span class="hljs-keyword">new</span> Employee();<br><br>            em.setAge(<span class="hljs-number">18</span>);<br><br>            em.setName(<span class="hljs-string">&quot;abc&quot;</span>);<br><br>            em.setSalary(<span class="hljs-number">10000</span>);<br><br><br>            ObjectOutputStream objectOutputStream = <span class="hljs-keyword">new</span> ObjectOutputStream(<span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-keyword">new</span> File(<span class="hljs-string">&quot;abc&quot;</span>)));<br><br>            objectOutputStream.writeObject(em);<br>            System.out.println(<span class="hljs-string">&quot;序列化成功&quot;</span>);<br>            objectOutputStream.close();<br>        &#125; <span class="hljs-keyword">catch</span> (Exception ex) &#123;<br>            System.out.println(<span class="hljs-string">&quot;WriteEmployee&quot;</span> + ex.getMessage());<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Employee <span class="hljs-title">readEmployee</span><span class="hljs-params">()</span></span>&#123;<br>        Employee me = <span class="hljs-keyword">null</span>;<br><br>        <span class="hljs-keyword">try</span>&#123;<br>            ObjectInputStream objectInputStream = <span class="hljs-keyword">new</span> ObjectInputStream(<span class="hljs-keyword">new</span> FileInputStream(<span class="hljs-keyword">new</span> File(<span class="hljs-string">&quot;abc&quot;</span>)));<br><br>            me = (Employee) objectInputStream.readObject();<br><br>            System.out.println(<span class="hljs-string">&quot;反序列化成功&quot;</span>);<br><br>            System.out.println(me);<br>        &#125;<span class="hljs-keyword">catch</span> (Exception ex)&#123;<br>            System.out.println(<span class="hljs-string">&quot;readEmployee:&quot;</span>+ex.getMessage());<br>        &#125;<br>        <span class="hljs-keyword">return</span> me;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        writeEmployee();<br>        readEmployee();<br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">序列化成功<br>反序列化成功<br>Employee&#123;<span class="hljs-attribute">age</span>=18, <span class="hljs-attribute">salary</span>=10000, <span class="hljs-attribute">name</span>=<span class="hljs-string">&#x27;abc&#x27;</span>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>如果没 <code>serialversionUID</code> 在反序列化时候就回抛出异常，这个 <code>serialVersionUID</code> 的详细的工作机制是：在序列化的时候系统将 <code>serialVersionUID</code> 写入到序列化的文件中去，当反序列化的时候系统会先去检测文件中的 <code>serialVersionUID</code> 是否跟当前的文件的 <code>serialVersionUID</code> 是否一致，如果一直则反序列化成功，否则就说明当前类跟序列化后的类发生了变化，比如是成员变量的数量或者是类型发生了变化，那么在反序列化时就会发生 <code>crash</code> ，并且回报出错误。</p>
+<h3 id="2-Comparable-和-Comparator"><a href="#2-Comparable-和-Comparator" class="headerlink" title="2. Comparable 和 Comparator"></a>2. Comparable 和 Comparator</h3><p>顾名思义咯，俩兄弟都是比较两个对象用的，要的是学习两个独特的用法和区别。</p>
+<h4 id="Comparable"><a href="#Comparable" class="headerlink" title="Comparable"></a>Comparable</h4><p>先看源码</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-symbol">Comparable</span>&lt;<span class="hljs-symbol">T</span>&gt; &#123;<br>    <span class="hljs-built_in">int</span> compareTo(T t);<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>所以如果一个类实现了 <code>Comparable</code> 接口，一定需要重写 <code>compareTo</code> 方法，用自己给定的规则对两个创建的对象进行比较。</p>
+<p>示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Comparable</span>&lt;<span class="hljs-title">Employee</span>&gt; </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">long</span> serialVersionUID = <span class="hljs-number">1L</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> salary;<br>    <span class="hljs-keyword">private</span> String name;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Employee</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age, <span class="hljs-keyword">int</span> salary, String name)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>        <span class="hljs-keyword">this</span>.salary = salary;<br>        <span class="hljs-keyword">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(Employee o)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.salary - o.salary;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        Employee a = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">18</span>, <span class="hljs-number">100</span>, <span class="hljs-string">&quot;A&quot;</span>);<br>        Employee b = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">18</span>, <span class="hljs-number">101</span>, <span class="hljs-string">&quot;B&quot;</span>);<br><br>        <span class="hljs-keyword">if</span>(a.compareTo(b)&gt;<span class="hljs-number">0</span>)&#123;<br>            System.out.println(a.name+<span class="hljs-string">&quot;工资高&quot;</span>);<br>        &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(a.compareTo(b)==<span class="hljs-number">0</span>)&#123;<br>            System.out.println(<span class="hljs-string">&quot;一样高&quot;</span>);<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            System.out.println(b.name+<span class="hljs-string">&quot;工资高&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">B</span>工资高<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>我们看 <code>Comparable</code> 接口还是比较简单的，只需要实现 <code>comparaTo</code> 方法即可，如果指定对象的类型与此对象不能进行比较，则引发 <code>ClassCastException</code> 异常（引入泛型可以规避这种情况）。</p>
+<h4 id="Comparator"><a href="#Comparator" class="headerlink" title="Comparator"></a>Comparator</h4><p>先看一下源码</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-symbol">CmowerComparator</span> <span class="hljs-symbol">implements</span> <span class="hljs-symbol">Comparator</span>&lt;<span class="hljs-symbol">Cmower</span>&gt; &#123;<br>    @Override<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> compare(Cmower o1, Cmower o2) &#123;<br>        <span class="hljs-keyword">return</span> o1.getAge() - o2.getAge();<br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>实际上是要你重写类，以及如何比较的方法，举个例子。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> salary;<br>    <span class="hljs-keyword">private</span> String name;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Employee</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age, <span class="hljs-keyword">int</span> salary, String name)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>        <span class="hljs-keyword">this</span>.salary = salary;<br>        <span class="hljs-keyword">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getSalary</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> salary;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        Employee a = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">18</span>, <span class="hljs-number">100</span>, <span class="hljs-string">&quot;A&quot;</span>);<br>        Employee b = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">18</span>, <span class="hljs-number">101</span>, <span class="hljs-string">&quot;B&quot;</span>);<br>        Employee c = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">18</span>, <span class="hljs-number">99</span>, <span class="hljs-string">&quot;C&quot;</span>);<br>        List&lt;Employee&gt; list = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>        list.add(a);<br>        list.add(b);<br>        list.add(c);<br><br>        list.sort(<span class="hljs-keyword">new</span> EmployeeComparator());<br><br>        <span class="hljs-keyword">for</span>(Employee i:list)&#123;<br>            System.out.println(i.getName());<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EmployeeComparator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Comparator</span>&lt;<span class="hljs-title">Employee</span>&gt;</span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compare</span><span class="hljs-params">(Employee o1, Employee o2)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> o1.getSalary() - o2.getSalary();<br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs css">C<br><span class="hljs-selector-tag">A</span><br><span class="hljs-selector-tag">B</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>显然，已经按照工资的顺序排列了。</p>
+<p><code>Comparator</code> 的具体作用就是判断大小的基础上应用如排序方法。</p>
+<h4 id="二者区别"><a href="#二者区别" class="headerlink" title="二者区别"></a>二者区别</h4><ul>
+<li>一个类实现了 <code>Comparable</code> 接口，意味着该类的对象可以直接进行比较（排序），但比较（排序）的方式只有一种，很单一。</li>
+<li>一个类如果想要保持原样，又需要进行不同方式的比较（排序），就可以定制比较器（实现 <code>Comparator</code> 接口）。</li>
+<li><code>Comparable</code> 接口在 <code>java.lang</code> 包下，而 <code>Comparator</code> 接口在 <code>java.util</code> 包下，算不上是亲兄弟，但可以称得上是表（堂）兄弟。</li>
+</ul>
+<h3 id="3-Cloneable"><a href="#3-Cloneable" class="headerlink" title="3. Cloneable"></a>3. Cloneable</h3><p>标记一个类是可以深复制的，在<a target="_blank" rel="noopener" href="https://www.dmxcg.xyz/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95(%E4%B8%8A)/">另一篇博客</a>中讲到如何使用的方法。</p>
+<h3 id="4-Iterable-和-Iterator"><a href="#4-Iterable-和-Iterator" class="headerlink" title="4. Iterable 和 Iterator"></a>4. Iterable 和 Iterator</h3><p>先看源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Iterable</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;<br>  <span class="hljs-function">Iterator&lt;T&gt; <span class="hljs-title">iterator</span><span class="hljs-params">()</span></span>;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Iterator</span>&lt;<span class="hljs-title">E</span>&gt; </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">hasNext</span><span class="hljs-params">()</span></span>;<br>  <span class="hljs-function">E <span class="hljs-title">next</span><span class="hljs-params">()</span></span>;<br>  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">remove</span><span class="hljs-params">()</span></span>;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p><code>Interable</code> 只是返回了 <code>Intertor</code> 的一个实例，原因是实现了 <code>Iterable</code> 的类可以在实现多个 <code>Iterator</code> 内部类，例如 <code>LinkedList</code> 中的 <code>ListItr</code> 和 <code>DescendingIterator</code> 两个内部类，就分别实现了双向遍历和逆序遍历。通过返回不同的Iterator实现不同的遍历方式，这样更加灵活。如果把两个接口合并，就没法返回不同的 <code>Iterator</code> 实现类了。</p>
+<p>上个代码，直观地展示一下实现了 <code>Iterable</code> 的类如何通过返回不同的 <code>Iterator</code> 从而实现不同的遍历方式。 <code>MutilIterator</code> 实现了三种迭代器，分别是默认的前向迭代器，反向迭代器和随机迭代器。主函数中分别调用了三种迭代器进行遍历。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MutilIterator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Iterable</span>&lt;<span class="hljs-title">String</span>&gt;</span>&#123;<br><br>    <span class="hljs-keyword">private</span> String[] words = <span class="hljs-string">&quot;May I get offers this summer.&quot;</span>.split(<span class="hljs-string">&quot; &quot;</span>);<br><br>    <span class="hljs-comment">// 默认迭代器，前向遍历</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Iterator&lt;String&gt; <span class="hljs-title">iterator</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Iterator&lt;String&gt;() &#123;<br>            <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> index = <span class="hljs-number">0</span>;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">hasNext</span><span class="hljs-params">()</span> </span>&#123;<br>                <span class="hljs-keyword">return</span> index &lt; words.length;<br>            &#125;<br><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">next</span><span class="hljs-params">()</span> </span>&#123;<br>                <span class="hljs-keyword">return</span> words[index++];<br>            &#125;<br><br>        &#125;;<br>    &#125;<br><br>    <span class="hljs-comment">// 反向迭代器</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Iterable&lt;String&gt; <span class="hljs-title">reverseItertor</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Iterable&lt;String&gt;() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-function"><span class="hljs-keyword">public</span> Iterator&lt;String&gt; <span class="hljs-title">iterator</span><span class="hljs-params">()</span> </span>&#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Iterator&lt;String&gt;() &#123;<br>                    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> index = words.length - <span class="hljs-number">1</span>;<br>                    <span class="hljs-meta">@Override</span><br>                    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">hasNext</span><span class="hljs-params">()</span> </span>&#123;<br>                        <span class="hljs-keyword">return</span> index&gt;-<span class="hljs-number">1</span>;<br>                    &#125;<br><br>                    <span class="hljs-meta">@Override</span><br>                    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">next</span><span class="hljs-params">()</span> </span>&#123;<br>                        <span class="hljs-keyword">return</span> words[index--];<br>                    &#125;<br>                &#125;;<br>            &#125;<br>        &#125;;<br>    &#125;<br><br>    <span class="hljs-comment">//随机迭代器，注意这里不是创建一个新的Iterator，而是返回了一个打乱的List中的迭代器</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Iterable&lt;String&gt; <span class="hljs-title">randomized</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Iterable&lt;String&gt;() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-function"><span class="hljs-keyword">public</span> Iterator&lt;String&gt; <span class="hljs-title">iterator</span><span class="hljs-params">()</span> </span>&#123;<br>                List&lt;String&gt; shuffled = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(words));<br>                Collections.shuffle(shuffled, <span class="hljs-keyword">new</span> Random(<span class="hljs-number">47</span>));<br>                <span class="hljs-keyword">return</span> shuffled.iterator();<br>            &#125;<br>        &#125;;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        MutilIterator mi = <span class="hljs-keyword">new</span> MutilIterator();<br><br>        <span class="hljs-keyword">for</span>(String i:mi)&#123;<br>            System.out.print(i + <span class="hljs-string">&quot; &quot;</span>);<br>        &#125;<br>        System.out.println();<br><br>        <span class="hljs-keyword">for</span>(String i:mi.reverseItertor())&#123;<br>            System.out.print(i + <span class="hljs-string">&quot; &quot;</span>);<br>        &#125;<br>        System.out.println();<br><br>        <span class="hljs-keyword">for</span>(String i:mi.randomized())&#123;<br>            System.out.print(i + <span class="hljs-string">&quot; &quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>以上就是三个常见的迭代器的用法。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/01/leetcode124-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E7%9A%84%E6%9C%80%E5%A4%A7%E8%B7%AF%E5%BE%84%E5%92%8C/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">leetcode124.二叉树中的最大路径和</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/01/Markdown%E8%BF%9B%E9%98%B6%E8%AF%AD%E6%B3%95/">
+                        <span class="hidden-mobile">Markdown进阶语法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

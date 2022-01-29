@@ -1,0 +1,543 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="类与继承1. 定义类 类(class)是构造对象的模板与蓝图，由类构造(construct)对象的过程称之为实例(instance) 。标准JAVA库中提供了几千个类可用于各种目的。 封装(encapsulation)从形式上看，封装就是把数据和行为组合在一个包里，并对对象的使用者隐藏具体的实现方式。对象中的数据称之为实例字段(instance field)，操作数据的过程称为方法(method)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java类与继承">
+<meta property="og:url" content="http://example.com/2021/02/24/Java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="类与继承1. 定义类 类(class)是构造对象的模板与蓝图，由类构造(construct)对象的过程称之为实例(instance) 。标准JAVA库中提供了几千个类可用于各种目的。 封装(encapsulation)从形式上看，封装就是把数据和行为组合在一个包里，并对对象的使用者隐藏具体的实现方式。对象中的数据称之为实例字段(instance field)，操作数据的过程称为方法(method)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/02/24/Java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/chain.png">
+<meta property="article:published_time" content="2021-02-24T02:09:11.000Z">
+<meta property="article:modified_time" content="2022-01-29T02:10:13.308Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="Java基础">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2021/02/24/Java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/chain.png">
+  
+  
+  <title>Java类与继承 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java类与继承">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-02-24 10:09" pubdate>
+        2021年2月24日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      44 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java类与继承</h1>
+            
+            <div class="markdown-body">
+              <h2 id="类与继承"><a href="#类与继承" class="headerlink" title="类与继承"></a>类与继承</h2><h3 id="1-定义类"><a href="#1-定义类" class="headerlink" title="1. 定义类"></a><strong>1. 定义类</strong></h3><hr>
+<p>类(class)是构造对象的模板与蓝图，由类构造(construct)对象的过程称之为实例(instance) 。标准JAVA库中提供了几千个类可用于各种目的。</p>
+<p>封装(encapsulation)从形式上看，封装就是把数据和行为组合在一个包里，并对对象的使用者隐藏具体的实现方式。对象中的数据称之为实例字段(instance field)，操作数据的过程称为方法(method)。作为一个类的实例，特定对象都有一组特定的实例字段值。这些值的集合就是这个对象的当前状态，再类上调用任何方法都可能改变的个状态。</p>
+<p><strong>· 举例:</strong></p>
+<figure class="highlight processing"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></div></td><td class="code"><pre><code class="hljs processing"><span class="hljs-keyword">public</span> class Employee &#123;<br>    <span class="hljs-comment">// instance field</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">String</span> name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">double</span> salary;<br>    <span class="hljs-keyword">private</span> LocalDate hireDay;<br>    <br>    <span class="hljs-comment">// constructor</span><br>    <span class="hljs-keyword">public</span> Employee(<span class="hljs-keyword">String</span> n, <span class="hljs-keyword">double</span> s, <span class="hljs-built_in">int</span> <span class="hljs-built_in">year</span>, <span class="hljs-built_in">int</span> <span class="hljs-built_in">month</span>, <span class="hljs-built_in">int</span> <span class="hljs-built_in">day</span>)<br>    &#123;<br>        name = n;<br>        salary = s;<br>        hireDay = LocalDate.of(<span class="hljs-built_in">year</span>, <span class="hljs-built_in">month</span>, <span class="hljs-built_in">day</span>);<br>    &#125;<br>    <br>    <span class="hljs-comment">// a method</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">String</span> getName()&#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br>    ...<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-继承类"><a href="#2-继承类" class="headerlink" title="2. 继承类"></a><strong>2. 继承类</strong></h3><hr>
+<h4 id="2-1-定义子类"><a href="#2-1-定义子类" class="headerlink" title="2.1 定义子类"></a>2.1 定义子类</h4><p>假设Manager和Employee的关系，继承Employee类来定义Manager，使用关键字extends来辨表示继承。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Manager</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Employee</span></span>&#123;<br>    add methods and fields<br>&#125;<br><span class="hljs-type">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>关键字extends表明正在构造的新类派生于一个已存在的类。这个已存在的类称为超类(superclass)，基类(base class)，父类(parent class); 新类称为子类(subclass)。一般称为超类与子类。</p>
+<p>在Manager类中可以设立新的方法，Employee类的对象不可用。Employee类中的一切public方法在Manager中可用。</p>
+<h4 id="2-2-覆盖方法"><a href="#2-2-覆盖方法" class="headerlink" title="2.2 覆盖方法"></a>2.2 覆盖方法</h4><p>以上的Employee类为例，salary是一个私有变量，所以在Manager类中不能直接调用，在不改变私有的情况下，如何使用salary变量?</p>
+<p>可以使用Employee中的public方法getsalary()返回salary，当然Manager类同样继承了salary方法，在salary()中调用salary()会构成无限递归，此时可以使用:</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">super</span>.getSalary()<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>这个语句调用的是超类中的方法。要使用这个变量可以用<code>double salary = super.getSalary();</code>来得到数值。</p>
+<p>子类不能删除任何超类中的字段。</p>
+<h4 id="2-3-子类构造器"><a href="#2-3-子类构造器" class="headerlink" title="2.3 子类构造器"></a>2.3 子类构造器</h4><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs processing">Public Manager(<span class="hljs-keyword">String</span> name, <span class="hljs-keyword">double</span> salary, <span class="hljs-built_in">int</span> <span class="hljs-built_in">year</span>, <span class="hljs-built_in">int</span> <span class="hljs-built_in">month</span>, <span class="hljs-built_in">int</span> <span class="hljs-built_in">day</span>)<br>&#123;<br>    <span class="hljs-keyword">super</span>(name, salary, <span class="hljs-built_in">year</span>, <span class="hljs-built_in">month</span>, <span class="hljs-built_in">day</span>);<br>    bonus = <span class="hljs-number">0</span>;<span class="hljs-comment">//Manager类比子类多了bones字段</span><br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p><code>super(name, salary, year, month, day);</code>是调用超类的构造器。</p>
+<p>如果子类的构造器没有显示的调用超类的构造器，讲自动地调用超类的无参构造器。如果超类没有无参构造器，Java便会报告一个错误。</p>
+<p>如果声明一个Employee对象 e， e既可以引用Employee类型的变量，也可以引用Manager类型的变量。虚拟机知道e的实际引用对象类型，可以正确的调用相应的方法。</p>
+<p>一个对象可以指示多种实际类型的现象称为多态(polymorphism)。在运行时候能够动态的选择适用的方法，称为动态绑定(dynamic binding)。</p>
+<h4 id="2-4-继承层次"><a href="#2-4-继承层次" class="headerlink" title="2.4 继承层次"></a>2.4 继承层次</h4><p>继承不仅限于一个层次。例如Manager类同样可以派生出新的类。由一个公共超类派生出的所有类的集合称为继承层次(inheritance hierarchy)。在继承层次中，从某个特定的类到其祖先的路径称为该类的继承链(inheritance chain)。</p>
+<p><a target="_blank" rel="noopener" href="https://www.dmxcg.xyz/img/Java/chain.png"><img src="/2021/02/24/Java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/chain.png" srcset="/img/loading.gif" lazyload alt="inheritance chain"></a></p>
+<h4 id="2-5-多态"><a href="#2-5-多态" class="headerlink" title="2.5 多态"></a>2.5 多态</h4><p>继承的规则为“is-a”关系，例如每个经理都是员工，但每个员工并不是经理，所以讲Manager类设计为Employee的子类是有道理的。</p>
+<p>“is-a”规则的另一种表述是替换原则(substitution principle)。他指出程序中出现超类对象任何地方都可以使用子类对象替换。</p>
+<p><strong>例如:</strong></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs haxe">Employee e;<br>e = <span class="hljs-keyword">new</span> <span class="hljs-type">Employee</span>(...); <span class="hljs-comment">//Employee object expected</span><br>e = <span class="hljs-keyword">new</span> <span class="hljs-type">Manager</span>(...); <span class="hljs-comment">//OK, Manager can be used as well</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>正如上述的代码，Java中，对象变量是多态的(polymorphic)，一个超类可以引用其任何一个子类。</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs haxe">Manager boss = <span class="hljs-keyword">new</span> <span class="hljs-type">Manager</span>(...);<br>Employee[] staff = <span class="hljs-keyword">new</span> <span class="hljs-type">Employee</span>[<span class="hljs-number">3</span>];<br>staff[<span class="hljs-number">0</span>] = boss;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>是完全正确的。</p>
+<p>但是超类的引用不能赋给子类变量</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">Manager m = staff[i]; <span class="hljs-regexp">//</span>ERROR<br>Copy<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-6-理解方法调用"><a href="#2-6-理解方法调用" class="headerlink" title="2.6 理解方法调用"></a>2.6 理解方法调用</h4><p>准确地理解如何在对象上应用方法调用很重要。下面假设要调用x.f(args)，隐式参数x声明为类C的一个对象。下面是调用过程的详细描述：</p>
+<ol>
+<li><p>编译器查看对象地声明类型和方法名。注意可能存在多个方法名为f但是参数类型不一样的方法。例如f(int)/f(String)。编译器会一一列举C类中所有名为f的方法和其超类中所有名为f而且可访问的方法。(除private方法)</p>
+</li>
+<li><p>接下来，编译器要确定方法中调用的参数类型。如果在所有名为f的方法中存在一个与提供参数类型完全匹配的方法，就选用这个方法。这个过程称为重载解析(overloading resolution)。如果编译器没有找到参数类型匹配的方法，或者类型转换后有多个方法匹配，编译器会报告一个错误。</p>
+<p><strong>PS:</strong></p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stata">例如，<span class="hljs-built_in">f</span>(int)和<span class="hljs-built_in">f</span>(String)是两个有相同名字不同签名的方法。<br>如果子类中定义了一个和超类签名相同的方法，那么子类中这个方法就会覆盖掉超类中这个相同签名的方法。<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure></li>
+<li><p>如果是private方法、 static方法、 final方法或者构造器，那么编译器将可以准确地知道应该调用哪个方法。这称为静态绑定(static binding)。相对应的，如果调用的方法依赖于隐式参数的实际类型，就必须运行时使用动态绑定。</p>
+</li>
+<li><p>程序运行并且采用动态绑定调用方法时，虚拟机必须调用与x所引用对象的实际类型对于的那个方法。假设x的实际类型是D，它是C类的子类。如果D类定义了方法f(String)，就会调用这个方法；否则，将在D类的超类中寻找f(String)，以此类推。</p>
+</li>
+</ol>
+<p>每次调用方法都要完成这个搜索，事件开销相当大。因此虚拟机预先为每个类计算了一个方法表(method table)，其中列出所有方法的签名和要调用的实际方法。这样一来在真正调用的时候，虚拟机查这个表就可以了。</p>
+<h4 id="2-7-阻止继承-final类和方法"><a href="#2-7-阻止继承-final类和方法" class="headerlink" title="2.7 阻止继承: final类和方法"></a>2.7 阻止继承: final类和方法</h4><p>不允许扩展的类被称为final类。在定义类的时候使用了final修饰符就表明了这个类是final类。</p>
+<p>声明格式如下:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Manager</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Employee</span></span><br>&#123;<br>    ...<br>&#125;<br><span class="hljs-type">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>类中的某个特定方法也可以被声明为final。如果这样做，子类就不能覆盖这个方法。</p>
+<p>例如:</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span></span><br><span class="hljs-class">&#123;</span><br>    ...<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">String</span> <span class="hljs-title">getName</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br>    ...<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>字段同样可以声明final。对于字段来说赋值final之后就不允许在改变值。同样，将方法和类声明final原因是确保它们不会再子类中被改变语义。String是常见的final类。</p>
+<h4 id="2-8-强制类型转换"><a href="#2-8-强制类型转换" class="headerlink" title="2.8 强制类型转换"></a>2.8 强制类型转换</h4><p>将一个类型强制转换成另一种类型在Java中提供了一种特殊表示方法:</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">double</span> x = <span class="hljs-number">3.405</span>;<br><span class="hljs-keyword">int</span> nx = (<span class="hljs-keyword">int</span>) x;<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>将表达式x的值舍去了小数部分。</p>
+<p>有时候需要将某个类的对象引用转换成另一个类的对象引用。要完成对象引用的强制类型转换:</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs abnf">staff[<span class="hljs-number">0</span>] = boss<span class="hljs-comment">;</span><br>Manager boss = (Manager) staff[<span class="hljs-number">0</span>]<span class="hljs-comment">;</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>进行强制类型转换的唯一原因是：要在暂时忽视对象地实际类型之后使用对象的全部功能。例如，staff数组必须是Employee对象的数组，但我们需要将经理的元素复原成Manager对象，以便能访问新增加的所有变量。</p>
+<p>如果一个子类的引用付给一个超类变量，是允许的。但超类的引用赋予一个子类变量，如果没有提前处理，将产生一个ClassCastException异常。因此，在进行强制转换之前，先查看是否能成功地转换。为此需要使用instanceof操作符</p>
+<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs prolog">if(staff[<span class="hljs-number">1</span>] instanceof <span class="hljs-symbol">Manager</span>)<br>&#123;<br>    boss = (<span class="hljs-symbol">Manager</span>) staff[<span class="hljs-number">1</span>];<br>    ...<br>&#125;<br><span class="hljs-symbol">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>综上所述，只能在继承层次内进行强制转换，且在超类强制转换成子类之前，应该使用instanaceof进行检查。</p>
+<p><strong>一般情况下，尽量少用强制类型转换与instanceof运算符</strong></p>
+<h4 id="2-9-抽象类"><a href="#2-9-抽象类" class="headerlink" title="2.9 抽象类"></a>2.9 抽象类</h4><p>在继承结构中，位于上层的类更具有一般性，即抽象性。比如，员工是一个人，学生也是一个人，人在他们的更上层。</p>
+<p>为什么要提供一个高层次的抽象呢？每个人都有一些属性，如姓名。学生与员工都有姓名属性，因此通过引入一个公共的超类，我们就可以吧getName方法放在继承层次结构中的更高一层。</p>
+<p>如果一个方法在员工和学生身上是截然不同的，例如调用工作方法，员工是上班而学生是上课。这时候就可以使用abstract关键字，这样就完全不用实现这个方法了。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-function"><span class="hljs-keyword">public</span> abstract <span class="hljs-keyword">String</span> <span class="hljs-title">getJob</span><span class="hljs-params">()</span></span>;<span class="hljs-comment">//no implement required</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>为了提高程序的清晰度，包含一个或多个抽象方法的类本身必须被声明为对象的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> String <span class="hljs-title">gerJob</span><span class="hljs-params">()</span></span>;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>除了抽象方法，抽象类还可以包含字段和具体方法。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-built_in">String</span> name;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-title">Person</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>)</span><br>    &#123;<br>        <span class="hljs-built_in">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-built_in">String</span> getJob();<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">String</span> <span class="hljs-function"><span class="hljs-title">getName</span>(<span class="hljs-params"></span>)</span><br>    &#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>抽象方法在子类中具体实现。扩展抽象类可以有两种选择。一种是在子类中保留抽象类中的部分或所有抽象方法仍未定义，这样就必须将子类也标记未抽象类；另一种做法就是定义全部方法，这样一来，子类就不是抽象的了。</p>
+<p>即使不含有抽象方法，也可以将类声明为抽象类。</p>
+<p>抽象类不能实例化。也就是说，如果讲一个类声明为abstract，就不能创建这个类的对象。例如:</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">new</span> Person(<span class="hljs-string">&quot;Name&quot;</span>);<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>需要注意，可以定义一个抽象类的对象变量，但是这样一个变量只能引用非抽象子类的对象。例如:</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">Person p</span> = nwe Student(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;...&quot;</span>);<br><span class="hljs-attribute">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>这里p是一个抽象类型的Person变量，它引用了一个非抽象子类Student的实例。</p>
+<h4 id="2-10-受保护访问"><a href="#2-10-受保护访问" class="headerlink" title="2.10 受保护访问"></a>2.10 受保护访问</h4><p>大部分情况，我们将类中的字段标记为private，而方法标记为public。任何声明为private的内容对其他类都是不可见得。</p>
+<p>不过有些时候，你可能希望限制超类中的某个方法只允许子类访问，更少见的，可能希望允许子类的方法访问超类的某些字段。为此，需要将这些方法声明为保护(pretected)。</p>
+<p>在Java中，保护字段只能由同一个包中的类访问。</p>
+<p><strong>小结</strong><br><strong>1. 仅本类可见——private。</strong><br><strong>2. 对外部完全可见——public</strong><br><strong>3. 对本包合所有子类可见——protected</strong><br><strong>4. 对本包可见——默认，不需要修饰符</strong></p>
+<h4 id="2-11-参考文献"><a href="#2-11-参考文献" class="headerlink" title="2.11 参考文献"></a>2.11 参考文献</h4><ol>
+<li>Java核心技术 卷一(第11版) P155 </li>
+<li>Java编程思想(第4版) P125 </li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/02/24/%E5%A6%82%E4%BD%95%E4%B8%8A%E7%BA%BF%E4%B8%80%E4%B8%AA%E5%88%B6%E4%BD%9C%E5%AE%8C%E6%88%90%E7%9A%84%E7%BD%91%E9%A1%B5%E9%A1%B9%E7%9B%AE/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">如何上线一个制作完成的网页项目</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/02/23/leetcode1052-%E7%88%B1%E7%94%9F%E6%B0%94%E7%9A%84%E4%B9%A6%E5%BA%97%E8%80%81%E6%9D%BF/">
+                        <span class="hidden-mobile">leetcode1052.爱生气的书店老板</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一切皆对象:Object类的11个方法(上)重要性Object类是一切Java中一切类默认的超类，是包括自建类的所有类继承的一个很重要的类。所有类都可以调用其中的11种方法，这十一种方法具有十分的通用性与易用性，要求每一个都熟练理解并掌握。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一切皆对象:Object类的11个方法">
+<meta property="og:url" content="http://example.com/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8A%EF%BC%89/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="一切皆对象:Object类的11个方法(上)重要性Object类是一切Java中一切类默认的超类，是包括自建类的所有类继承的一个很重要的类。所有类都可以调用其中的11种方法，这十一种方法具有十分的通用性与易用性，要求每一个都熟练理解并掌握。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8A%EF%BC%89/equals1.jpg">
+<meta property="og:image" content="http://example.com/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8A%EF%BC%89/JVM1.jpg">
+<meta property="og:image" content="http://example.com/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8A%EF%BC%89/JVM2.jpg">
+<meta property="article:published_time" content="2021-02-25T02:12:05.000Z">
+<meta property="article:modified_time" content="2022-01-29T08:39:47.180Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="Java基础">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8A%EF%BC%89/equals1.jpg">
+  
+  
+  <title>一切皆对象:Object类的11个方法 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="一切皆对象:Object类的11个方法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-02-25 10:12" pubdate>
+        2021年2月25日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      66 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">一切皆对象:Object类的11个方法</h1>
+            
+            <div class="markdown-body">
+              <h2 id="一切皆对象-Object类的11个方法-上"><a href="#一切皆对象-Object类的11个方法-上" class="headerlink" title="一切皆对象:Object类的11个方法(上)"></a>一切皆对象:Object类的11个方法(上)</h2><h3 id="重要性"><a href="#重要性" class="headerlink" title="重要性"></a>重要性</h3><p>Object类是一切Java中一切类默认的超类，是包括自建类的所有类继承的一个很重要的类。所有类都可以调用其中的11种方法，这十一种方法具有十分的通用性与易用性，要求每一个都熟练理解并掌握。</p>
+<span id="more"></span>
+
+<h3 id="1-toString"><a href="#1-toString" class="headerlink" title="1. toString()"></a>1. toString()</h3><p>正如 <code>toString</code> 的名字， <code>toString()</code> 就是将一个对象转换为字符串然后输出。</p>
+<p>让我们来到手撕源码环节</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs reasonml">public String <span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> &#123;<br>    return get<span class="hljs-constructor">Class()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;@&quot;</span> + <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Integer</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">HexString(<span class="hljs-params">hashCode</span>()</span>);<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>一脸蒙蔽，追查源码同样一脸蒙蔽，基本追查不下去，那我们开始实操环节，用我们最经典的 <code>Employee</code> 类做实验。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">public <span class="hljs-keyword">class</span> Employee &#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> double salary;<br>    <span class="hljs-keyword">private</span> LocalDate hireDay;<br><br>    public <span class="hljs-constructor">Employee(String <span class="hljs-params">n</span>, <span class="hljs-params">double</span> <span class="hljs-params">s</span>, <span class="hljs-params">int</span> <span class="hljs-params">year</span>, <span class="hljs-params">int</span> <span class="hljs-params">month</span>, <span class="hljs-params">int</span> <span class="hljs-params">day</span>)</span><br>    &#123;<br>        name = n;<br>        salary = s;<br>        hireDay = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">LocalDate</span>.</span></span><span class="hljs-keyword">of</span>(year, month, day);<br>    &#125;<br><br>    public static void main(String<span class="hljs-literal">[]</span> args) &#123;<br>        Employee e = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Employee(<span class="hljs-string">&quot;abc&quot;</span>, 1, 2000, 1, 1)</span>;<br>        <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(e.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span>);<br><br>        Integer i = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Integer(<span class="hljs-string">&quot;123&quot;</span>)</span>;<span class="hljs-comment">//我们再拿Integer做实验</span><br>        <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(i);<br>        <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(i.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span>);<br>        <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(i.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span>.get<span class="hljs-constructor">Class()</span>);<span class="hljs-comment">//getClass()类同样是Object中的一个方法，作用是返回类名，我们在下面详细的介绍。</span><br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果是</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">inheritance</span>.Employee@<span class="hljs-number">16</span>d<span class="hljs-number">3586</span><br><span class="hljs-attribute">123</span><br><span class="hljs-attribute">123</span><br><span class="hljs-attribute">class</span> java.lang.String<br><span class="hljs-attribute">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>我们发现，<code>i.toString()</code> 并没有基类所带的 <code>@</code> ，说明它可能放弃了基类的教导，转身重写了 <code>toString()</code>，我们追查一下。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">public String <span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> &#123;<br>    return <span class="hljs-keyword">to</span><span class="hljs-constructor">String(<span class="hljs-params">value</span>)</span>;<br>&#125;<br><br>public static String <span class="hljs-keyword">to</span><span class="hljs-constructor">String(<span class="hljs-params">int</span> <span class="hljs-params">i</span>)</span> &#123;<br>    <span class="hljs-keyword">if</span> (i<span class="hljs-operator"> == </span>Integer.MIN_VALUE)<br>        return <span class="hljs-string">&quot;-2147483648&quot;</span>;<br>    <span class="hljs-built_in">int</span> size = (i &lt; <span class="hljs-number">0</span>) ? <span class="hljs-built_in">string</span><span class="hljs-constructor">Size(-<span class="hljs-params">i</span>)</span> + <span class="hljs-number">1</span> : <span class="hljs-built_in">string</span><span class="hljs-constructor">Size(<span class="hljs-params">i</span>)</span>;<br>    <span class="hljs-built_in">char</span><span class="hljs-literal">[]</span> buf = <span class="hljs-keyword">new</span> <span class="hljs-built_in">char</span><span class="hljs-literal">[<span class="hljs-identifier">size</span>]</span>;<br>    get<span class="hljs-constructor">Chars(<span class="hljs-params">i</span>, <span class="hljs-params">size</span>, <span class="hljs-params">buf</span>)</span>;<br>    return <span class="hljs-keyword">new</span> <span class="hljs-constructor">String(<span class="hljs-params">buf</span>, <span class="hljs-params">true</span>)</span>;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>果然不错，凡是我们知道能用串表示出来的，经过追查，都忘了初心，变成了我们更好用的样子，即直接转换为字符串。只有那些不能用串表示的，才会接过 <code>Object</code> 的摊子。而我们此刻应该去和那些忘了初心的类学习，重写 <code>toString</code>。就以打工人这个类为例。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Override</span><span class="hljs-comment">//表示对父类方法的重写</span><br><span class="hljs-keyword">public</span> <span class="hljs-built_in">String</span> <span class="hljs-function"><span class="hljs-title">toString</span>(<span class="hljs-params"></span>)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Employee&#123;&quot;</span> +<br>            <span class="hljs-string">&quot;name=&#x27;&quot;</span> + name + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>            <span class="hljs-string">&quot;, salary=&quot;</span> + salary +<br>            <span class="hljs-string">&quot;, hireDay=&quot;</span> + hireDay +<br>            <span class="hljs-string">&#x27;&#125;&#x27;</span>;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>我们 <code>System.out.println(e.toString());</code> 的结果如下</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Employee</span>&#123;name=&#x27;abc&#x27;, salary=<span class="hljs-number">1</span>.<span class="hljs-number">0</span>, hireDay=<span class="hljs-number">2000</span>-<span class="hljs-number">01</span>-<span class="hljs-number">01</span>&#125;//我这才发现这个苦逼打工人的薪水只有一块钱<br><span class="hljs-attribute">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>果然重写之后的 <code>toString</code> 更加适合我们去用。</p>
+<p>这其实也奠定了一个基调，部分时候 <code>Object</code> 的方法要重写成适合使用的模样。</p>
+<h3 id="2-equals"><a href="#2-equals" class="headerlink" title="2. equals()"></a>2. equals()</h3><p><code>equals</code> 方法用于检测一个对象是否等于另一个对象，这是一个合理的默认行为：如果两个对象的引用相等，这两个对象肯定就相等。如果基于状态检测对象的相等于，两个对象有相同的状态，才认为这两个对象是相等的。</p>
+<p>话不多说，我们上一段代码:</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span>&#123;</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">String</span> name;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span><span class="hljs-params">(<span class="hljs-keyword">String</span> name)</span></span>&#123;<span class="hljs-keyword">this</span>.name = name;&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">String</span>[] args)</span></span>&#123;<br>    <span class="hljs-keyword">String</span> s3 = <span class="hljs-keyword">new</span> <span class="hljs-built_in"><span class="hljs-keyword">String</span></span>(<span class="hljs-string">&quot;100&quot;</span>);<br>    <span class="hljs-keyword">String</span> s4 = <span class="hljs-keyword">new</span> <span class="hljs-built_in"><span class="hljs-keyword">String</span></span>(<span class="hljs-string">&quot;100&quot;</span>);<br>    System.out.<span class="hljs-built_in">println</span>(s3.<span class="hljs-built_in">equals</span>(s4));<br><br>    Integer itr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Integer</span>(<span class="hljs-string">&quot;123&quot;</span>);<br>    Long lon = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Long</span>(<span class="hljs-string">&quot;123&quot;</span>);<br>    System.out.<span class="hljs-built_in">println</span>(itr.<span class="hljs-built_in">equals</span>(lon));<br><br>    Person person1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Person</span>(<span class="hljs-string">&quot;张三&quot;</span>);<br>    Person person2 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Person</span>(<span class="hljs-string">&quot;张三&quot;</span>);<br>    System.out.<span class="hljs-built_in">println</span>(person1.<span class="hljs-built_in">equals</span>(person2));<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果是 <code>true false false</code></p>
+<p>我们要想知道为什么是这个结果，首先就要研究一下 <code>equals()</code> 的源码</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-built_in">boolean</span> <span class="hljs-function"><span class="hljs-title">equals</span>(<span class="hljs-params"><span class="hljs-built_in">Object</span> obj</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span>(<span class="hljs-built_in">this</span> == obj);<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>很简单，就是判断两个引用是否指向同一个对象，由于 <code>Person</code> 类并没有重写 <code>equals</code> ，所以继承的就是 <code>Object</code> 中的<code>equals()</code> ，在内存的观点来看，两个 <code>Person</code> 对象显然是不同的。</p>
+<p><a target="_blank" rel="noopener" href="https://www.dmxcg.xyz/img/Java/Object/equals1.jpg"><img src="/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8A%EF%BC%89/equals1.jpg" srcset="/img/loading.gif" lazyload alt="在内存中的示意图"></a></p>
+<p><a target="_blank" rel="noopener" href="https://www.dmxcg.xyz/img/Java/Object/equals1.jpg">在内存中的示意图</a></p>
+<p>在 <code>Integer</code> 中，<code>equals</code> 的实现如下</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-built_in">public</span> <span class="hljs-type">boolean</span> equals(<span class="hljs-keyword">Object</span> obj)&#123;<br>    <span class="hljs-keyword">if</span>(obj instanceof <span class="hljs-type">Integer</span>)&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">value</span> == ((<span class="hljs-type">Integer</span>)obj).intValue();<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>&#125;<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>意思很明确，判断对象类型是否可以为 <code>Integer</code> (参考我的上一篇: 类与继承)，这里 <code>lon</code> 是 <code>Long</code> 类型，所有结果肯定是 <code>false</code> 。</p>
+<p>最后我们看看 <code>String</code> 的实现</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs processing"><span class="hljs-keyword">public</span> <span class="hljs-built_in">boolean</span> equals(<span class="hljs-keyword">Object</span> anObject) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == anObject) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (anObject <span class="hljs-keyword">instanceof</span> <span class="hljs-keyword">String</span>) &#123;<br>        <span class="hljs-keyword">String</span> anotherString = (<span class="hljs-keyword">String</span>)anObject;<br>        <span class="hljs-built_in">int</span> n = value.length;<br>        <span class="hljs-keyword">if</span> (n == anotherString.value.length) &#123;<br>            <span class="hljs-built_in">char</span> v1[] = value;<br>            <span class="hljs-built_in">char</span> v2[] = anotherString.value;<br>            <span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">while</span> (n-- != <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">if</span> (v1[i] != v2[i])<br>                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>                i++;<br>            &#125;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>如果都指向一个引用，毋庸置疑是相等的。接下来有三个步骤</p>
+<ol>
+<li>判断是否为String类型。</li>
+<li>判断这两个字符串底层char数组的长度是否一致。</li>
+<li>循环判断每一个char字符是否相等。</li>
+</ol>
+<p>我们的s3，s4显然不满足第一步，但可以过了下面三关，成功打印出 <code>true</code> 。</p>
+<p>显然，我们超类 <code>Object</code> 的 <code>equals()</code> 只是判断二者引用是否相同，大部分时候，还是需要我们重写 <code>equals()</code> 来定义是否相等。</p>
+<p>由此，我们能回答一个面试的经典问题： <code>==</code> 和 <code>equals()</code> 有什么区别？</p>
+<p><code>==</code> 指的就是引用相同，和超类中的 <code>equals</code> 意义相同，而大部分情况，我们需要重写 <code>equals</code> 来定义两个对象是否相同，这时候含义就与 <code>==</code> 不同了。</p>
+<h3 id="3-hashCode"><a href="#3-hashCode" class="headerlink" title="3. hashCode()"></a>3. hashCode()</h3><p><code>hashCode</code> 方法是由对象导出的一个整形值。散列码没有规律，如果 <code>x</code> 和 <code>y</code> 是两个不同的对象，那么 <code>x.hashCode()</code> 和 <code>y.hashCode()</code> 基本上不会相同。简单的来说，<code>hashCode</code>就像是一个签名，当两个对象的 <code>hashcode</code> 一样，那么两个对象就可能一样，如果不一样，那两个对象肯定不是同一个对象。等于 <code>hashcode</code> 可以确定一个大范围，然后可以使用 <code>equals</code> 来比较。</p>
+<p>即 <code>对象1</code> 和 <code>对象2</code> 签名(散列码) 相等并不能确定两个对象相等，凡是如果两个对象相等，它们的散列码一定是相等的。</p>
+<p>所以 <code>hashcode</code> 可以减少 <code>equals</code> 比较的次数，提高运算效率。</p>
+<p>我们来看一下没有重写的 <code>hashCode</code> 在实战中的表现</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache">    <span class="hljs-attribute">Employee</span> e = new Employee(<span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2000</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br>    <span class="hljs-attribute">Employee</span> d = new Employee(<span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2000</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br><br>    <span class="hljs-attribute">System</span>.out.println(e.hashCode()== d.hashCode());<br><span class="hljs-attribute">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>结果是 <code>false</code> 。在 <code>equals</code> 中，我们也试验了，<code>e</code> 是不等于 <code>d</code> 的，如果先用 <code>hashCode</code> 检测，就能更有效率的发现二者不相等了。所以我们一般用 <code>hashcode</code> 来进行比较两个东西是不是一样的，可以很容易的排除许多不一样的东西。</p>
+<p><code>hashCode</code> 在官方源码的文档可以提取处几个要点：</p>
+<ol>
+<li><code>hashCode</code> 的存在主要是用于查找的快捷性，如 <code>Hashtable</code> ，<code>HashMap</code>等，<code>hashCode</code>是用来在散列存储结构中确定对象的存储地址的；</li>
+<li>如果两个对象相同，就是适用于 <code>equals(Java.lang.Object)</code> 方法，那么这两个对象的 <code>hashCode</code> 一定要相同</li>
+<li>如果对象的 <code>equals</code> 方法被重写，那么对象的 <code>hashCode</code> 也尽量重写，并且产生 <code>hashCode</code> 使用的对象，一定要和 <code>equals</code> 方法中使用的一致，否则就会违反上面提到的第2点</li>
+<li>两个对象的 <code>hashCode</code> 相同，并不一定表示两个对象就相同，也就是不一定适用于 <code>equals(java.lang.Object)</code> 方法，只能够说明这两个对象在散列存储结构中，如 <code>Hashtable</code> ，他们“存放在同一个篮子里”。</li>
+</ol>
+<p>但我们经过上面两轮发现，<code>Object</code> 中的方法大部分是需要重写的，而 <code>hashCode</code> 在实际应用中非常重要，是需要重写的重中之重，下面我们还是用打工人这个类，重写一下 <code>hashCode</code> 方法。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">@Override<br>public <span class="hljs-built_in">int</span> hash<span class="hljs-constructor">Code()</span> &#123;<br>    return <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Objects</span>.</span></span>hash(get<span class="hljs-constructor">Name()</span>, get<span class="hljs-constructor">Salary()</span>, hireDay);<br>&#125;<br><br>@Override<br>public boolean equals(Object o) &#123;<br>    <span class="hljs-keyword">if</span> (this<span class="hljs-operator"> == </span>o) return <span class="hljs-literal">true</span>;<br>    <span class="hljs-keyword">if</span> (!(o instanceof Employee)) return <span class="hljs-literal">false</span>;<br>    Employee employee = (Employee) o;<br>    return <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Double</span>.</span></span>compare(employee.get<span class="hljs-constructor">Salary()</span>, get<span class="hljs-constructor">Salary()</span>)<span class="hljs-operator"> == </span><span class="hljs-number">0</span><span class="hljs-operator"> &amp;&amp; </span><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Objects</span>.</span></span>equals(get<span class="hljs-constructor">Name()</span>, employee.get<span class="hljs-constructor">Name()</span>)<span class="hljs-operator"> &amp;&amp; </span><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Objects</span>.</span></span>equals(hireDay, employee.hireDay);<br>&#125;<br><br>public static void main(String<span class="hljs-literal">[]</span> args) &#123;<br>    Employee e = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Employee(<span class="hljs-string">&quot;abc&quot;</span>, 1, 2000, 1, 1)</span>;<br>    Employee d = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Employee(<span class="hljs-string">&quot;abc&quot;</span>, 1, 2000, 1, 1)</span>;<br><br>    <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(e.hash<span class="hljs-constructor">Code()</span>== d.hash<span class="hljs-constructor">Code()</span>);<br>    <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(e.equals(d));<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果是:</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">true</span><br><span class="hljs-keyword">true</span><br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>和上面没有重写的结果显然就不一样了，实际上这两个对象除了地址不一样，别的不能说几分相像，简直是一模一样。</p>
+<p>但是我们实际情况中肯定更复杂，一个打工人的属性肯定也不会只有这些，一般是按照 <code>id</code> 来确认 <code>hashcode</code> 再确认是否相等的。</p>
+<p>PS: 在覆写 <code>equals()</code> 方法的时候也必须覆写 <code>hashCode()</code> 方法。这样才能确保相等的两个对象拥有相等的 <code>.hashCode</code>。</p>
+<p>再使用 <code>IDEA</code> 进行编程时，如果你需要重写一般会为你生成一个较好的方案，但仍要实际情况实际分析，选择效率与准确性最高的方法。</p>
+<h3 id="4-clone"><a href="#4-clone" class="headerlink" title="4. clone()"></a>4. clone()</h3><p>提到 <code>clone</code> ，显而易见，就是复制一个对象，正如 <code>C++</code> 一样，复制同样分为深复制与浅复制。</p>
+<p>浅复制指被复制对象的所有数据成员都含有与原来对象相同的值，包括引用类型的数据成员，即不复制引用类型数据成员所指向的对象。深复制实现的是数据成员的全面复制，包括复制产生引用成员所指向的对象的副本。</p>
+<p>接下来通过几个实例来分析</p>
+<p>实例1</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">String</span>[] args)</span> </span>&#123;<br>    Employee a = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Employee</span>(<span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2000</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br>    Employee b = a;<br><br>    System.out.<span class="hljs-built_in">println</span>(a);<br>    System.out.<span class="hljs-built_in">println</span>(b);<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果是</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">inheritance</span>.Employee@c<span class="hljs-number">3</span>d<span class="hljs-number">3</span>dc<span class="hljs-number">82</span><br><span class="hljs-attribute">inheritance</span>.Employee@c<span class="hljs-number">3</span>d<span class="hljs-number">3</span>dc<span class="hljs-number">82</span><br><span class="hljs-attribute">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>其实我们这儿就可以发现，直接打印一个对象就是打印它 <code>toString()</code> 的值，如果重写了，就打印重写的值。这两个指向的地址显然一模一样，就是复制了引用。实际上，这就是<strong>浅复制</strong>。</p>
+<p>从JVM的角度来看</p>
+<p><a target="_blank" rel="noopener" href="https://www.dmxcg.xyz/img/Java/Object/JVM1.jpg"><img src="/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8A%EF%BC%89/JVM1.jpg" srcset="/img/loading.gif" lazyload alt="不要在意为什么是dog"></a></p>
+<p>实例2</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">String</span>[] args)</span> throws CloneNotSupportedException </span>&#123;<span class="hljs-comment">//抛出异常</span><br>    Employee a = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Employee</span>(<span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2000</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br>    Employee b = (Employee) a.<span class="hljs-built_in">clone</span>();<br><br>    System.out.<span class="hljs-built_in">println</span>(a);<br>    System.out.<span class="hljs-built_in">println</span>(b);<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>运行，我们发现，就算我们抛出了异常，依然出错。我们就该知道，<code>clone</code> 这个方法不简单, 下面我们来介绍如何用他进行复制。</p>
+<p><code>Object</code> 的 <code>clone()</code> 方法，实现了对象中各个属性的复制，但它的可见范围是 <code>protected</code> 的，所以实体类使用克隆的前提是：</p>
+<ol>
+<li>实现Cloneable接口，这是一个标记接口，自身没有方法。</li>
+<li>覆盖clone()方法，可见性提升为public。</li>
+</ol>
+<p>让我们实现一下</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs processing"><span class="hljs-keyword">public</span> class Employee implements Cloneable &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">String</span> name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">double</span> salary;<br>    <span class="hljs-keyword">private</span> LocalDate hireDay;<br><br>    @Override<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">Object</span> clone() <span class="hljs-keyword">throws</span> CloneNotSupportedException&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.clone();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> Employee(<span class="hljs-keyword">String</span> n, <span class="hljs-keyword">double</span> s, <span class="hljs-built_in">int</span> <span class="hljs-built_in">year</span>, <span class="hljs-built_in">int</span> <span class="hljs-built_in">month</span>, <span class="hljs-built_in">int</span> <span class="hljs-built_in">day</span>)<br>    &#123;<br>        name = n;<br>        salary = s;<br>        hireDay = LocalDate.of(<span class="hljs-built_in">year</span>, <span class="hljs-built_in">month</span>, <span class="hljs-built_in">day</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(<span class="hljs-keyword">String</span>[] args) <span class="hljs-keyword">throws</span> CloneNotSupportedException &#123;<br>        Employee a = <span class="hljs-keyword">new</span> Employee(<span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2000</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br>        Employee b = (Employee) a.clone();<br><br>        System.out.<span class="hljs-built_in">println</span>(a==b);<br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p><code>implements Cloneable</code> 即表示这个类是可以复制的，这时候才能对其对象进行复制。</p>
+<p>运行的结果是 <code>false</code>, 即 <code>OBject</code> 的 <code>clone</code>，并不能把他俩拽到同一个引用，从JVM上看</p>
+<p><a target="_blank" rel="noopener" href="https://www.dmxcg.xyz/img/Java/Object/JVM2.jpg"><img src="/2021/02/25/%E4%B8%80%E5%88%87%E7%9A%86%E5%AF%B9%E8%B1%A1-Object%E7%B1%BB%E7%9A%8411%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8A%EF%BC%89/JVM2.jpg" srcset="/img/loading.gif" lazyload alt="堆"></a></p>
+<p>其实这就是<strong>深复制</strong>，创建了新的一个对象而不是简单的引用。发现这两个对象也是两个地址的。</p>
+<p>大部分情况，我们还是要用深复制，且要根据实际情况考虑是否重写方法</p>
+<h3 id="5-finalize"><a href="#5-finalize" class="headerlink" title="5. finalize()"></a>5. finalize()</h3><p><code>Java9</code> 开始，<code>finalize()</code> 在源码上被标注上了 <code>@Deprecated</code> , 代表这finalize的正式退休。</p>
+<p><code>finalize</code> 方法原本作用就是处理系统资源、执行其他清理或者对象自救，实际上，<code>Object</code> 中的 <code>finalize</code> 只是建议回收资源，并没有正式析构，大部分时候对对象回收还是要重写 <code>finalize</code> 的。</p>
+<p>既然已经退休了，我们就不再学习它了，等到资源回收专题会讲解更适用的方法。</p>
+<h3 id="6-getClass"><a href="#6-getClass" class="headerlink" title="6. getClass()"></a>6. getClass()</h3><p><code>getClass</code> 方法将返回一个对象所属的类，顾名思义，也就是返回对象的类的名称。</p>
+<p>就比如我们的打工人类，我们再次拿来做示范</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">Employee a = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Employee(<span class="hljs-string">&quot;abc&quot;</span>, 1, 2000, 1, 1)</span>;<br><br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(a.get<span class="hljs-constructor">Class()</span>);<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果是</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">class</span> inheritance.Employee<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>很简单，就是返回类名。 <code>getClass()</code> 的实际作用就是获得这个类，进而通过这个类来获取与之相关的信息。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这个是上篇，下篇的方法大多和多线程关系巨大，还比较高级，先掌握好基础，多练习这些方法，在做项目时根据项目的实际情况来重写相对应的方法。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>[^1] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27573287">说说Java里的equals（上）</a><br>[^2] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26814793">Java中的HashCode</a><br>[^3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33314107/article/details/80271963">java对象clone()方法</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/02/27/leetcode395-%E8%87%B3%E5%B0%91%E6%9C%89K%E4%B8%AA%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">leetcode395.至少有K个重复字符的最长子串</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/02/24/%E5%A6%82%E4%BD%95%E4%B8%8A%E7%BA%BF%E4%B8%80%E4%B8%AA%E5%88%B6%E4%BD%9C%E5%AE%8C%E6%88%90%E7%9A%84%E7%BD%91%E9%A1%B5%E9%A1%B9%E7%9B%AE/">
+                        <span class="hidden-mobile">如何上线一个制作完成的网页项目</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

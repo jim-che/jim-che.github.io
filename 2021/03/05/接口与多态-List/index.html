@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="接口与多态(List)ArrayList概述ArrayList 是基于数组实现的，是一个动态数组，其容量能自动增长。   ArrayList 不是线程安全的，只能用在单线程环境下，多线程环境下可以考虑用 Collections.synchronizedList(List l) 函数返回一个线程安全的 ArrayList 类，也可以使用 concurrent 并发包下的 CopyOnWriteArr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接口与多态-List">
+<meta property="og:url" content="http://example.com/2021/03/05/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81-List/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="接口与多态(List)ArrayList概述ArrayList 是基于数组实现的，是一个动态数组，其容量能自动增长。   ArrayList 不是线程安全的，只能用在单线程环境下，多线程环境下可以考虑用 Collections.synchronizedList(List l) 函数返回一个线程安全的 ArrayList 类，也可以使用 concurrent 并发包下的 CopyOnWriteArr">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-05T02:25:22.000Z">
+<meta property="article:modified_time" content="2022-01-29T08:55:53.064Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="Java基础">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>接口与多态-List - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="接口与多态-List">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-05 10:25" pubdate>
+        2021年3月5日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      46 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">接口与多态-List</h1>
+            
+            <div class="markdown-body">
+              <h2 id="接口与多态-List"><a href="#接口与多态-List" class="headerlink" title="接口与多态(List)"></a>接口与多态(List)</h2><h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p><code>ArrayList</code> 是基于数组实现的，是一个动态数组，其容量能自动增长。</p>
+<!--more--->
+
+<p><code>ArrayList</code> 不是线程安全的，只能用在单线程环境下，多线程环境下可以考虑用 <code>Collections.synchronizedList(List l)</code> 函数返回一个线程安全的 <code>ArrayList</code> 类，也可以使用 <code>concurrent</code> 并发包下的 <code>CopyOnWriteArrayList</code> 类。</p>
+<p><code>ArrayList</code> 实现了 <code>Serializable</code> 接口，因此它支持序列化，能够通过序列化传输，实现了 <code>RandomAccess</code> 接口，支持快速随机访问，实际上就是通过下标序号进行快速访问，实现了 <code>Cloneable</code> 接口，能被克隆。</p>
+<p>每个 <code>ArrayList</code> 实例都有一个容量，该容量是指用来存储列表元素的数组的大小。它总是至少等于列表的大小。随着向 <code>ArrayList</code> 中不断添加元素，其容量也自动增长。自动增长会带来数据向新数组的重新拷贝，因此，如果可预知数据量的多少，可在构造 <code>ArrayList</code> 时指定其容量。在添加大量元素前，应用程序也可以使用 <code>ensureCapacity</code> 操作来增加ArrayList实例的容量，这可以减少递增式再分配的数量。</p>
+<p>注意，此实现不是同步的。如果多个线程同时访问一个 <code>ArrayList</code> 实例，而其中至少一个线程从结构上修改了列表，那么它必须保持外部同步。</p>
+<h4 id="ArrayList的实现："><a href="#ArrayList的实现：" class="headerlink" title="ArrayList的实现："></a>ArrayList的实现：</h4><p>对于ArrayList而言，它实现List接口、底层使用数组保存所有元素。其操作基本上是对数组的操作。下面我们来分析ArrayList的源代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><pre><code class="hljs Java">ArrayList定义只定义类两个私有属性：<br> <span class="hljs-comment">/** </span><br><span class="hljs-comment">    * The array buffer into which the elements of the ArrayList are stored. </span><br><span class="hljs-comment">    * The capacity of the ArrayList is the length of this array buffer. </span><br><span class="hljs-comment">    */</span>  <br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> Object[] elementData;  <br> <br>   <span class="hljs-comment">/** </span><br><span class="hljs-comment">    * The size of the ArrayList (the number of elements it contains). </span><br><span class="hljs-comment">    * </span><br><span class="hljs-comment">    * <span class="hljs-doctag">@serial</span> </span><br><span class="hljs-comment">    */</span>  <br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> size;<br></code></pre></td></tr></table></figure>
+
+<p><code>elementData</code> 储存 <code>ArrayList</code> 内的元素，<code>size</code> 表示长度。</p>
+<p>有个关键字需要解释： <code>transient</code> 。</p>
+<p>Java的 <code>serialization</code> 提供了一种持久化对象实例的机制。当持久化对象时，可能有一个特殊的对象数据成员，我们不想用 <code>serialization</code> 机制来保存它。为了在一个特定对象的一个域上关闭 <code>serialization</code> ，可以在这个域前加上关键字 <code>transient</code>。</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法:"></a>基本用法:</h4><p>上一段代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>    ArrayList list = <span class="hljs-keyword">new</span> ArrayList();<br><br>    String[] Array = <span class="hljs-string">&quot;Hello World Java&quot;</span>.split(<span class="hljs-string">&quot; &quot;</span>);<br><br>    list.add(Array[<span class="hljs-number">0</span>]);<br>    list.add(Array[<span class="hljs-number">1</span>]);<br>    list.add(Array[<span class="hljs-number">2</span>]);<br>    list.add(<span class="hljs-number">5</span>);<br><br>    System.out.println(list.get(<span class="hljs-number">1</span>).getClass());<br>    System.out.println((<span class="hljs-keyword">int</span>)list.get(<span class="hljs-number">3</span>) + <span class="hljs-number">2</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">World</span><br><span class="hljs-number">7</span><br></code></pre></td></tr></table></figure>
+
+<p><code>ArrayList</code> 也是可以添加相同的元素的。</p>
+<p>下面我们看一下 <code>ArrayList</code> 最基本的增删改查</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>    ArrayList&lt;Integer&gt; list = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br><br>    list.add(<span class="hljs-number">4</span>);<br>    list.add(<span class="hljs-number">3</span>);<br>    list.add(<span class="hljs-number">1</span>);<br>    System.out.println(list);<span class="hljs-comment">// [4, 3, 1]</span><br><br>    list.add(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);<span class="hljs-comment">// 在2处插入2</span><br>    System.out.println(list);<span class="hljs-comment">// [4, 3, 2, 1]</span><br><br>    list.sort(<span class="hljs-keyword">new</span> Comparator&lt;Integer&gt;() &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compare</span><span class="hljs-params">(Integer o1, Integer o2)</span> </span>&#123;<br>            <span class="hljs-keyword">return</span> o1-o2;<br>        &#125;<br>    &#125;);<span class="hljs-comment">// 排序</span><br>    System.out.println(list);<span class="hljs-comment">// [1, 2, 3, 4]</span><br><br>    list.remove(<span class="hljs-number">0</span>);<span class="hljs-comment">// 删除0处的元素</span><br>    System.out.println(list);<span class="hljs-comment">// [2, 3, 4]</span><br><br>    list.set(<span class="hljs-number">0</span>, <span class="hljs-number">8</span>);<span class="hljs-comment">// 将0处的元素改为8</span><br>    System.out.println(list);<span class="hljs-comment">// [8, 3, 4]</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist.html">更多方法</a></p>
+<p>我们看一下 <code>ArrayList</code> 中的遍历。</p>
+<p>第一种：通过迭代器遍历，即通过Iterator去遍历</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">Integer</span> value = <span class="hljs-literal">null</span>;<br><span class="hljs-built_in">Iterator</span> iter = <span class="hljs-keyword">list</span>.<span class="hljs-built_in">iterator</span>();<br><span class="hljs-keyword">while</span> (iter.hasNext()) &#123;<br>    value = (<span class="hljs-keyword">Integer</span>)iter.next();<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>第二种：随机访问，通过索引值去遍历，因为ArrayList实现了RandomAccess接口，so，她支持通过索引值去随机访问元素：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs fortran"><span class="hljs-keyword">Integer</span> <span class="hljs-keyword">value</span> = null;<br><span class="hljs-built_in">int</span> <span class="hljs-built_in">size</span> = list.<span class="hljs-built_in">size</span>();<br>for (<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-built_in">size</span>; i++) &#123;<br>    <span class="hljs-keyword">value</span> = (<span class="hljs-keyword">Integer</span>)list.get(i);        <br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>第三种：for循环遍历，如下所示：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-type">Integer</span> <span class="hljs-keyword">value</span> = <span class="hljs-keyword">null</span>;<br><span class="hljs-keyword">for</span> (<span class="hljs-type">Integer</span> integ:list) &#123;<br>    <span class="hljs-keyword">value</span> = integ;<br>&#125;<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>如果实际测试下来我们可以发现，遍历ArrayList时，使用随机访问(即，通过索引序号访问)效率最高，而使用迭代器的效率最低！</p>
+<h4 id="ArrayList的优缺点"><a href="#ArrayList的优缺点" class="headerlink" title="ArrayList的优缺点"></a>ArrayList的优缺点</h4><p><strong>优点</strong>:</p>
+<ol>
+<li><code>ArrayList</code> 底层以数组实现，是一种随机访问模式，再加上它实现了 <code>RandomAccess</code> 接口，因此查找速度快；</li>
+<li><code>ArrayList</code> 在顺序添加一个元素的时候非常方便，只是往数组里面添加了一个元素而已；</li>
+</ol>
+<p><strong>缺点</strong>:</p>
+<ol>
+<li>删除元素的时候，涉及到一次元素复制，如果要复制的元素很多，那么就会比较耗费性能</li>
+<li>插入元素的时候，涉及到一次元素复制，如果要复制的元素很多，那么就会比较耗费性能</li>
+</ol>
+<p><strong>ArrayList线程问题</strong>:</p>
+<p><code>ArrayList</code> 是线程不安全的，这个由它的实现方式决定。</p>
+<p>我们知道ArrayList在添加一个元素的时候，需要两个步骤，第一步在Items[Size]的位置存放此元素，第二步增大Size的值，在单线程运行的情况，比如两个苹果两个人吃，一个人吃一个，这个是并发的，互不影响，但是如果一个人吃两个苹果，要保证同时吃完，就需要这个苹果吃一点，停下来再去吃一点另一个苹果，既然Add方法内部是需要分两步走，那就是线程A在0的位置赋了一个值，然后停下来去B线程ArrayList 0的位置又赋了一个值，其实是重复在一个位置赋值，然后回到A线程，执行Size增加，也就是ArrayList的大小增加了，原来Size是1，现在变成2，然后停下来继续执行线程B，又增加了一个空间位置，size大小就变成了3，结果就是0的位置有值，1和2的索引位置都没有值实际大小是3，跟想要的结果0和1赋不同的值，结果不对，so线程不安全。</p>
+<p>解决线程不安全的方法：</p>
+<ol>
+<li>继承Arraylist，然后重写或按需求编写自己的方法，这些方法要写成synchronized，在这些synchronized的方法中调用ArrayList的方法。</li>
+<li>List list = Collections.synchronizedList(new ArrayList());</li>
+</ol>
+<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p><code>LinkedList</code> 是基于链表设计的，而且是双向链表，所以它具有双向链表的特性。</p>
+<ul>
+<li>链表无容量限制，但双向链表本身使用了更多空间，也需要额外的链表指针操作。</li>
+<li>除了实现 <code>List</code> 接口外，LinkedList还为在列表的开头及结尾 <code>get、remove和insert</code> 元素提供了统一的命名方法。这些操作可以将链接列表当作栈，队列和双端队列来使用。</li>
+</ul>
+<p>从源码上看，<code>LinkedList</code> 继承的类与实现的接口如下</p>
+<p><code>Collection</code> 接口、<code>List</code> 接口、<code>Cloneable</code> 接口、<code>Serializable</code> 接口、<code>Deque</code> 接口（5个接口）</p>
+<p><code>AbstractCollection</code> 类、<code>AbstractList</code> 类、<code>AbstractSequentialList</code> 类（3个类） 。</p>
+<p>其中 <code>Deque</code> 定义了一个线性 <code>Collection</code> ，支持在两端插入和删除元素。</p>
+<h4 id="API操作"><a href="#API操作" class="headerlink" title="API操作"></a>API操作</h4><ol>
+<li><p>节点Node结构</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span>&lt;<span class="hljs-title">E</span>&gt; </span>&#123;<br>        E item;<span class="hljs-comment">//元素值</span><br>        Node&lt;E&gt; next;<span class="hljs-comment">//后置节点</span><br>        Node&lt;E&gt; prev;<span class="hljs-comment">//前置节点</span><br>        Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;<br>            <span class="hljs-keyword">this</span>.item = element;<br>            <span class="hljs-keyword">this</span>.next = next;<br>            <span class="hljs-keyword">this</span>.prev = prev;<br>        &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>构造方法</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs typescript"> <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-title">LinkedList</span>(<span class="hljs-params"></span>)</span> &#123;&#125;<br> <span class="hljs-comment">//调用addAll(c)  表示将集合c所有元素插入链表中</span><br> <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-title">LinkedList</span>(<span class="hljs-params">Collection&lt;? <span class="hljs-keyword">extends</span> E&gt; c</span>)</span> &#123;<br>     <span class="hljs-built_in">this</span>();<br>     addAll(c);<br> &#125;<br>Copy<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>下面实际用例来看看具体是怎么增删改查的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>    LinkedList&lt;Integer&gt; list = <span class="hljs-keyword">new</span> LinkedList&lt;Integer&gt;();<br><br>    list.add(<span class="hljs-number">1</span>);<span class="hljs-comment">//增加一个节点</span><br>    list.add(<span class="hljs-number">3</span>);<br>    list.add(<span class="hljs-number">4</span>);<br>    System.out.println(list);<span class="hljs-comment">// [1, 3, 4]</span><br>    list.add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);<span class="hljs-comment">// 在1处插入2</span><br>    System.out.println(list);<span class="hljs-comment">// [1, 2, 3, 4]</span><br>    list.remove(<span class="hljs-number">0</span>);<span class="hljs-comment">// 删除第一个元素</span><br>    System.out.println(list);<span class="hljs-comment">// [2, 3, 4]</span><br>    list.set(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>);<span class="hljs-comment">// 将0位设置为1</span><br>    System.out.println(list);<span class="hljs-comment">// [1, 3, 4]</span><br>    Integer a = list.get(<span class="hljs-number">0</span>);<br>    System.out.println(a);<span class="hljs-comment">// 1</span><br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-linkedlist.html">更多方法</a></p>
+<p>下面看一下 <code>LinkedList</code> 的一般的遍历</p>
+<ol>
+<li><p>一般的for循环(随机访问)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">int</span> size = list.size();<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; i&lt;size; i++) &#123;<br>    list.get(i);        <br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>for–each循环</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">for</span> (Integer integ:list) <br></code></pre></td></tr></table></figure></li>
+<li><p>迭代器iterator</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">for</span>(Iterator iter = list.iterator(); iter.hasNext();)<br>    iter.next();<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结:"></a>小结:</h4><ol>
+<li>底层实现：LinkedList的实现是基于双向链表的，且头结点中不存放数据</li>
+<li>构造方法：无参构造方法直接建立一个仅包含head节点的空链表；包含Collection的构造方法，先调用无参构造方法建立一个空链表，而后将Collection中的数据加入到链表的尾部后面。</li>
+<li>查找删除：源码中都划分为该元素为null和不为null两种情况来处理，LinkedList中允许元素为null。</li>
+<li>LinkedList是基于链表实现的，因此不存在容量不足的问题，所以这里没有扩容的方法。</li>
+<li>LinkedList是基于链表实现的，因此插入删除效率高，查找效率低（虽然有一个加速动作）。</li>
+<li>注意源码中还实现了栈和队列的操作方法，因此也可以作为栈、队列和双端队列来使用。</li>
+</ol>
+<h3 id="ArrayList-和-LinkedList-异同"><a href="#ArrayList-和-LinkedList-异同" class="headerlink" title="ArrayList 和 LinkedList 异同"></a>ArrayList 和 LinkedList 异同</h3><p><strong>相同点</strong>：</p>
+<ol>
+<li>接口实现：都实现了List接口，都是线性列表的实现</li>
+<li>线程安全：都是线程不安全的，都是基于fail-fast机制</li>
+</ol>
+<p><strong>不同点</strong>：</p>
+<ol>
+<li>底层:ArrayList内部是数组实现，而LinkedList内部实现是双向链表结构</li>
+<li>接口：ArrayList实现了RandomAccess可以支持随机元素访问，而LinkedList实现了Deque可以当做队列使用</li>
+<li>性能：新增、删除元素时ArrayList需要使用到拷贝原数组，而LinkedList只需移动指针，查找元素 ArrayList支持随机元素访问,而LinkedList只能一个节点的去遍历</li>
+</ol>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24247566">https://zhuanlan.zhihu.com/p/24247566</a> [↩]</li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist.html">https://www.runoob.com/java/java-arraylist.html</a> [↩]</li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/06/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81-Set/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">接口与多态-Set</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/02/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E6%9C%80%E9%95%BF%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B3%BB%E5%88%97/">
+                        <span class="hidden-mobile">动态规划:最长子数组和系列</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

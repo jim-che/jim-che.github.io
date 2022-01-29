@@ -1,0 +1,465 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="接口与多态(Set)HashSet通过哈希码对集合数组进行内部排序，和添加的顺序无关(如果是普通数会根据hash码内部排序)。下面介绍一下基本使用方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接口与多态-Set">
+<meta property="og:url" content="http://example.com/2021/03/06/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81-Set/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="接口与多态(Set)HashSet通过哈希码对集合数组进行内部排序，和添加的顺序无关(如果是普通数会根据hash码内部排序)。下面介绍一下基本使用方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-06T01:21:02.000Z">
+<meta property="article:modified_time" content="2022-01-29T08:54:49.000Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="Java基础">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>接口与多态-Set - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="接口与多态-Set">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-06 09:21" pubdate>
+        2021年3月6日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      17 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">接口与多态-Set</h1>
+            
+            <div class="markdown-body">
+              <h2 id="接口与多态-Set"><a href="#接口与多态-Set" class="headerlink" title="接口与多态(Set)"></a>接口与多态(Set)</h2><h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><p>通过哈希码对集合数组进行内部排序，和添加的顺序无关(如果是普通数会根据hash码内部排序)。下面介绍一下基本使用方法。</p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><pre><code class="hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>    HashSet&lt;String&gt; hash = <span class="hljs-keyword">new</span> HashSet&lt;&gt;();<br>    hash.add(<span class="hljs-string">&quot;一&quot;</span>);<br>    hash.add(<span class="hljs-string">&quot;二&quot;</span>);<br>    hash.add(<span class="hljs-string">&quot;三&quot;</span>);<br>    System.out.println(hash); <span class="hljs-comment">// [一, 三, 二]</span><br>    System.out.println(hash.contains(<span class="hljs-string">&quot;三&quot;</span>)); <span class="hljs-comment">// 是否包含 &quot;三&quot; // true</span><br>    hash.remove(<span class="hljs-string">&quot;三&quot;</span>);<br>    System.out.println(hash); <span class="hljs-comment">// [一, 二]</span><br>    System.out.println(hash.size());<span class="hljs-comment">// set的容量 // 2</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>HashSet</code> 本质上是一个 <code>HashMap</code>, 对集合的迭代次序没有任何保证; 特别是，它不能保证订单会随着时间的推移保持不变。这个类允许 <code>null</code> 元素。虽然 <code>HashSet</code> 在很少量 <code>Integer</code> 数据会自动通过哈希码排序，但是对于一般的数据完全不能保证数据的顺序。</p>
+<p>放入 <code>HashSet</code> 的类必须实现 <code>HashCode</code> 方法，这也是 <code>HashSet</code> 进行存放数据的基础。</p>
+<p><code>HashSet</code> 默认创建一个大小为 16 的容器，加载因子是 0.75 ，意思是到 12 个元素，它会自动扩容，扩容成的大小都是 2 的幂， 这些都可以在构造函数时候进行改变。</p>
+<p><code>HashSet</code> 实现了 <code>Cloneable</code> 和 <code>Serializable</code> 说明是可以克隆和序列化的。</p>
+<p><code>HashSet</code> 线程并不安全，和 <code>HashMap</code> 一样。<code>java.util.concurrent</code> 包下的 <code>ConcurrentHashMap</code> 类是线程安全的。</p>
+<h3 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h3><p><code>TreeSet</code> 是有序的 <code>set</code> 集合，放入 <code>TreeSet</code> 中的数据会自动内部排序，不同于 <code>HashSet</code> 基于哈希表的结构，<code>TreeSet</code> 是基于二叉树的，这也使得 <code>TreeSet</code> 并不支持放入 <code>null</code> 值。</p>
+<p>由于 <code>TreeSet</code> 是可以放入类结构，这就意味着如果我们要将自己的类通过 <code>TreeSet</code> 存储，那么这个类必须实现 <code>Comparable</code> 接口。</p>
+<p><code>TreeSet</code> 和 <code>HashSet</code> 一样，实现了 <code>Cloneable</code> 接口与 <code>Serializable</code> 接口，保证了可被复制，也可以序列化的特性。</p>
+<p><code>TreeSet</code> 是基于 <code>TreeMap</code> 实现的，使用的是 <code>NavigableMap</code> 来进行数据的存放，使用方法和 <code>HashSet</code> 差不多，但是内部结构是截然不同的，它们适用的领域也是不相同的</p>
+<p>下面简单写一下 <code>TreeSet</code> 的部分方法，更多具体方法可以查找JDK文档。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>    TreeSet&lt;Integer&gt; treeSet = <span class="hljs-keyword">new</span> TreeSet&lt;&gt;();<br>    treeSet.add(<span class="hljs-number">1</span>);<br>    treeSet.add(<span class="hljs-number">3</span>);<br>    treeSet.add(<span class="hljs-number">2</span>);<br>    System.out.println(treeSet);<span class="hljs-comment">// [1, 2, 3]</span><br><br>    treeSet.remove(<span class="hljs-number">3</span>);<br>    System.out.println(treeSet);<span class="hljs-comment">// [1, 2]</span><br><br>    System.out.println(treeSet.contains(<span class="hljs-number">3</span>));<span class="hljs-comment">// false</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是 <code>TreeSet</code> 同样是 <code>fail-fast</code> 的，是线程不安全的。</p>
+<h3 id="LinkedHashSet"><a href="#LinkedHashSet" class="headerlink" title="LinkedHashSet"></a>LinkedHashSet</h3><p>看名字就知道，也是一个的哈希结构，本身也是继承 <code>HashSet</code> 而来的，也实现了和 <code>HashSet</code> 一样的 <code>Serializable</code> 和 <code>Cloneable</code> 接口。默认也为加载因素为0.75，大小为16的容器。</p>
+<p><code>LinkedHashSet</code> 是一个基于哈希表和双向链表的接口，增加删除等方法都是基于链表结构的，所以它的存储结构在逻辑上是有序的，迭代时获取元素的顺序等于元素的添加顺序，注意这里不是访问顺序。</p>
+<p><code>LinkedHashSet</code> 在添加了一个全局的双向链表的结构，所以相比较于 <code>HashSet</code> 而言，查找慢，添加元素稍慢，但迭代访问快，性能更强。也是基于哈希函数查看容器中是否存在，如果不存在才会添加。</p>
+<p>使用方法基本无异，唯一区别就是迭代获取元素的顺序是和添加的顺序一致，这里就不在赘述代码了。</p>
+<p>同样的，<code>LinkedHashSet</code> 也是 <code>fail-fast</code> 线程不安全的。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>三种结构各有各的优势，虽然在方法上大相近同，但在底层区别还是不晓得，在实际使用中要通过对源码的分析来确定使用哪个类，才能获得更高的性能。</p>
+<p>三种结构虽然都是线程不安全的，但是原理也都是线程安全类的基础，需要牢牢掌握。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/08/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81-Map/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">接口与多态-Map</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/05/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81-List/">
+                        <span class="hidden-mobile">接口与多态-List</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

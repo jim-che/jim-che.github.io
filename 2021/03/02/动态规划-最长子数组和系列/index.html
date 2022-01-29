@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="动态规划:最长子数组和系列官方解释: 从动态规划角度讲，最大子数组和是以一类较简单的 DP 问题，但它的状态设计比较经典，同时也是很多问题的基础组件，需要专门掌握。 果然是我太菜了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态规划:最长子数组和系列">
+<meta property="og:url" content="http://example.com/2021/03/02/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E6%9C%80%E9%95%BF%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B3%BB%E5%88%97/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="动态规划:最长子数组和系列官方解释: 从动态规划角度讲，最大子数组和是以一类较简单的 DP 问题，但它的状态设计比较经典，同时也是很多问题的基础组件，需要专门掌握。 果然是我太菜了">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-02T08:23:16.000Z">
+<meta property="article:modified_time" content="2022-01-29T08:51:57.000Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>动态规划:最长子数组和系列 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="动态规划:最长子数组和系列">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-02 16:23" pubdate>
+        2021年3月2日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      35 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">动态规划:最长子数组和系列</h1>
+            
+            <div class="markdown-body">
+              <h2 id="动态规划-最长子数组和系列"><a href="#动态规划-最长子数组和系列" class="headerlink" title="动态规划:最长子数组和系列"></a>动态规划:最长子数组和系列</h2><p>官方解释: 从动态规划角度讲，最大子数组和是以一类较简单的 <code>DP</code> 问题，但它的状态设计比较经典，同时也是很多问题的基础组件，需要专门掌握。</p>
+<p>果然是我太菜了</p>
+<span id="more"></span>
+
+<h3 id="1-最大子序和"><a href="#1-最大子序和" class="headerlink" title="1. 最大子序和"></a>1. 最大子序和</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/maximum-subarray/">刷题地址 53. 最大子序和</a></p>
+<p>给定一个整数数组 <code>nums</code> ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+<p><strong>示例 1</strong>：</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><pre><code class="hljs subunit">输入：nums = [<span class="hljs-string">-2</span>,1,<span class="hljs-string">-3</span>,4,<span class="hljs-string">-1</span>,2,1,<span class="hljs-string">-5</span>,4]<br>输出：6<br>解释：连续子数组 [4,<span class="hljs-string">-1</span>,2,1] 的和最大，为 6 。<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2</strong>：</p>
+<figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs fix"><span class="hljs-attr">输入：nums </span>=<span class="hljs-string"> [1]</span><br><span class="hljs-string">输出：1</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>提示</strong>：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-number">1</span> &lt;= nums.<span class="hljs-built_in">length</span> &lt;= <span class="hljs-number">3</span> * <span class="hljs-number">10e4</span><br><span class="hljs-number">-105</span> &lt;= nums[i] &lt;= <span class="hljs-number">10e5</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>该系列最经典的一题，也是最简单的一题，思路也很简单。思路清晰，先说DP。</p>
+<ol>
+<li>对数组遍历，连续子序列和为 <code>sum</code></li>
+<li>如果 <code>sum&gt;0</code> 就说明对结果有增益</li>
+<li>如果小于0就表示没有增益，直接舍去前面的结果，将 <code>sum</code> 赋值为 <code>nums[i]</code>。</li>
+<li>记录每次遍历是sum的最大值</li>
+</ol>
+<p>代码还是很简洁的</p>
+<h4 id="代码-Java"><a href="#代码-Java" class="headerlink" title="代码(Java)"></a>代码(Java)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxSubArray</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> len = nums.length;<br>        <span class="hljs-keyword">if</span>(len&lt;<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><br>        <span class="hljs-keyword">int</span> sum = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> res = Integer.MIN_VALUE;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;len;i++)&#123;<br>            <span class="hljs-keyword">if</span>(sum&gt;<span class="hljs-number">0</span>)&#123;<br>                sum += nums[i];<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                sum = nums[i];<br>            &#125;<br>            res = Math.max(res, sum);<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-乘积最大子数组"><a href="#2-乘积最大子数组" class="headerlink" title="2. 乘积最大子数组"></a>2. 乘积最大子数组</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/maximum-product-subarray/">刷题地址:152. 乘积最大子数组</a></p>
+<p>给你一个整数数组 <code>nums</code> ，请你找出数组中乘积最大的连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。</p>
+<p><strong>示例 1</strong>：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: [2,3,-2,4] </span><br><span class="hljs-section">输出: 6</span><br><span class="hljs-section">解释: 子数组 [2,3] 有最大乘积 6。</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2</strong>:</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs subunit">输入: [<span class="hljs-string">-2</span>,0,<span class="hljs-string">-1</span>]<br>输出: 0<br>解释: 结果不能为 2, 因为 [<span class="hljs-string">-2</span>,<span class="hljs-string">-1</span>] 不是子数组。<br>Copy<br></code></pre></td></tr></table></figure>
+
+<h4 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h4><p>和上一题差不多，但是我们要注意，如果遇到负数的话，最大值乘负数会变成最小值，相对应的，最小值乘负数也会变成最大值。我们需要在每次遍历时候记录最大值和最小值，在 <code>nums[i]</code> 为负数时，调换最大值和最小值的数值。</p>
+<h4 id="代码-Java-1"><a href="#代码-Java-1" class="headerlink" title="代码(Java)"></a>代码(Java)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxProduct</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> len = nums.length;<br>        <span class="hljs-keyword">if</span>(len==<span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><br>        <span class="hljs-keyword">int</span> res = Integer.MIN_VALUE;<br>        <span class="hljs-keyword">int</span> imax = <span class="hljs-number">1</span>, imin = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;len;i++)&#123;<br>            <span class="hljs-keyword">if</span>(nums[i]&lt;<span class="hljs-number">0</span>)&#123;<br>                <span class="hljs-keyword">int</span> temp = imax;<br>                imax = imin;<br>                imin = temp;<br>            &#125;<br>            imax = Math.max(imax*nums[i], nums[i]);<br>            imin = Math.min(imin*nums[i], nums[i]);<br><br>            res = Math.max(imax, res);<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-环形子数组的最大和"><a href="#3-环形子数组的最大和" class="headerlink" title="3. 环形子数组的最大和"></a>3. 环形子数组的最大和</h3><p>给定一个由整数数组 A 表示的环形数组 C，求 C 的非空子数组的最大可能和。</p>
+<p>在此处，环形数组意味着数组的末端将会与开头相连呈环状。（形式上，当 <code>0 &lt;= i &lt; A.length</code> 时 <code>C[i] = A[i]</code>，且当 <code>i &gt;= 0</code> 时 <code>C[i+A.length] = C[i]</code>）</p>
+<p>此外，子数组最多只能包含固定缓冲区 A 中的每个元素一次。（形式上，对于子数组 <code>C[i], C[i+1], ..., C[j]</code>，不存在 <code>i &lt;= k1, k2 &lt;= j</code> 其中 <code>k1 % A.length = k2 % A.length</code>）</p>
+<p><strong>示例 1</strong>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs css">输入：<span class="hljs-selector-attr">[1,-2,3,-2]</span><br>输出：<span class="hljs-number">3</span><br>解释：从子数组 <span class="hljs-selector-attr">[3]</span> 得到最大和 <span class="hljs-number">3</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2</strong>：</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：<span class="hljs-comment">[5,-3,5]</span><br>输出：10<br>解释：从子数组 <span class="hljs-comment">[5,5]</span> 得到最大和 5 + 5 = 10<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 3</strong>：</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs subunit">输入：[3,<span class="hljs-string">-1</span>,2,<span class="hljs-string">-1</span>]<br>输出：4<br>解释：从子数组 [2,<span class="hljs-string">-1</span>,3] 得到最大和 2 + (<span class="hljs-string">-1</span>) + 3 = 4<br>Copy<br></code></pre></td></tr></table></figure>
+
+<h4 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h4><p>思路清晰，先说DP。<br>稍微变通一下就是很简单的一道题，因为只包含两种情况，一种就是第一题的情况，另一种其实就是肯定包括第一位和最后一位，找出最大的子数组其实也就是找到第二位和倒数第二位之间最小的连续子序列，然后用总和减去即可。</p>
+<h4 id="代码-Java-2"><a href="#代码-Java-2" class="headerlink" title="代码(Java)"></a>代码(Java)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxSubarraySumCircular</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] A)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> sum = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> len = A.length;<br>        <span class="hljs-keyword">if</span>(len&lt;<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">if</span>(len == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> A[<span class="hljs-number">0</span>];<br>        <span class="hljs-keyword">int</span> s1 = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> ans1 = Integer.MIN_VALUE;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;len;i++)&#123;<br>            sum += A[i];<br>            s1 = Math.max(s1+A[i], A[i]);<br>            ans1 = Math.max(s1, ans1);<br>        &#125;<br><br>        <span class="hljs-keyword">int</span> s2 = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> ans2 = Integer.MAX_VALUE;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;len-<span class="hljs-number">1</span>;i++)&#123;<br>            s2 = Math.min(s2+A[i], A[i]);<br>            ans2 = Math.min(ans2, s2);<br>        &#125;<br>        ans2 = sum - ans2;<br><br>        <span class="hljs-keyword">return</span> Math.max(ans1, ans2);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-最大子矩阵"><a href="#4-最大子矩阵" class="headerlink" title="4. 最大子矩阵"></a>4. 最大子矩阵</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/max-submatrix-lcci/">刷题地址:面试题 17.24. 最大子矩阵</a></p>
+<p>给定一个正整数、负整数和 0 组成的 N × M 矩阵，编写代码找出元素总和最大的子矩阵。</p>
+<p>返回一个数组 <code>[r1, c1, r2, c2]</code> ，其中 <code>r1</code>, <code>c1</code> 分别代表子矩阵左上角的行号和列号，<code>r2</code>, <code>c2</code> 分别代表右下角的行号和列号。若有多个满足条件的子矩阵，返回任意一个均可。</p>
+<p>注意：本题相对书上原题稍作改动</p>
+<p><strong>示例</strong>：</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：<br><span class="hljs-comment">[</span><br><span class="hljs-comment">   <span class="hljs-comment">[-1,0]</span>,</span><br><span class="hljs-comment">   <span class="hljs-comment">[0,-1]</span></span><br><span class="hljs-comment">]</span><br>输出：<span class="hljs-comment">[0,1,0,1]</span><br>解释：输入中标粗的元素即为输出所表示的矩阵<br>Copy<br></code></pre></td></tr></table></figure>
+
+<h4 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h4><p>看着挺唬人的一道题，也还是第一道题的二维化，我们遍历两次从第 <code>i</code> 行开始的 <code>j</code> 行，每一列的数加在一起变成了一个新的数组 <code>b[]</code>，然后算b的最大连续子序列，同时记录下左上的坐标，在每次出现最大值时更新右下坐标即可，思路还是很清晰的。</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span>[] getMaxMatrix(<span class="hljs-keyword">int</span>[][] matrix) &#123;<br>        <span class="hljs-keyword">int</span> []ans = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span> [<span class="hljs-number">4</span>];<br>        <span class="hljs-keyword">int</span> lenx = matrix.length;<br>        <span class="hljs-keyword">int</span> leny = matrix[<span class="hljs-number">0</span>].length;<br>        <span class="hljs-keyword">int</span> []b = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[leny];<br>        <span class="hljs-keyword">int</span> row = <span class="hljs-number">0</span>, col = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> max = Integer.MIN_VALUE;<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;lenx;i++)&#123;<br>            Arrays.fill(b, <span class="hljs-number">0</span>);<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=i;j&lt;lenx;j++)&#123;<br>                <span class="hljs-keyword">int</span> sum = <span class="hljs-number">0</span>;<br>                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k=<span class="hljs-number">0</span>;k&lt;leny;k++)&#123;<br>                    b[k] += matrix[j][k];<br><br>                    <span class="hljs-keyword">if</span>(sum&gt;<span class="hljs-number">0</span>)&#123;<br>                        sum += b[k];<br>                    &#125;<span class="hljs-keyword">else</span>&#123;<br>                        sum = b[k];<br>                        row = i;<br>                        col = k;<br>                    &#125;<br><br>                    <span class="hljs-keyword">if</span>(sum &gt; max)&#123;<br>                        max = sum;<br>                        ans[<span class="hljs-number">0</span>] = row;<br>                        ans[<span class="hljs-number">1</span>] = col;<br>                        ans[<span class="hljs-number">2</span>] = j;<br>                        ans[<span class="hljs-number">3</span>] = k;<br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-矩形区域不超过-K-的最大数值和"><a href="#5-矩形区域不超过-K-的最大数值和" class="headerlink" title="5. 矩形区域不超过 K 的最大数值和"></a>5. 矩形区域不超过 K 的最大数值和</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/max-sum-of-rectangle-no-larger-than-k/">刷题地址:363. 矩形区域不超过 K 的最大数值和</a></p>
+<p>给定一个非空二维矩阵 matrix 和一个整数 k，找到这个矩阵内部不大于 k 的最大矩形和。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs lua">输入: matrix = <span class="hljs-string">[[1,0,1],[0,-2,3]]</span>, k = <span class="hljs-number">2</span><br>输出: <span class="hljs-number">2</span> <br>解释: 矩形区域 <span class="hljs-string">[[0, 1], [-2, 3]]</span> 的数值和是 <span class="hljs-number">2</span>，且 <span class="hljs-number">2</span> 是不超过 k 的最大数字（k = <span class="hljs-number">2</span>）。<br>Copy<br></code></pre></td></tr></table></figure>
+
+<h4 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h4><p>思路清晰，先不说DP，就是上面一道题的变体，最接近 <code>k</code> 而不大于 <code>k</code>, 直接对上一题的 <code>b[]</code> 进行暴力遍历咯，找到所有情况直接选择最优解。</p>
+<p>PS：实际情况因为一般都要查询多次，为避免重复计算一般选用二维前缀和，在前缀和篇章细嗦。</p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxSumSubmatrix</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[][] matrix, <span class="hljs-keyword">int</span> k)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> res = Integer.MIN_VALUE;<br>        <span class="hljs-keyword">int</span> lenx = matrix.length;<br>        <span class="hljs-keyword">int</span> leny = matrix[<span class="hljs-number">0</span>].length;<br>        <span class="hljs-keyword">int</span> []b = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[leny];<br>        <br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;lenx;i++)&#123;<br>            Arrays.fill(b, <span class="hljs-number">0</span>);<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=i;j&lt;lenx;j++)&#123;<br>                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> l=<span class="hljs-number">0</span>;l&lt;leny;l++)&#123;<br>                    b[l] += matrix[j][l];<br>                &#125;<br>                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> x=<span class="hljs-number">0</span>;x&lt;leny;x++)&#123;<br>                    <span class="hljs-keyword">int</span> sum = <span class="hljs-number">0</span>;<br>                    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> y=x;y&lt;leny;y++)&#123;<br>                        sum += b[y];<br>                        <span class="hljs-keyword">if</span>(sum&lt;=k)&#123;<br>                            res = Math.max(res, sum);<br>                        &#125;<br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125; <br></code></pre></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/05/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81-List/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">接口与多态-List</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/01/leetcode124-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E7%9A%84%E6%9C%80%E5%A4%A7%E8%B7%AF%E5%BE%84%E5%92%8C/">
+                        <span class="hidden-mobile">leetcode124.二叉树中的最大路径和</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

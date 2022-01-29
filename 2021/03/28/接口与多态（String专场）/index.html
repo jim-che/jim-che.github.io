@@ -1,0 +1,625 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="接口与多态(String专场)多态讲的差不多了，下面介绍一些常见常用需要掌握的接口。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接口与多态（String）">
+<meta property="og:url" content="http://example.com/2021/03/28/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81%EF%BC%88String%E4%B8%93%E5%9C%BA%EF%BC%89/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="接口与多态(String专场)多态讲的差不多了，下面介绍一些常见常用需要掌握的接口。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/03/28/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81%EF%BC%88String%E4%B8%93%E5%9C%BA%EF%BC%89/JVM3.jpg">
+<meta property="article:published_time" content="2021-03-28T02:17:10.000Z">
+<meta property="article:modified_time" content="2022-01-29T08:49:25.947Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="Java基础">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2021/03/28/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81%EF%BC%88String%E4%B8%93%E5%9C%BA%EF%BC%89/JVM3.jpg">
+  
+  
+  <title>接口与多态（String） - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="接口与多态（String）">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-28 10:17" pubdate>
+        2021年3月28日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      50 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">接口与多态（String）</h1>
+            
+            <div class="markdown-body">
+              <h2 id="接口与多态-String专场"><a href="#接口与多态-String专场" class="headerlink" title="接口与多态(String专场)"></a>接口与多态(String专场)</h2><p>多态讲的差不多了，下面介绍一些常见常用需要掌握的接口。</p>
+<span id="more"></span>
+
+<h3 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h3><p>就是一个常见而特殊的接口，一共有几十种方法可以使用</p>
+<p>先看一下如果初始化一个字符串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><pre><code class="hljs Java">String s1 = <span class="hljs-string">&quot;Runoob&quot;</span>;              <span class="hljs-comment">// String 直接创建</span><br>String s2 = <span class="hljs-string">&quot;Runoob&quot;</span>;              <span class="hljs-comment">// String 直接创建</span><br>String s3 = s1;                    <span class="hljs-comment">// 相同引用</span><br>String s4 = <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;Runoob&quot;</span>);   <span class="hljs-comment">// String 对象创建</span><br>String s5 = <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;Runoob&quot;</span>);   <span class="hljs-comment">// String 对象创建</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>根据学过的知识，我们知道在 <code>JVM</code> 中，地址如下</p>
+<p><a target="_blank" rel="noopener" href="https://www.dmxcg.xyz/img/Java/Object/JVM3.jpg"><img src="/2021/03/28/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81%EF%BC%88String%E4%B8%93%E5%9C%BA%EF%BC%89/JVM3.jpg" srcset="/img/loading.gif" lazyload alt="JVM"></a></p>
+<p><a target="_blank" rel="noopener" href="https://www.dmxcg.xyz/img/Java/Object/JVM3.jpg">JVM</a></p>
+<p>我们同样可以这样来初始化 <code>String</code></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs arduino">  <span class="hljs-keyword">char</span>[] helloArray = &#123;<span class="hljs-string">&#x27;H&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>, <span class="hljs-string">&#x27;l&#x27;</span>, <span class="hljs-string">&#x27;l&#x27;</span>, <span class="hljs-string">&#x27;o&#x27;</span>&#125; ;<br>  <span class="hljs-keyword">String</span> helloString = <span class="hljs-keyword">new</span> <span class="hljs-built_in"><span class="hljs-keyword">String</span></span>(helloArray);<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>下面介绍 <code>String</code> 类支持的方法</p>
+<p>我们定义一个字符串 <code>s = &quot;Hello&quot;</code>。</p>
+<h4 id="1-charAt"><a href="#1-charAt" class="headerlink" title="1. charAt()"></a>1. charAt()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">char</span> <span class="hljs-title">charAt</span><span class="hljs-params">(<span class="hljs-keyword">int</span> index)</span></span><br><span class="hljs-function">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>就是返回 <code>index</code> 索引处的字符</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Java">System.out.println(s.charAt(<span class="hljs-number">0</span>));<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果<br>H</p>
+<h4 id="2-comparaTo-和-compareToIgnoreCase"><a href="#2-comparaTo-和-compareToIgnoreCase" class="headerlink" title="2. comparaTo() 和 compareToIgnoreCase()"></a>2. comparaTo() 和 compareToIgnoreCase()</h4><p><code>comparaTo()</code> 方法用于两个字符串的比较</p>
+<ul>
+<li><p>按字典顺序比较两个字符串。</p>
+<p>int compareTo(String anotherString)</p>
+</li>
+</ul>
+<p>返回值是整型，它是先比较对应字符的大小(ASCII码顺序)，如果第一个字符和参数的第一个字符不等，结束比较，返回他们之间的长度差值，如果第一个字符和参数的第一个字符相等，则以第二个字符和参数的第二个字符做比较，以此类推,直至比较的字符或被比较的字符有一方结束。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> </span>&#123;<br> <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span> </span>&#123;<br>        String str1 = <span class="hljs-string">&quot;Strings&quot;</span>;<br>        String str2 = <span class="hljs-string">&quot;Strings&quot;</span>;<br>        String str3 = <span class="hljs-string">&quot;Strings123&quot;</span>;<br> <br>        <span class="hljs-keyword">int</span> result = str1.compareTo( str2 );<br>        System.out.println(result);<br>      <br>        result = str2.compareTo( str3 );<br>        System.out.println(result);<br>     <br>        result = str3.compareTo( str1 );<br>        System.out.println(result);<br>    &#125;<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs diff">0<br><span class="hljs-deletion">-3</span><br>3<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p><code>comparaToIngoreCase()</code> 就是忽略大小写的 <code>comparaTo()</code>。</p>
+<h4 id="3-concat"><a href="#3-concat" class="headerlink" title="3. concat()"></a>3. concat()</h4><p>连接两个字符串</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">    String a = &quot;Hello&quot;;<br>    String b = &quot; World!&quot;;<br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(a.concat(b));<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">Hello World!<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>实际上和 <code>+</code> 效果一样。</p>
+<h4 id="4-contentEquals"><a href="#4-contentEquals" class="headerlink" title="4. contentEquals()"></a>4. contentEquals()</h4><p>用于将此字符串与指定的 <code>StringBuffer</code> 比较。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> contentEquals(StringBuffer sb)<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>如果该字符串与 <code>sb</code> 字符都相同就返回 <code>true</code> 否则 <code>false</code>。</p>
+<h4 id="5-copyValueOf"><a href="#5-copyValueOf" class="headerlink" title="5. copyValueOf()"></a>5. copyValueOf()</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String copyValueOf(<span class="hljs-keyword">char</span>[] data)<span class="hljs-comment">// 返回指定数组中表示该字符序列的字符串。</span><br><br>或<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String copyValueOf(<span class="hljs-keyword">char</span>[] data, <span class="hljs-keyword">int</span> offset, <span class="hljs-keyword">int</span> <span class="hljs-keyword">count</span>)<span class="hljs-comment">// 返回指定数组中表示该字符序列的 字符串。 </span><br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>即第一种就是把数组组合成字符串。第二种，就是截取，从 <code>offset</code> 开始的 <code>count</code> 位成为字符串。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">char</span>[] Str1 = &#123;<span class="hljs-string">&#x27;h&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>, <span class="hljs-string">&#x27;l&#x27;</span>, <span class="hljs-string">&#x27;l&#x27;</span>, <span class="hljs-string">&#x27;o&#x27;</span>, <span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-string">&#x27;w&#x27;</span>, <span class="hljs-string">&#x27;o&#x27;</span>, <span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-string">&#x27;l&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>&#125;;<br><span class="hljs-keyword">String</span> Str2 = <span class="hljs-string">&quot;&quot;</span>;<br><br>Str2 = <span class="hljs-keyword">String</span>.<span class="hljs-built_in">copyValueOf</span>(Str1);<br>System.out.<span class="hljs-built_in">println</span>(Str2);<br><br>Str2 = <span class="hljs-keyword">String</span>.<span class="hljs-built_in">copyValueOf</span>(Str1, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>);<br>System.out.<span class="hljs-built_in">println</span>(Str2);<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">hello world<br>ell<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="6-endsWith-和startsWith"><a href="#6-endsWith-和startsWith" class="headerlink" title="6. endsWith()和startsWith()"></a>6. endsWith()和startsWith()</h4><p>endsWith() 方法用于测试字符串是否以指定的后缀结束。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">String str1 = <span class="hljs-string">&quot;Hello World&quot;</span>;<br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(str1.ends<span class="hljs-constructor">With(<span class="hljs-string">&quot;rld&quot;</span>)</span>);<br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(str1.ends<span class="hljs-constructor">With(<span class="hljs-string">&quot;abc&quot;</span>)</span>);<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">true</span><br><span class="hljs-keyword">false</span><br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p><code>startsWith()</code> 方法用于检测字符串是否以指定的前缀开始。参数方法就和 <code>endsWith()</code> 一样。</p>
+<h4 id="7-equals-和equalsIgnoreCase"><a href="#7-equals-和equalsIgnoreCase" class="headerlink" title="7. equals()和equalsIgnoreCase()"></a>7. equals()和equalsIgnoreCase()</h4><p>老朋友了，<code>String</code> 的 <code>equals()</code> 是重写的，就是判断两个字符串是否相等。</p>
+<p><code>equalsIgnoreCase()</code> 就是忽略大小写的 <code>equals()</code>。</p>
+<h4 id="8-getChars"><a href="#8-getChars" class="headerlink" title="8. getChars()"></a>8. getChars()</h4><p>getChars() 方法将字符从字符串复制到目标字符数组。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">public void get<span class="hljs-constructor">Chars(<span class="hljs-params">int</span> <span class="hljs-params">srcBegin</span>, <span class="hljs-params">int</span> <span class="hljs-params">srcEnd</span>, <span class="hljs-params">char</span>[] <span class="hljs-params">dst</span>,  <span class="hljs-params">int</span> <span class="hljs-params">dstBegin</span>)</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>srcBegin – 字符串中要复制的第一个字符的索引。</li>
+<li>srcEnd – 字符串中要复制的最后一个字符之后的索引。</li>
+<li>dst – 目标数组。</li>
+<li>dstBegin – 目标数组中的起始偏移量。</li>
+</ul>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">String str1 = <span class="hljs-string">&quot;Hello World&quot;</span>;<br><span class="hljs-built_in">char</span> <span class="hljs-literal">[]</span>str2 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">char</span><span class="hljs-literal">[<span class="hljs-number">5</span>]</span>;<br><br>str1.get<span class="hljs-constructor">Chars(0, 5, <span class="hljs-params">str2</span>, 0)</span>;<br><br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(str2);<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">Hello<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="9-hashCode"><a href="#9-hashCode" class="headerlink" title="9. hashCode()"></a>9. hashCode()</h4><p>hashCode() 方法用于返回字符串的哈希码。</p>
+<p>计算方法：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">s</span>[<span class="hljs-number">0</span>]*<span class="hljs-number">31</span>^(n-<span class="hljs-number">1</span>) + s[<span class="hljs-number">1</span>]*<span class="hljs-number">31</span>^(n-<span class="hljs-number">2</span>) + ... + s[n-<span class="hljs-number">1</span>]<br><span class="hljs-attribute">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>在之前我们也说过，<code>hashCode</code> 还是辅助 <code>equals</code> 的。 <code>equals</code> 是 <code>hashCode</code> 相等的充分条件。</p>
+<h4 id="10-indexOf-和lastIndexOf"><a href="#10-indexOf-和lastIndexOf" class="headerlink" title="10. indexOf()和lastIndexOf()"></a>10. indexOf()和lastIndexOf()</h4><ul>
+<li>public int indexOf(int ch): 返回指定字符(ASCII)在字符串中第一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1。</li>
+<li>public int indexOf(int ch, int fromIndex): 返回从 fromIndex 位置开始查找指定字符在字符串中第一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1。</li>
+<li>int indexOf(String str): 返回指定字符在字符串中第一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1。</li>
+<li>int indexOf(String str, int fromIndex): 返回从 fromIndex 位置开始查找指定字符在字符串中第一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1。</li>
+</ul>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">public <span class="hljs-built_in">int</span> index<span class="hljs-constructor">Of(<span class="hljs-params">int</span> <span class="hljs-params">ch</span> )</span><br><br>或<br><br>public <span class="hljs-built_in">int</span> index<span class="hljs-constructor">Of(<span class="hljs-params">int</span> <span class="hljs-params">ch</span>, <span class="hljs-params">int</span> <span class="hljs-params">fromIndex</span>)</span><br><br>或<br><br><span class="hljs-built_in">int</span> index<span class="hljs-constructor">Of(String <span class="hljs-params">str</span>)</span><br><br>或<br><br><span class="hljs-built_in">int</span> index<span class="hljs-constructor">Of(String <span class="hljs-params">str</span>, <span class="hljs-params">int</span> <span class="hljs-params">fromIndex</span>)</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<p><code>lastIndexOf()</code> 就是返回最后一次索引，函数与上面完全相同</p>
+<h4 id="11-intern"><a href="#11-intern" class="headerlink" title="11. intern()"></a>11. intern()</h4><p>看似没用的一个方法，返回值就是字符串，但是它会检查内存池中是否存在该字符串啊，如果没有，添加到内存池再返回其引用，如果有就直接返回该字符串的引用。</p>
+<p>例如</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">String</span> str<span class="hljs-number">1</span> = <span class="hljs-string">&quot;a&quot;</span>;<br><span class="hljs-attribute">String</span> str<span class="hljs-number">2</span> = <span class="hljs-string">&quot;b&quot;</span>;<br><br><span class="hljs-attribute">String</span> str<span class="hljs-number">3</span> = str<span class="hljs-number">1</span> + str<span class="hljs-number">2</span>;<br><span class="hljs-attribute">String</span> str<span class="hljs-number">4</span> = new String(<span class="hljs-string">&quot;ab&quot;</span>);<br><br><span class="hljs-attribute">System</span>.out.println(str<span class="hljs-number">3</span>==<span class="hljs-string">&quot;ab&quot;</span>);<br><span class="hljs-attribute">System</span>.out.println(str<span class="hljs-number">4</span>==<span class="hljs-string">&quot;ab&quot;</span>);<br><span class="hljs-attribute">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">false</span><br><span class="hljs-keyword">false</span><br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>虽然 <code>str3</code>，<code>str4</code> 的值也是 <code>ab</code> 但是它并不在内存池中，如果使用 <code>intern()</code> 就会添加到内存池</p>
+<figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sas">System.<span class="hljs-meta">out</span>.print<span class="hljs-meta">ln(</span>str3.inte<span class="hljs-meta">rn(</span>)==<span class="hljs-string">&quot;ab&quot;</span>);<br>System.<span class="hljs-meta">out</span>.print<span class="hljs-meta">ln(</span>str4.inte<span class="hljs-meta">rn(</span>)==<span class="hljs-string">&quot;ab&quot;</span>);<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">true</span><br><span class="hljs-keyword">true</span><br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>这个方法并不是持续的，即只有在调用这一刻，它是在内存池中的。</p>
+<h4 id="12-length"><a href="#12-length" class="headerlink" title="12. length()"></a>12. length()</h4><p>就是返回字符串的长度，差不多是最常用的。</p>
+<h4 id="13-regionMatches"><a href="#13-regionMatches" class="headerlink" title="13. regionMatches()"></a>13. regionMatches()</h4><p><code>regionMatches()</code> 方法用于检测两个字符串在一个区域内是否相等。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">regionMatches</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> ignoreCase,</span></span><br><span class="hljs-params"><span class="hljs-function">                             <span class="hljs-keyword">int</span> toffset,</span></span><br><span class="hljs-params"><span class="hljs-function">                             <span class="hljs-keyword">String</span> other,</span></span><br><span class="hljs-params"><span class="hljs-function">                             <span class="hljs-keyword">int</span> ooffset,</span></span><br><span class="hljs-params"><span class="hljs-function">                             <span class="hljs-keyword">int</span> len)</span></span><br><span class="hljs-function">Copy</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>ignoreCase – 如果为 true，则比较字符时忽略大小写。</p>
+</li>
+<li><p>toffset – 此字符串中子区域的起始偏移量。</p>
+</li>
+<li><p>other – 字符串参数。</p>
+</li>
+<li><p>ooffset – 字符串参数中子区域的起始偏移量。</p>
+</li>
+<li><p>len – 要比较的字符数。</p>
+<p>String s1 = “Hello World”;<br>String s2 = “World”;</p>
+<p>System.out.println(s1.regionMatches(s1.indexOf(“W”), s2, 0, 5));</p>
+</li>
+</ul>
+<p>结果</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">true</span><br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="14-replace"><a href="#14-replace" class="headerlink" title="14. replace()"></a>14. replace()</h4><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-built_in">public</span> String replace(<span class="hljs-type">char</span> searchChar, <span class="hljs-type">char</span> newChar)  <br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>替换所有 <code>searchChar</code> 字符为 <code>newChar</code></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">String s1 = &quot;Hello World&quot;;<br><br><span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(s1.replace(<span class="hljs-string">&#x27;o&#x27;</span>, <span class="hljs-string">&#x27;O&#x27;</span>));<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">HellO WOrld<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="15-subSequence"><a href="#15-subSequence" class="headerlink" title="15. subSequence()"></a>15. subSequence()</h4><p>subSequence() 方法返回一个新的字符序列，它是此序列的一个子序列。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">public CharSequence sub<span class="hljs-constructor">Sequence(<span class="hljs-params">int</span> <span class="hljs-params">beginIndex</span>, <span class="hljs-params">int</span> <span class="hljs-params">endIndex</span>)</span><br>Copy<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>beginIndex – 起始索引（包括）。</p>
+</li>
+<li><p>endIndex – 结束索引（不包括）。</p>
+<p>String s1 = “Hello World”;</p>
+<p>System.out.println(s1.subSequence(s1.indexOf(“H”), s1.indexOf(“ “)));</p>
+</li>
+</ul>
+<p>结果</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">Hello<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>返回值是一个 <code>CharSequence</code> 字符序列，是 <code>String</code> 的超类</p>
+<h4 id="16-substring"><a href="#16-substring" class="headerlink" title="16. substring()"></a>16. substring()</h4><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-built_in">public</span> String substring(<span class="hljs-type">int</span> beginIndex)<br><br>或<br><br><span class="hljs-built_in">public</span> String substring(<span class="hljs-type">int</span> beginIndex, <span class="hljs-type">int</span> endIndex)<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>beginIndex – 起始索引（包括）, 索引从 0 开始。</li>
+<li>endIndex – 结束索引（不包括）。</li>
+</ul>
+<p>用法和上面差不多</p>
+<h4 id="17-toCharArray"><a href="#17-toCharArray" class="headerlink" title="17. toCharArray()"></a>17. toCharArray()</h4><p>转换为字符数组，很实用的一个类</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">String s1 = <span class="hljs-string">&quot;Hello World&quot;</span>;<br><br><span class="hljs-built_in">char</span> <span class="hljs-literal">[]</span>a = s1.<span class="hljs-keyword">to</span><span class="hljs-constructor">CharArray()</span>;<br><br><span class="hljs-keyword">for</span>(<span class="hljs-built_in">char</span> i:a)&#123;<br>    <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.print(i+<span class="hljs-string">&quot; &quot;</span>);<br>&#125;<br>Copy<br></code></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-built_in">H</span> e l l o   W o <span class="hljs-built_in">r</span> l d <br><span class="hljs-built_in">Copy</span><br></code></pre></td></tr></table></figure>
+
+<p>PS: Java中，字符串是不能直接遍历进行修改的。</p>
+<h4 id="18-toLowerCase-和toUpperCase"><a href="#18-toLowerCase-和toUpperCase" class="headerlink" title="18. toLowerCase()和toUpperCase()"></a>18. toLowerCase()和toUpperCase()</h4><p>顾名思义，就是把字符串中所有字符转换为小/大写</p>
+<h4 id="19-trim"><a href="#19-trim" class="headerlink" title="19. trim()"></a>19. trim()</h4><p>用于删除字符串首尾的空白符</p>
+<h4 id="20-valueOf"><a href="#20-valueOf" class="headerlink" title="20. valueOf()"></a>20. valueOf()</h4><p><code>valueOf</code> 就是让各种形式的参数变为字符串形式。</p>
+<ul>
+<li>valueOf(boolean b): 返回 boolean 参数的字符串表示形式。.</li>
+<li>valueOf(char c): 返回 char 参数的字符串表示形式。</li>
+<li>valueOf(char[] data): 返回 char 数组参数的字符串表示形式。</li>
+<li>valueOf(char[] data, int offset, int count): 返回 char 数组参数的特定子数组的字符串表示形式。</li>
+<li>valueOf(double d): 返回 double 参数的字符串表示形式。</li>
+<li>valueOf(float f): 返回 float 参数的字符串表示形式。</li>
+<li>valueOf(int i): 返回 int 参数的字符串表示形式。</li>
+<li>valueOf(long l): 返回 long 参数的字符串表示形式。</li>
+<li>valueOf(Object obj): 返回 Object 参数的字符串表示形式。</li>
+</ul>
+<h4 id="21-contains"><a href="#21-contains" class="headerlink" title="21. contains()"></a>21. contains()</h4><p>contains() 方法用于判断字符串中是否包含指定的字符或字符串。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> contains(CharSequence chars)<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="22-isEmpty"><a href="#22-isEmpty" class="headerlink" title="22. isEmpty()"></a>22. isEmpty()</h4><p>就是判读字符串是否为空。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-built_in">public</span> <span class="hljs-type">boolean</span> isEmpty()<br><span class="hljs-keyword">Copy</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>常用的字符串方法基本就这么多，还有一些关于正则表达式的部分方法我们放在正则表达式专题细嗦。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/29/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E6%9C%80%E7%BB%8F%E5%85%B8LIS%E5%8D%95%E4%B8%B2%E9%97%AE%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">动态规划:最经典LIS单串问题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/27/hexo%E5%8D%9A%E5%AE%A2%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E4%BD%BF%E7%94%A8/">
+                        <span class="hidden-mobile">hexo博客的创建与使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
