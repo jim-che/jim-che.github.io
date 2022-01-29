@@ -19,33 +19,33 @@
     <meta name="description" content="HashMap 源码分析（JDK 1.8）HashMap在Java学习中是越不过去的一道弯，HashMap虽然用着简单，但是其中的原理却很复杂。搞清楚弄明白之后，能够很大的提升个人能力。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HashMap源码分析">
-<meta property="og:url" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
+<meta property="og:url" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="HashMap 源码分析（JDK 1.8）HashMap在Java学习中是越不过去的一道弯，HashMap虽然用着简单，但是其中的原理却很复杂。搞清楚弄明白之后，能够很大的提升个人能力。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/3.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/4.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/5.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/6.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/7.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/8.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/9.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/10.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/11.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/12.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/13.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/14.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/15.png">
-<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/16.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/3.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/4.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/5.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/6.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/7.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/8.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/9.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/10.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/11.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/12.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/13.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/14.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/15.png">
+<meta property="og:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/16.png">
 <meta property="article:published_time" content="2022-02-23T01:46:59.000Z">
-<meta property="article:modified_time" content="2022-01-29T14:30:05.978Z">
+<meta property="article:modified_time" content="2022-01-29T15:37:39.803Z">
 <meta property="article:author" content="jim-che">
 <meta property="article:tag" content="Java容器">
 <meta property="article:tag" content="HashMap">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1.png">
+<meta name="twitter:image" content="http://example.com/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1.png">
   
   
   <title>HashMap源码分析 - Blog</title>
@@ -264,7 +264,7 @@
 <p>在本篇文章中，我将会对 HashMap 中常用方法、重要属性及相关方法进行分析。需要说明的是，HashMap 源码中可分析的点很多，本文很难一一覆盖，请见谅。</p>
 <hr>
 <h2 id="2-原理"><a href="#2-原理" class="headerlink" title="2. 原理"></a>2. 原理</h2><p>上一节说到 HashMap 底层是基于散列算法实现，散列算法分为散列再探测和拉链式。HashMap 则使用了拉链式的散列算法，并在 JDK 1.8 中引入了红黑树优化过长的链表。数据结构示意图如下：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>对于拉链式的散列算法，其数据结构是由数组和链表（或树形结构）组成。在进行增删查等操作时，首先要定位到元素的所在桶的位置，之后再从链表中定位该元素。比如我们要查询上图结构中是否包含元素<code>35</code>，步骤如下：</p>
 <ol>
 <li>定位元素<code>35</code>所处桶的位置，<code>index = 35 % 16 = 3</code></li>
@@ -310,7 +310,7 @@
 
 <p>上面的代码长的有点不太好看，反正我第一次看的时候不明白它想干啥。不过后来在纸上画画，知道了它的用途。</p>
 <p>总结起来就一句话：找到大于或等于 cap 的最小2的幂。至于为啥要这样，后面再解释。我们先来看看 tableSizeFor 方法的图解：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>上面是 tableSizeFor 方法的计算过程图，这里 cap = 536,870,913 = 2<sup>29</sup> + 1<code>，多次计算后，算出</code>n + 1 = 1,073,741,824 = 2<sup>30 </sup>。通过图解应该可以比较容易理解这个方法的用途，这里就不多说了。</p>
 <p>说完了初始阈值的计算过程，再来说说负载因子（loadFactor）。对于 HashMap 来说，负载因子是一个很重要的参数，该参数反应了 HashMap 桶数组的使用情况（假设键值对节点均匀分布在桶数组中）。</p>
 <p>通过调节负载因子，可使 HashMap 时间和空间复杂度上有不同的表现。当我们调低负载因子时，HashMap 所能容纳的键值对数量变少。扩容时，重新将键值对存储新的桶数组里，键与键之间产生的碰撞会下降，链表长度变短。此时，HashMap 的增删改查等操作的效率将会变高，这里是典型的拿空间换时间。</p>
@@ -322,14 +322,14 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// index = (n - 1) &amp; hash</span><br>first = tab[(n - <span class="hljs-number">1</span>) &amp; hash]<br></code></pre></td></tr></table></figure>
 
 <p>这里通过<code>(n - 1)&amp; hash</code>即可算出桶的在桶数组中的位置，可能有的朋友不太明白这里为什么这么做，这里简单解释一下。HashMap 中桶数组的大小 length 总是2的幂，此时，<code>(n - 1) &amp; hash</code> 等价于对 length 取余。但取余的计算效率没有位运算高，所以<code>(n - 1) &amp; hash</code>也是一个小的优化。举个例子说明一下吧，假设 hash = 185，n = 16。计算过程示意图如下：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>上面的计算并不复杂，这里就不多说了。</p>
 <p>在上面源码中，除了查找相关逻辑，还有一个计算 hash 的方法。这个方法源码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 计算键的 hash 值</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> <span class="hljs-title">hash</span><span class="hljs-params">(Object key)</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> h;<br>    <span class="hljs-keyword">return</span> (key == <span class="hljs-keyword">null</span>) ? <span class="hljs-number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="hljs-number">16</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>看这个方法的逻辑好像是通过位运算重新计算 hash，那么这里为什么要这样做呢？为什么不直接用键的 hashCode 方法产生的 hash 呢？大家先可以思考一下，我把答案写在下面。</p>
 <p>这样做有两个好处，我来简单解释一下。我们再看一下上面求余的计算图，图中的 hash 是由键的 hashCode 产生。计算余数时，由于 n 比较小，hash 只有低4位参与了计算，高位的计算可以认为是无效的。这样导致了计算结果只与低位信息有关，高位数据没发挥作用。为了处理这个缺陷，我们可以上图中的 hash 高4位数据与低4位数据进行异或运算，即 <code>hash ^ (hash &gt;&gt;&gt; 4)</code>。通过这种方式，让高位数据与低位数据进行异或，以此加大低位信息的随机性，变相的让高位数据参与到计算中。此时的计算过程如下：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>在 Java 中，hashCode 方法产生的 hash 是 int 类型，32 位宽。前16位为高位，后16位为低位，所以要右移16位。</p>
 <p>上面所说的是重新计算 hash 的一个好处，除此之外，重新计算 hash 的另一个好处是可以增加 hash 的复杂度。当我们覆写 hashCode 方法时，可能会写出分布性不佳的 hashCode 方法，进而导致 hash 的冲突率比较高。通过移位和异或运算，可以让 hash 变得更复杂，进而影响 hash 的分布性。这也就是为什么 HashMap 不直接使用键对象原始 hash 的原因了。</p>
 <h3 id="3-3-遍历"><a href="#3-3-遍历" class="headerlink" title="3.3 遍历"></a>3.3 遍历</h3><p>和查找查找一样，遍历操作也是大家使用频率比较高的一个操作。对于 遍历 HashMap，我们一般都会用下面的方式：</p>
@@ -347,9 +347,9 @@
 <p>如上面的源码，遍历所有的键时，首先要获取键集合<code>KeySet</code>对象，然后再通过 KeySet 的迭代器<code>KeyIterator</code>进行遍历。</p>
 <p>KeyIterator 类继承自<code>HashIterator</code>类，核心逻辑也封装在 HashIterator 类中。HashIterator 的逻辑并不复杂，在初始化时，HashIterator 先从桶数组中找到包含链表节点引用的桶。然后对这个桶指向的链表进行遍历。</p>
 <p>遍历完成后，再继续寻找下一个包含链表节点引用的桶，找到继续遍历。找不到，则结束遍历。举个例子，假设我们遍历下图的结构：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>HashIterator 在初始化时，会先遍历桶数组，找到包含链表节点引用的桶，对应图中就是3号桶。随后由 nextNode 方法遍历该桶所指向的链表。遍历完3号桶后，nextNode 方法继续寻找下一个不为空的桶，对应图中的7号桶。之后流程和上面类似，直至遍历完最后一个桶。以上就是 HashIterator 的核心逻辑的流程，对应下图：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/6.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/6.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>遍历上图的最终结果是 <code>19 -&gt; 3 -&gt; 35 -&gt; 7 -&gt; 11 -&gt; 43 -&gt; 59</code>，已经验证为正确。</p>
 <h3 id="3-4-插入"><a href="#3-4-插入" class="headerlink" title="3.4 插入"></a>3.4 插入</h3><h4 id="3-4-1-插入逻辑分析"><a href="#3-4-1-插入逻辑分析" class="headerlink" title="3.4.1 插入逻辑分析"></a>3.4.1 插入逻辑分析</h4><p>通过前两节的分析，已经 HashMap 底层的数据结构应该了然于心了。对于插入的逻辑已经呼之欲出了。</p>
 <p>首先要定位要插入的键值对属于那个桶，定位到桶后，再判断桶是否为空。如果为空则将键值对存入即可，如果不为空，则需要将键值对接在链表最后一个位置，或者更新键值对。</p>
@@ -429,7 +429,7 @@
 </tr>
 </tbody></table>
 <p>这里简单说明一下移位导致的溢出情况，当 loadFactor小数位为 0，整数位可被2整除且大于等于8时，在某次计算中就可能会导致 newThr 溢出归零。见下图：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/7.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/7.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>分支二：</p>
 <table>
 <thead>
@@ -448,18 +448,18 @@
 <p>说完 newCap 和 newThr 的计算过程，接下来再来分析一下键值对节点重新映射的过程。</p>
 <p>在 JDK 1.8 中，重新映射节点需要考虑节点类型。对于树形节点，需先拆分红黑树再映射。对于链表类型节点，则需先对链表进行分组，然后再映射。需要的注意的是，分组后，组内节点相对位置保持不变。关于红黑树拆分的逻辑将会放在下一小节说明，先来看看链表是怎样进行分组映射的。</p>
 <p>我们都知道往底层数据结构中插入节点时，一般都是先通过模运算计算桶位置，接着把节点放入桶中即可。事实上，我们可以把重新映射看做插入操作。在 JDK 1.7 中，也确实是这样做的。但在 JDK 1.8 中，则对这个过程进行了一定的优化，逻辑上要稍微复杂一些。在详细分析前，我们先来回顾一下 hash 求余的过程：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/8.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/8.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>上图中，桶数组大小 n = 16，hash1 与 hash2 不相等。但因为只有后4位参与求余，所以结果相等。当桶数组扩容后，n 由16变成了32，对上面的 hash 值重新进行映射：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>扩容后，参与模运算的位数由4位变为了5位。由于两个 hash 第5位的值是不一样，所以两个 hash 算出的结果也不一样。上面的计算过程并不难理解，继续往下分析。</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/10.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/10.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>假设我们上图的桶数组进行扩容，扩容后容量 n = 16，重新映射过程如下:</p>
 <p>依次遍历链表，并计算节点 <code>hash &amp; oldCap</code> 的值。如下图所示</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/11.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/11.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>如果值为0，将 loHead 和 loTail 指向这个节点。如果后面还有节点 hash &amp; oldCap 为0的话，则将节点链入 loHead 指向的链表中，并将 loTail 指向该节点。如果值为非0的话，则让 hiHead 和 hiTail 指向该节点。完成遍历后，可能会得到两条链表，此时就完成了链表分组：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/12.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/12.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>最后再将这两条链接存放到相应的桶中，完成扩容。如下图：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/13.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/13.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>从上图可以发现，重新映射后，两条链表中的节点顺序并未发生变化，还是保持了扩容前的顺序。以上就是 JDK 1.8 中 HashMap 扩容的代码讲解。</p>
 <p>另外再补充一下，JDK 1.8 版本下 HashMap 扩容效率要高于之前版本。如果大家看过 JDK 1.7 的源码会发现，JDK 1.7 为了防止因 hash 碰撞引发的拒绝服务攻击，在计算 hash 过程中引入随机种子。以增强 hash 的随机性，使得键值对均匀分布在桶数组中。在扩容过程中，相关方法会根据容量判断是否需要生成新的随机种子，并重新计算所有节点的 hash。而在 JDK 1.8 中，则通过引入红黑树替代了该种方式。从而避免了多次计算 hash 的操作，提高了扩容效率。</p>
 <p>本小节的内容讲就先讲到这，接下来，来讲讲链表与红黑树相互转换的过程。</p>
@@ -476,7 +476,7 @@
 <p>第一个条件比较好理解，这里就不说了。这里来说说加入第二个条件的原因，个人觉得原因如下：</p>
 <p>当桶数组容量比较小时，键值对节点 hash 的碰撞率可能会比较高，进而导致链表长度较长。这个时候应该优先扩容，而不是立马树化。毕竟高碰撞率是因为桶数组容量较小引起的，这个是主因。容量小时，优先扩容可以避免一些列的不必要的树化过程。同时，桶容量较小时，扩容会比较频繁，扩容时需要拆分红黑树并重新映射。所以在桶容量比较小的情况下，将长链表转成红黑树是一件吃力不讨好的事。</p>
 <p>回到上面的源码中，我们继续看一下 treeifyBin 方法。该方法主要的作用是将普通链表转成为由 TreeNode 型节点组成的链表，并在最后调用 treeify 是将该链表转为红黑树。TreeNode 继承自 Node 类，所以 TreeNode 仍然包含 next 引用，原链表的节点顺序最终通过 next 引用被保存下来。我们假设树化前，链表结构如下：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/14.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/14.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>HashMap 在设计之初，并没有考虑到以后会引入红黑树进行优化。所以并没有像 TreeMap 那样，要求键类实现 comparable 接口或提供相应的比较器。但由于树化过程需要比较两个键对象的大小，在键类没有实现 comparable 接口的情况下，怎么比较键与键之间的大小了就成了一个棘手的问题。为了解决这个问题，HashMap 是做了三步处理，确保可以比较出两个键的大小，如下：</p>
 <ol>
 <li>比较键与键之间 hash 的大小，如果 hash 相同，继续往下比较</li>
@@ -485,7 +485,7 @@
 </ol>
 <p>tie break 是网球术语，可以理解为加时赛的意思，起这个名字还是挺有意思的。</p>
 <p>通过上面三次比较，最终就可以比较出孰大孰小。比较出大小后就可以构造红黑树了，最终构造出的红黑树如下：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/15.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/15.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>橙色的箭头表示 TreeNode 的 next 引用。由于空间有限，prev 引用未画出。可以看出，链表转成红黑树后，原链表的顺序仍然会被引用仍被保留了（红黑树的根节点会被移动到链表的第一位），我们仍然可以按遍历链表的方式去遍历上面的红黑树。这样的结构为后面红黑树的切分以及红黑树转成链表做好了铺垫，我们继续往下分析。</p>
 <h4 id="红黑树拆分"><a href="#红黑树拆分" class="headerlink" title="红黑树拆分"></a>红黑树拆分</h4><p>扩容后，普通节点需要重新映射，红黑树节点也不例外。按照一般的思路，我们可以先把红黑树转成链表，之后再重新映射链表即可。这种处理方式是大家比较容易想到的，但这样做会损失一定的效率。</p>
 <p>不同于上面的处理方式，HashMap 实现的思路则是上好佳（上好佳请把广告费打给我）。如上节所说，在将普通链表转成红黑树时，HashMap 通过两个额外的引用 next 和 prev 保留了原链表的节点顺序。这样再对红黑树进行重新映射时，完全可以按照映射链表的方式进行。这样就避免了将红黑树转成链表后再进行映射，无形中提高了效率。</p>
@@ -493,7 +493,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 红黑树转链表阈值</span><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> UNTREEIFY_THRESHOLD = <span class="hljs-number">6</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title">split</span><span class="hljs-params">(HashMap&lt;K,V&gt; map, Node&lt;K,V&gt;[] tab, <span class="hljs-keyword">int</span> index, <span class="hljs-keyword">int</span> bit)</span> </span>&#123;<br>    TreeNode&lt;K,V&gt; b = <span class="hljs-keyword">this</span>;<br>    <span class="hljs-comment">// Relink into lo and hi lists, preserving order</span><br>    TreeNode&lt;K,V&gt; loHead = <span class="hljs-keyword">null</span>, loTail = <span class="hljs-keyword">null</span>;<br>    TreeNode&lt;K,V&gt; hiHead = <span class="hljs-keyword">null</span>, hiTail = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-keyword">int</span> lc = <span class="hljs-number">0</span>, hc = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">/* </span><br><span class="hljs-comment">     * 红黑树节点仍然保留了 next 引用，故仍可以按链表方式遍历红黑树。</span><br><span class="hljs-comment">     * 下面的循环是对红黑树节点进行分组，与上面类似</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">for</span> (TreeNode&lt;K,V&gt; e = b, next; e != <span class="hljs-keyword">null</span>; e = next) &#123;<br>        next = (TreeNode&lt;K,V&gt;)e.next;<br>        e.next = <span class="hljs-keyword">null</span>;<br>        <span class="hljs-keyword">if</span> ((e.hash &amp; bit) == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">if</span> ((e.prev = loTail) == <span class="hljs-keyword">null</span>)<br>                loHead = e;<br>            <span class="hljs-keyword">else</span><br>                loTail.next = e;<br>            loTail = e;<br>            ++lc;<br>        &#125;<br>        <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">if</span> ((e.prev = hiTail) == <span class="hljs-keyword">null</span>)<br>                hiHead = e;<br>            <span class="hljs-keyword">else</span><br>                hiTail.next = e;<br>            hiTail = e;<br>            ++hc;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (loHead != <span class="hljs-keyword">null</span>) &#123;<br>        <span class="hljs-comment">// 如果 loHead 不为空，且链表长度小于等于 6，则将红黑树转成链表</span><br>        <span class="hljs-keyword">if</span> (lc &lt;= UNTREEIFY_THRESHOLD)<br>            tab[index] = loHead.untreeify(map);<br>        <span class="hljs-keyword">else</span> &#123;<br>            tab[index] = loHead;<br>            <span class="hljs-comment">/* </span><br><span class="hljs-comment">             * hiHead == null 时，表明扩容后，</span><br><span class="hljs-comment">             * 所有节点仍在原位置，树结构不变，无需重新树化</span><br><span class="hljs-comment">             */</span><br>            <span class="hljs-keyword">if</span> (hiHead != <span class="hljs-keyword">null</span>) <br>                loHead.treeify(tab);<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 与上面类似</span><br>    <span class="hljs-keyword">if</span> (hiHead != <span class="hljs-keyword">null</span>) &#123;<br>        <span class="hljs-keyword">if</span> (hc &lt;= UNTREEIFY_THRESHOLD)<br>            tab[index + bit] = hiHead.untreeify(map);<br>        <span class="hljs-keyword">else</span> &#123;<br>            tab[index + bit] = hiHead;<br>            <span class="hljs-keyword">if</span> (loHead != <span class="hljs-keyword">null</span>)<br>                hiHead.treeify(tab);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>从源码上可以看得出，重新映射红黑树的逻辑和重新映射链表的逻辑基本一致。不同的地方在于，重新映射后，会将红黑树拆分成两条由 TreeNode 组成的链表。如果链表长度小于 UNTREEIFY_THRESHOLD，则将链表转换成普通链表。否则根据条件重新将 TreeNode 链表树化。举个例子说明一下，假设扩容后，重新映射上图的红黑树，映射结果如下：</p>
-<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/16.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/02/23/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/16.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <h4 id="红黑树链化"><a href="#红黑树链化" class="headerlink" title="红黑树链化"></a>红黑树链化</h4><p>前面说过，红黑树中仍然保留了原链表节点顺序。有了这个前提，再将红黑树转成链表就简单多了，仅需将 TreeNode 链表转成 Node 类型的链表即可。相关代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">final</span> Node&lt;K,V&gt; <span class="hljs-title">untreeify</span><span class="hljs-params">(HashMap&lt;K,V&gt; map)</span> </span>&#123;<br>    Node&lt;K,V&gt; hd = <span class="hljs-keyword">null</span>, tl = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-comment">// 遍历 TreeNode 链表，并用 Node 替换</span><br>    <span class="hljs-keyword">for</span> (Node&lt;K,V&gt; q = <span class="hljs-keyword">this</span>; q != <span class="hljs-keyword">null</span>; q = q.next) &#123;<br>        <span class="hljs-comment">// 替换节点类型</span><br>        Node&lt;K,V&gt; p = map.replacementNode(q, <span class="hljs-keyword">null</span>);<br>        <span class="hljs-keyword">if</span> (tl == <span class="hljs-keyword">null</span>)<br>            hd = p;<br>        <span class="hljs-keyword">else</span><br>            tl.next = p;<br>        tl = p;<br>    &#125;<br>    <span class="hljs-keyword">return</span> hd;<br>&#125;<br><br><span class="hljs-function">Node&lt;K,V&gt; <span class="hljs-title">replacementNode</span><span class="hljs-params">(Node&lt;K,V&gt; p, Node&lt;K,V&gt; next)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Node&lt;&gt;(p.hash, p.key, p.value, next);<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -550,9 +550,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/23/Ping%E7%9A%84%E5%8E%9F%E7%90%86/">
+                      <a href="/2022/02/27/%E7%B4%A2%E5%BC%95%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E6%8F%90%E9%AB%98%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Ping的原理</span>
+                        <span class="hidden-mobile">索引为什么能提高查询性能....</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -560,8 +560,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/18/Gc/">
-                        <span class="hidden-mobile">JVM垃圾回收详解</span>
+                      <a href="/2022/02/23/Ping%E7%9A%84%E5%8E%9F%E7%90%86/">
+                        <span class="hidden-mobile">Ping的原理</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
