@@ -19,31 +19,31 @@
     <meta name="description" content="JVM 垃圾回收详解常见面试题 如果判断对象是否死亡（两种方法） 简单的介绍一下强引用、软引用、软引用、虚引用（虚引用与软引用和弱引用的区别，使用软引用能带来的好处）。 如何判断一个常量是废弃常量？ 如果判断一个类是无用类？ 垃圾收集有哪些算法，各自的特点。 HotSpot 为什么要分为新生代和老年代？ 常见的垃圾回收器有哪些？ 介绍一下 CMS、G1 收集器。 Minor Gc 和 Full G">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM垃圾回收详解">
-<meta property="og:url" content="http://example.com/2022/02/18/Gc/index.html">
+<meta property="og:url" content="http://example.com/2022/01/18/Gc/index.html">
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="JVM 垃圾回收详解常见面试题 如果判断对象是否死亡（两种方法） 简单的介绍一下强引用、软引用、软引用、虚引用（虚引用与软引用和弱引用的区别，使用软引用能带来的好处）。 如何判断一个常量是废弃常量？ 如果判断一个类是无用类？ 垃圾收集有哪些算法，各自的特点。 HotSpot 为什么要分为新生代和老年代？ 常见的垃圾回收器有哪些？ 介绍一下 CMS、G1 收集器。 Minor Gc 和 Full G">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/1.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/2.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/3.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/4.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/5.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/6.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/7.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/8.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/9.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/10.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/11.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/12.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/13.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/14.png">
-<meta property="og:image" content="http://example.com/2022/02/18/Gc/15.png">
-<meta property="article:published_time" content="2022-02-18T11:46:59.000Z">
-<meta property="article:modified_time" content="2022-01-29T15:03:30.035Z">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/1.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/2.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/3.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/4.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/5.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/6.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/7.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/8.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/9.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/10.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/11.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/12.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/13.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/14.png">
+<meta property="og:image" content="http://example.com/2022/01/18/Gc/15.png">
+<meta property="article:published_time" content="2022-01-18T11:46:59.000Z">
+<meta property="article:modified_time" content="2022-01-30T05:42:09.888Z">
 <meta property="article:author" content="jim-che">
 <meta property="article:tag" content="GC">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2022/02/18/Gc/1.png">
+<meta name="twitter:image" content="http://example.com/2022/01/18/Gc/1.png">
   
   
   <title>JVM垃圾回收详解 - Blog</title>
@@ -202,8 +202,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-02-18 19:46" pubdate>
-        2022年2月18日 晚上
+      <time datetime="2022-01-18 19:46" pubdate>
+        2022年1月18日 晚上
       </time>
     </span>
   
@@ -267,12 +267,12 @@
 </ul>
 <span id="more"></span>
 
-<p><img src="/2022/02/18/Gc/1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/01/18/Gc/1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>当需要排查各种内存溢出问题、当垃圾收集成为系统达到更高并发的瓶颈时，我们就需要对这些“自动化”的技术实施必要的监控和调节。</p>
 <h2 id="1-揭开-JVM-内存分配与回收的神秘面纱"><a href="#1-揭开-JVM-内存分配与回收的神秘面纱" class="headerlink" title="1. 揭开 JVM 内存分配与回收的神秘面纱"></a>1. 揭开 JVM 内存分配与回收的神秘面纱</h2><p>Java 的自动内存管理主要是针对对象内存的回收和对象内存的分配。同时，Java 自动内存管理的功能是 <strong>堆</strong> 内存中对象的分配与回收。</p>
 <p>Java 堆事垃圾收集器管理的主要区域，因此也被称作<strong>GC 堆（Garbage Collected Heap）</strong>.从垃圾回收的角度，由于现在收集器基本都采用分代垃圾收集算法，所以 Java 堆还可以细分为：新生代和老年代：再细致一点有：Eden 空间、From Survivor、To Survivor 空间等。<strong>进一步划分的目的是更好地回收内存，或者更快地分配内存。</strong></p>
 <p><strong>堆空间的基本结构：</strong></p>
-<p><img src="/2022/02/18/Gc/2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/01/18/Gc/2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>上图所示的 Eden 区、From Survivor0(“From”) 区、To Survivor1(“To”) 区都属于新生代，Old Memory 区属于老年代。</p>
 <p>大部分情况，对象都会首先在 Eden 区域分配，在一次新生代垃圾回收后，如果对象还存活，则会进入 s0 或者 s1，并且对象的年龄还会加 1(Eden 区-&gt;Survivor 区后对象的初始年龄变为 1)，当它的年龄增加到一定程度（默认为大于 15 岁），就会被晋升到老年代中。对象晋升到老年代的年龄阈值，可以通过参数 <code>-XX:MaxTenuringThreshold</code> 来设置默认值，这个值会在虚拟机运行过程中进行调整，可以通过<code>-XX:+PrintTenuringDistribution</code>来打印出当次 GC 后的 Threshold。</p>
 <p>“Hotspot 遍历所有对象时，按照年龄从小到大对其所占用的大小进行累积，当累积的某个年龄大小超过了 survivor 区的一半时，取这个年龄和 MaxTenuringThreshold 中更小的一个值，作为新的晋升年龄阈值”。</p>
@@ -290,7 +290,7 @@
 <p>注意:如下输出结果中老年代的信息为 <code>concurrent mark-sweep generation</code> 和以前版本略有不同。另外，还列出了某次 GC 后是否重新生成了 threshold，以及各个年龄占用空间的大小。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs sh">2022-01-27T21:35:22.116+0800: [GC (Allocation Failure) 2022-01-27T21:35:22.116+0800: [ParNew<br>Desired survivor size 3145728 bytes, new threshold 1 (max 3)<br>- age   1:    3531352 bytes,    3531352 total<br>: 40351K-&gt;3490K(46080K), 0.0014085 secs] 40351K-&gt;3490K(199680K), 0.0014581 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] <br>2022-01-27T21:35:22.118+0800: [GC (Allocation Failure) 2022-01-27T21:35:22.118+0800: [ParNew<br>Desired survivor size 3145728 bytes, new threshold 3 (max 3)<br>: 13730K-&gt;0K(46080K), 0.0208955 secs] 13730K-&gt;13703K(199680K), 0.0209167 secs] [Times: user=0.05 sys=0.00, real=0.02 secs] <br>Heap<br> par new generation   total 46080K, used 35225K [0x00000007b3800000, 0x00000007b6a00000, 0x00000007b6a00000)<br>  eden space 40960K,  86% used [0x00000007b3800000, 0x00000007b5a667e8, 0x00000007b6000000)<br>  from space 5120K,   0% used [0x00000007b6000000, 0x00000007b6000000, 0x00000007b6500000)<br>  to   space 5120K,   0% used [0x00000007b6500000, 0x00000007b6500000, 0x00000007b6a00000)<br> concurrent mark-sweep generation total 153600K, used 13703K [0x00000007b6a00000, 0x00000007c0000000, 0x00000007c0000000)<br> Metaspace       used 3169K, capacity 4496K, committed 4864K, reserved 1056768K<br>  class space    used 346K, capacity 388K, committed 512K, reserved 1048576K<br></code></pre></td></tr></table></figure>
 
-<img src="/2022/02/18/Gc/3.png" srcset="/img/loading.gif" lazyload alt="堆内存常见分配策略 " style="zoom:200%;">
+<img src="/2022/01/18/Gc/3.png" srcset="/img/loading.gif" lazyload alt="堆内存常见分配策略 " style="zoom:200%;">
 
 <h3 id="1-1-对象优先在-eden-区分配"><a href="#1-1-对象优先在-eden-区分配" class="headerlink" title="1.1 对象优先在 eden 区分配"></a>1.1 对象优先在 eden 区分配</h3><p>目前主流的垃圾收集器都会采用分代回收算法，因此需要将堆内存分为新生代和老生代，这样我们就可以根据各个年代的特点选择合适的垃圾收集算法。</p>
 <p>大多数情况下，对象在新生代中 eden 区分配。当 eden 区没有足够空间进行分配时，虚拟机将发起一次 Minor GC.下面我们来进行实际测试以下。</p>
@@ -322,7 +322,7 @@
 <p><em>“老年代 GC（Major GC/Full GC），指发生在老年代的 GC……”</em></p>
 </blockquote>
 <p>上面的说法已经在《深入理解 Java 虚拟机》第三版中被改正过来了。感谢 R 大的回答：</p>
-<p><img src="/2022/02/18/Gc/4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/01/18/Gc/4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><strong>总结：</strong></p>
 <p>针对 HotSpot VM 的实现，它里面的 GC 其实准确分类只有两大种：</p>
 <p>部分收集 (Partial GC)：</p>
@@ -339,13 +339,13 @@
 <p>JDK 6 Update 24 之后的规则变为只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小，就会进行 Minor GC，否则将进行 Full GC。</p>
 </blockquote>
 <h2 id="2-判断对象死亡"><a href="#2-判断对象死亡" class="headerlink" title="2. 判断对象死亡"></a>2. 判断对象死亡</h2><p>堆中几乎放着所有的对象实例，对堆垃圾回收前的第一步就是要判断哪些对象已经死亡（即不能再被任何途径使用的对象）。</p>
-<p><img src="/2022/02/18/Gc/5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/01/18/Gc/5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <h3 id="2-1-引用计数法"><a href="#2-1-引用计数法" class="headerlink" title="2.1 引用计数法"></a>2.1 引用计数法</h3><p>给对象中添加一个引用计数器，每当有一个地方引用它，计数器就加 1；当引用失效，计数器就减 1；任何时候计数器为 0 的对象就是不可能再被使用的。</p>
 <p><strong>这个方法实现简单，效率高，但是目前主流的虚拟机中并没有选择这个算法来管理内存，其最主要的原因是它很难解决对象之间相互循环引用的问题。</strong> 所谓对象之间的相互引用问题，如下面代码所示：除了对象 objA 和 objB 相互引用着对方之外，这两个对象之间再无任何引用。但是他们因为互相引用对方，导致它们的引用计数器都不为 0，于是引用计数算法无法通知 GC 回收器回收他们。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReferenceCountingGc</span> </span>&#123;<br>    Object instance = <span class="hljs-keyword">null</span>;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		ReferenceCountingGc objA = <span class="hljs-keyword">new</span> ReferenceCountingGc();<br>		ReferenceCountingGc objB = <span class="hljs-keyword">new</span> ReferenceCountingGc();<br>		objA.instance = objB;<br>		objB.instance = objA;<br>		objA = <span class="hljs-keyword">null</span>;<br>		objB = <span class="hljs-keyword">null</span>;<br><br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h3 id="2-2-可达性分析算法"><a href="#2-2-可达性分析算法" class="headerlink" title="2.2 可达性分析算法"></a>2.2 可达性分析算法</h3><p>这个算法的基本思想就是通过一系列的称为 <strong>“GC Roots”</strong> 的对象作为起点，从这些节点开始向下搜索，节点所走过的路径称为引用链，当一个对象到 GC Roots 没有任何引用链相连的话，则证明此对象是不可用的。</p>
-<img src="/2022/02/18/Gc/6.png" srcset="/img/loading.gif" lazyload alt="可达性分析算法 " style="zoom: 150%;">
+<img src="/2022/01/18/Gc/6.png" srcset="/img/loading.gif" lazyload alt="可达性分析算法 " style="zoom: 150%;">
 
 <p>可作为 GC Roots 的对象包括下面几种:</p>
 <ul>
@@ -389,32 +389,32 @@
 <li>该类对应的 <code>java.lang.Class</code> 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
 </ul>
 <p>虚拟机可以对满足上述 3 个条件的无用类进行回收，这里说的仅仅是“可以”，而并不是和对象一样不使用了就会必然被回收。</p>
-<h2 id="3-垃圾收集算法"><a href="#3-垃圾收集算法" class="headerlink" title="3. 垃圾收集算法"></a>3. 垃圾收集算法</h2><p><img src="/2022/02/18/Gc/7.png" srcset="/img/loading.gif" lazyload alt="垃圾收集算法分类"></p>
+<h2 id="3-垃圾收集算法"><a href="#3-垃圾收集算法" class="headerlink" title="3. 垃圾收集算法"></a>3. 垃圾收集算法</h2><p><img src="/2022/01/18/Gc/7.png" srcset="/img/loading.gif" lazyload alt="垃圾收集算法分类"></p>
 <h3 id="3-1-标记-清除算法"><a href="#3-1-标记-清除算法" class="headerlink" title="3.1 标记-清除算法"></a>3.1 标记-清除算法</h3><p>该算法分为“标记”和“清除”阶段：首先标记出所有不需要回收的对象，在标记完成后统一回收掉所有没有被标记的对象。它是最基础的收集算法，后续的算法都是对其不足进行改进得到。这种垃圾收集算法会带来两个明显的问题：</p>
 <ol>
 <li><strong>效率问题</strong></li>
 <li><strong>空间问题（标记清除后会产生大量不连续的碎片）</strong></li>
 </ol>
-<p><img src="/2022/02/18/Gc/8.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/2022/01/18/Gc/8.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <h3 id="3-2-标记-复制算法"><a href="#3-2-标记-复制算法" class="headerlink" title="3.2 标记-复制算法"></a>3.2 标记-复制算法</h3><p>为了解决效率问题，“标记-复制”收集算法出现了。它可以将内存分为大小相同的两块，每次使用其中的一块。当这一块的内存使用完后，就将还存活的对象复制到另一块去，然后再把使用的空间一次清理掉。这样就使每次的内存回收都是对内存区间的一半进行回收。</p>
-<p><img src="/2022/02/18/Gc/9.png" srcset="/img/loading.gif" lazyload alt="复制算法"></p>
+<p><img src="/2022/01/18/Gc/9.png" srcset="/img/loading.gif" lazyload alt="复制算法"></p>
 <h3 id="3-3-标记整理算法"><a href="#3-3-标记整理算法" class="headerlink" title="3.3 标记整理算法"></a>3.3 标记整理算法</h3><p>根据老年代的特点提出的一种标记算法，标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象回收，而是让所有存活的对象向一端移动，然后直接清理掉端边界以外的内存。</p>
-<p><img src="/2022/02/18/Gc/10.png" srcset="/img/loading.gif" lazyload alt="标记-整理算法 "></p>
+<p><img src="/2022/01/18/Gc/10.png" srcset="/img/loading.gif" lazyload alt="标记-整理算法 "></p>
 <h3 id="3-4-分代收集算法"><a href="#3-4-分代收集算法" class="headerlink" title="3.4 分代收集算法"></a>3.4 分代收集算法</h3><p>当前虚拟机的垃圾收集都采用分代收集算法，这种算法没有什么新的思想，只是根据对象存活周期的不同将内存分为几块。一般将 java 堆分为新生代和老年代，这样我们就可以根据各个年代的特点选择合适的垃圾收集算法。</p>
 <p><strong>比如在新生代中，每次收集都会有大量对象死去，所以可以选择”标记-复制“算法，只需要付出少量对象的复制成本就可以完成每次垃圾收集。而老年代的对象存活几率是比较高的，而且没有额外的空间对它进行分配担保，所以我们必须选择“标记-清除”或“标记-整理”算法进行垃圾收集。</strong></p>
 <p><strong>延伸面试问题：</strong> HotSpot 为什么要分为新生代和老年代？</p>
 <p>根据上面的对分代收集算法的介绍回答。</p>
-<h2 id="4-垃圾收集器"><a href="#4-垃圾收集器" class="headerlink" title="4. 垃圾收集器"></a>4. 垃圾收集器</h2><p><img src="/2022/02/18/Gc/11.png" srcset="/img/loading.gif" lazyload alt="垃圾收集器分类"></p>
+<h2 id="4-垃圾收集器"><a href="#4-垃圾收集器" class="headerlink" title="4. 垃圾收集器"></a>4. 垃圾收集器</h2><p><img src="/2022/01/18/Gc/11.png" srcset="/img/loading.gif" lazyload alt="垃圾收集器分类"></p>
 <p><strong>如果说收集算法是内存回收的方法论，那么垃圾收集器就是内存回收的具体实现。</strong></p>
 <p>虽然我们对各个收集器进行比较，但并非要挑选出一个最好的收集器。因为直到现在为止还没有最好的垃圾收集器出现，更加没有万能的垃圾收集器，<strong>我们能做的就是根据具体应用场景选择适合自己的垃圾收集器</strong>。试想一下：如果有一种四海之内、任何场景下都适用的完美收集器存在，那么我们的 HotSpot 虚拟机就不会实现那么多不同的垃圾收集器了。</p>
 <h3 id="4-1-Serial-收集器"><a href="#4-1-Serial-收集器" class="headerlink" title="4.1 Serial 收集器"></a>4.1 Serial 收集器</h3><p>Serial（串行）收集器是最基本、历史最悠久的垃圾收集器了。大家看名字就知道这个收集器是一个单线程收集器了。它的 <strong>“单线程”</strong> 的意义不仅仅意味着它只会使用一条垃圾收集线程去完成垃圾收集工作，更重要的是它在进行垃圾收集工作的时候必须暂停其他所有的工作线程（ <strong>“Stop The World”</strong> ），直到它收集结束。</p>
 <p><strong>新生代采用标记-复制算法，老年代采用标记-整理算法。</strong></p>
-<p><img src="/2022/02/18/Gc/12.png" srcset="/img/loading.gif" lazyload alt=" Serial 收集器 "></p>
+<p><img src="/2022/01/18/Gc/12.png" srcset="/img/loading.gif" lazyload alt=" Serial 收集器 "></p>
 <p>虚拟机的设计者们当然知道 Stop The World 带来的不良用户体验，所以在后续的垃圾收集器设计中停顿时间在不断缩短（仍然还有停顿，寻找最优秀的垃圾收集器的过程仍然在继续）。</p>
 <p>但是 Serial 收集器有没有优于其他垃圾收集器的地方呢？当然有，它<strong>简单而高效（与其他收集器的单线程相比）</strong>。Serial 收集器由于没有线程交互的开销，自然可以获得很高的单线程收集效率。Serial 收集器对于运行在 Client 模式下的虚拟机来说是个不错的选择。</p>
 <h3 id="4-2-ParNew-收集器"><a href="#4-2-ParNew-收集器" class="headerlink" title="4.2 ParNew 收集器"></a>4.2 ParNew 收集器</h3><p><strong>ParNew 收集器其实就是 Serial 收集器的多线程版本，除了使用多线程进行垃圾收集外，其余行为（控制参数、收集算法、回收策略等等）和 Serial 收集器完全一样。</strong></p>
 <p><strong>新生代采用标记-复制算法，老年代采用标记-整理算法。</strong></p>
-<p><img src="/2022/02/18/Gc/13.png" srcset="/img/loading.gif" lazyload alt="ParNew 收集器 "></p>
+<p><img src="/2022/01/18/Gc/13.png" srcset="/img/loading.gif" lazyload alt="ParNew 收集器 "></p>
 <p>它是许多运行在 Server 模式下的虚拟机的首要选择，除了 Serial 收集器外，只有它能与 CMS 收集器（真正意义上的并发收集器，后面会介绍到）配合工作。</p>
 <p><strong>并行和并发概念补充：</strong></p>
 <ul>
@@ -426,7 +426,7 @@
 
 <p><strong>Parallel Scavenge 收集器关注点是吞吐量（高效率的利用 CPU）。CMS 等垃圾收集器的关注点更多的是用户线程的停顿时间（提高用户体验）。所谓吞吐量就是 CPU 中用于运行用户代码的时间与 CPU 总消耗时间的比值。</strong> Parallel Scavenge 收集器提供了很多参数供用户找到最合适的停顿时间或最大吞吐量，如果对于收集器运作不太了解，手工优化存在困难的时候，使用 Parallel Scavenge 收集器配合自适应调节策略，把内存管理优化交给虚拟机去完成也是一个不错的选择。</p>
 <p><strong>新生代采用标记-复制算法，老年代采用标记-整理算法。</strong></p>
-<p><img src="/2022/02/18/Gc/14.png" srcset="/img/loading.gif" lazyload alt="Parallel Scavenge 收集器 "></p>
+<p><img src="/2022/01/18/Gc/14.png" srcset="/img/loading.gif" lazyload alt="Parallel Scavenge 收集器 "></p>
 <p><strong>这是 JDK1.8 默认收集器</strong></p>
 <p>使用 java -XX:+PrintCommandLineFlags -version 命令查看</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sh">-XX:InitialHeapSize=262921408 -XX:MaxHeapSize=4206742528 -XX:+PrintCommandLineFlags -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseParallelGC<br>java version <span class="hljs-string">&quot;1.8.0_211&quot;</span><br>Java(TM) SE Runtime Environment (build 1.8.0_211-b12)<br>Java HotSpot(TM) 64-Bit Server VM (build 25.211-b12, mixed mode)<br></code></pre></td></tr></table></figure>
@@ -443,7 +443,7 @@
 <li><strong>重新标记：</strong> 重新标记阶段就是为了修正并发标记期间因为用户程序继续运行而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段的时间稍长，远远比并发标记阶段时间短</li>
 <li><strong>并发清除：</strong> 开启用户线程，同时 GC 线程开始对未标记的区域做清扫。</li>
 </ul>
-<p><img src="/2022/02/18/Gc/15.png" srcset="/img/loading.gif" lazyload alt="CMS 垃圾收集器 "></p>
+<p><img src="/2022/01/18/Gc/15.png" srcset="/img/loading.gif" lazyload alt="CMS 垃圾收集器 "></p>
 <p>从它的名字就可以看出它是一款优秀的垃圾收集器，主要优点：<strong>并发收集、低停顿</strong>。但是它有下面三个明显的缺点：</p>
 <ul>
 <li><strong>对 CPU 资源敏感；</strong></li>
@@ -499,9 +499,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/23/Ping%E7%9A%84%E5%8E%9F%E7%90%86/">
+                      <a href="/2022/01/18/MySQL%E7%B4%A2%E5%BC%95/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Ping的原理</span>
+                        <span class="hidden-mobile">MySQL索引</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -509,8 +509,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/17/Restful/RESTful/">
-                        <span class="hidden-mobile">RESTful API</span>
+                      <a href="/2022/01/17/hashcode%E4%B8%8Eequals/hashcode%20%E4%B8%8E%20equals/">
+                        <span class="hidden-mobile">hashcode与equals</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -577,7 +577,7 @@
 
   <footer class="text-center mt-5 py-3">
   <div class="footer-content">
-     <a target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+     <a href="https://github.com/jim-che" target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
   </div>
   
 
