@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/imgs/lock1.jpg">
 <meta property="article:published_time" content="2022-02-01T02:14:21.000Z">
-<meta property="article:modified_time" content="2022-02-01T05:41:07.446Z">
+<meta property="article:modified_time" content="2022-02-02T06:33:57.554Z">
 <meta property="article:author" content="jim-che">
 <meta property="article:tag" content="锁">
 <meta property="article:tag" content="多线程">
@@ -200,7 +200,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.2k 字
+      5.3k 字
     </span>
   
 
@@ -209,7 +209,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      27 分钟
+      44 分钟
     </span>
   
 
@@ -281,6 +281,32 @@
 <p>长时间的自旋操作是非常消耗资源的，一个线程持有锁，其他线程就只能在原地空耗CPU，执行不了任何有效的任务，这种现象叫做<strong>忙等（busy-waiting）</strong>。如果多个线程用一个锁，但是没有发生锁竞争，或者发生了很轻微的锁竞争，那么synchronized就用轻量级锁，允许短时间的忙等现象。这是一种折衷的想法，<strong>短时间的忙等，换取线程在用户态和内核态之间切换的开销。</strong></p>
 <p>显然，此忙等是有限度的（有个计数器记录自旋次数，默认允许循环10次，可以通过虚拟机参数更改）。如果锁竞争情况严重，某个达到最大自旋次数的线程，会将轻量级锁升级为<strong>重量级锁</strong>（依然是CAS修改锁标志位，但不修改持有锁的线程ID）。当后续线程尝试获取锁时，发现被占用的锁是重量级锁，则直接将自己挂起（而不是忙等），等待将来被唤醒。在JDK1.6之前，synchronized直接加重量级锁，很明显现在得到了很好的优化。</p>
 <p>一个锁只能按照 偏向锁、轻量级锁、重量级锁的顺序逐渐升级（也有叫<strong>锁膨胀</strong>的），不允许降级。</p>
+<h2 id="可重入锁（递归锁）"><a href="#可重入锁（递归锁）" class="headerlink" title="可重入锁（递归锁）"></a>可重入锁（递归锁）</h2><p>可重入锁的字面意思是 “可以重新进入的锁”，即<strong>允许同一个线程多次获取同一把锁</strong>。比如一个递归函数中有加锁的操作，递归过程中这个锁会阻塞自己吗？如果不会，那么这个锁就是<strong>可重入锁</strong>。</p>
+<p>Java 里只要以 Reentrant 开头命名的锁都是可重入锁，而且 <strong>JDK 提供的所有现成的 Lock 实现类，包括 synchronized 关键字锁都是可重入的。</strong></p>
+<p>如果你不需要可重入锁，可以自己实现。绝大部分场景，可重入锁就可以了。</p>
+<p><img src="/2022/02/01/%E9%94%81%E5%8F%8AJava%E7%9A%84%E5%AE%9E%E7%8E%B0/v2-ffbe0e21512c64a1b444cf55d4b3bf61_1440w.jpg" srcset="/img/loading.gif" lazyload alt="JDK提供的Lock的实现类都是可重入的"></p>
+<h2 id="公平锁、非公平锁"><a href="#公平锁、非公平锁" class="headerlink" title="公平锁、非公平锁"></a>公平锁、非公平锁</h2><p>如果多个线程申请一把<strong>公平锁</strong>，那么当锁释放的时候，先申请的先得到，非常公平。显然如果是<strong>非公平锁</strong>，后申请的线程可能先获取到锁，是随机或者按照其他优先级排序的。</p>
+<p>对ReentrantLock类而言，通过构造函数传参<strong>可以指定该锁是否是公平锁，默认是非公平锁</strong>。一般情况下，非公平锁的吞吐量比公平锁大，如果没有特殊要求，优先使用非公平锁。</p>
+<p><img src="/2022/02/01/%E9%94%81%E5%8F%8AJava%E7%9A%84%E5%AE%9E%E7%8E%B0/v2-7a4a72fe7ace46095cd3ca2e6c5212d9_1440w.jpg" srcset="/img/loading.gif" lazyload alt="ReentrantLock构造器可以指定为公平或非公平"></p>
+<p>对于synchronized而言，它也是一种<strong>非公平锁</strong>，但是并没有任何办法使其变成公平锁。</p>
+<h2 id="可中断锁"><a href="#可中断锁" class="headerlink" title="可中断锁"></a>可中断锁</h2><p>可中断锁，字面意思是“可以<strong>响应中断</strong>的锁”。</p>
+<p>这里的关键是理解什么是<strong>中断</strong>。Java并没有提供任何直接中断某线程的方法，只提供了<strong>中断机制</strong>。何谓“中断机制”？线程A向线程B发出“请你停止运行”的请求（线程B也可以自己给自己发送此请求），但线程B并不会立刻停止运行，而是自行选择合适的时机以自己的方式响应中断，也可以直接忽略此中断。也就是说，Java的<strong>中断不能直接终止线程</strong>，而是需要被中断的线程自己决定怎么处理。这好比是父母叮嘱在外的子女要注意身体，但子女是否注意身体，怎么注意身体则完全取决于自己。</p>
+<p>回到锁的话题上来，如果线程A持有锁，线程B等待获取该锁。由于线程A持有锁的时间过长，线程B不想继续等待了，我们可以让线程B中断自己或者在别的线程里中断它，这种就是<strong>可中断锁</strong>。</p>
+<p>在Java中，synchronized就是<strong>不可中断锁</strong>，而Lock的实现类都是<strong>可中断锁，</strong>可以简单看下Lock接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/* Lock接口 */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Lock</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">lock</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">// 拿不到锁就一直等，拿到马上返回。</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">lockInterruptibly</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> InterruptedException</span>; <span class="hljs-comment">// 拿不到锁就一直等，如果等待时收到中断请求，则需要处理InterruptedException。</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">tryLock</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">// 无论拿不拿得到锁，都马上返回。拿到返回true，拿不到返回false。</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">tryLock</span><span class="hljs-params">(<span class="hljs-keyword">long</span> time, TimeUnit unit)</span> <span class="hljs-keyword">throws</span> InterruptedException</span>; <span class="hljs-comment">// 同上，可以自定义等待的时间。</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">unlock</span><span class="hljs-params">()</span></span>;<br><br>    <span class="hljs-function">Condition <span class="hljs-title">newCondition</span><span class="hljs-params">()</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="读写锁、共享锁、互斥锁"><a href="#读写锁、共享锁、互斥锁" class="headerlink" title="读写锁、共享锁、互斥锁"></a>读写锁、共享锁、互斥锁</h2><p>读写锁就是一对锁，一个读锁（共享锁）和一个写锁（互斥锁、拍他锁）。</p>
+<p>看下Java里的ReadWriteLock接口，它只规定了两个方法，一个返回读锁，一个返回写锁。</p>
+<p><img src="/2022/02/01/%E9%94%81%E5%8F%8AJava%E7%9A%84%E5%AE%9E%E7%8E%B0/v2-5ec6ed066c75e59c4f3829ca51db8148_1440w.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>读写锁和乐观锁做的事情是一样的，所有现成都可以读取，仅在写之前判断值有没有被修改。</p>
+<p>很多情况下，线程知道自己读取数据后，是否是为了更新他。如果我读取值时候就是为了更新它（MySQL for update），那么加锁的时候就直接加上写锁，我持有写锁的时候别的线程无论读还是写都需要等待；如果我读取数据仅仅为了展示，那么加锁就明确的加一个<strong>读锁</strong>，其他线程如果也要读，就无需等待，直接加读锁获取（读锁计数器 + 1）。</p>
+<p>虽然读写锁感觉与乐观锁有点像，但是<strong>读写锁是悲观锁策略</strong>。因为读写锁并没有在<strong>更新前</strong>判断值有没有被修改过，而是在<strong>加锁前</strong>决定应该用读锁还是写锁。乐观锁特指无锁编程。</p>
+<p>JDK提供的唯一一个 ReadWriteLock 接口实现类是 ReentrantReadWriteLock。看名字就知道，它不仅提供了读写锁，而是都是可重入锁。 除了两个接口方法以外，ReentrantReadWriteLock 还提供了一些便于外界监控其内部工作状态的方法，这里就不一一展开。</p>
+<h2 id="回到悲观锁和乐观锁"><a href="#回到悲观锁和乐观锁" class="headerlink" title="回到悲观锁和乐观锁"></a>回到悲观锁和乐观锁</h2><p>在 Java 中使用的各种锁，<strong>几乎都是悲观锁</strong>。synchronized 从偏向锁、轻量级锁到重量级锁，全是悲观锁。JDK提供的Lock实现类全是悲观锁。其实只要有“锁对象”出现，那么就一定是悲观锁。因为<strong>乐观锁不是锁，而是一个在循环里尝试CAS的算法。</strong></p>
+<p>那JDK并发包里到底有没有乐观锁呢？</p>
+<p>有。java.util.concurrent.atomic包里面的<strong>原子类</strong>都是利用乐观锁实现的。</p>
+<p><img src="/2022/02/01/%E9%94%81%E5%8F%8AJava%E7%9A%84%E5%AE%9E%E7%8E%B0/v2-98cd919fe09521bac03aa66d6968aeb2_1440w.jpg" srcset="/img/loading.gif" lazyload alt="原子类AtomicInteger的自增方法为乐观锁策略"></p>
+<p>虽然轻量级锁上用到了 CAS 循环等待，感觉好像是乐观锁。但是问题的关键是，我们说一个锁是乐观锁还是倍感锁，总是应该站在应用层的层面，看它们是如何锁住数据的，等后续更新时再决定要不要重试？对于偏向锁、轻量级锁来说，显然答案是否定的。无论是挂起还是忙等，对应用数据的读取操作都被“挡住”了。从这个角度看，它们确实是悲观锁。</p>
 
             </div>
             <hr>
