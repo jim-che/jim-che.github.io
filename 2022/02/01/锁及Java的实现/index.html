@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/imgs/lock1.jpg">
 <meta property="article:published_time" content="2022-02-01T02:14:21.000Z">
-<meta property="article:modified_time" content="2022-02-01T02:57:24.173Z">
+<meta property="article:modified_time" content="2022-02-01T05:41:07.446Z">
 <meta property="article:author" content="jim-che">
 <meta property="article:tag" content="锁">
 <meta property="article:tag" content="多线程">
@@ -200,7 +200,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.9k 字
+      3.2k 字
     </span>
   
 
@@ -209,7 +209,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      17 分钟
+      27 分钟
     </span>
   
 
@@ -267,11 +267,20 @@
 
 <p>这是一个简单直观的乐观锁实现，它允许多个线程同时读取（因为根本没有加锁操作），但是只有一个线程可以成功更新数据，并导致其他要更新数据的线程回滚重试。 CAS利用CPU指令，从硬件层面保证了操作的原子性，以达到类似于锁的效果。</p>
 <p><img src="/2022/02/01/%E9%94%81%E5%8F%8AJava%E7%9A%84%E5%AE%9E%E7%8E%B0/v2-3c683e1f88faa31152fc35d14b8fb8de_1440w-3683912.jpg" srcset="/img/loading.gif" lazyload alt="Java中真正的CAS操作调用的native方法"></p>
-<p>整个过程没有加锁变成，所以乐观锁策略也被称为<strong>无锁变成</strong>。换句话说，乐观锁并不是锁，仅仅是一个循环重试的 CAS 算法。</p>
+<p>整个过程没有加锁变成，所以乐观锁策略也被称为<strong>无锁编程</strong>。换句话说，乐观锁并不是锁，仅仅是一个循环重试的 CAS 算法。</p>
 <h2 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h2><p>有一种锁叫<strong>自旋锁</strong>。就是一个 while(true) 的无限循环。</p>
 <p>乐观锁也有类似的无限循环，它是自旋锁吗？</p>
 <p>并不是，经过乐观锁也有类似的无限循环，但是 “自旋” 两个字，特指  “自旋锁” 的 “自旋”。</p>
 <p>具体内容下面介绍</p>
+<h2 id="synchronized-锁升级：偏向锁-gt-轻量级锁-gt-重量级锁"><a href="#synchronized-锁升级：偏向锁-gt-轻量级锁-gt-重量级锁" class="headerlink" title="synchronized 锁升级：偏向锁 -&gt; 轻量级锁 -&gt; 重量级锁"></a>synchronized 锁升级：偏向锁 -&gt; 轻量级锁 -&gt; 重量级锁</h2><p>前面提到，synchronized关键字就像是汽车的<strong>自动档，</strong>现在详细讲这个过程。一脚油门踩下去，synchronized会从<strong>无锁</strong>升级为<strong>偏向锁</strong>，再升级为<strong>轻量级锁</strong>，最后升级为<strong>重量级锁</strong>，就像自动换挡一样。那么自旋锁在哪里呢？这里的轻量级锁就是一种<strong>自旋锁</strong>。</p>
+<p>初次执行到synchronized代码块的时候，锁对象变成<strong>偏向锁</strong>（通过CAS修改对象头里的锁标志位），字面意思是“偏向于第一个获得它的线程”的锁。执行完同步代码块后，线程并<strong>不会主动释放偏向锁</strong>。当第二次到达同步代码块时，线程会判断此时持有锁的线程是否就是自己（持有锁的线程ID也在对象头里），如果是则正常往下执行。<strong>由于之前没有释放锁，这里也就不需要重新加锁。</strong>如果自始至终使用锁的线程只有一个，很明显偏向锁几乎没有额外开销，性能极高。</p>
+<p>偏向锁的一个特性是，持有锁的线程在执行完同步代码块时不会释放锁。那么当第二个线程执行到这个synchronized代码块时是否一定会发生锁竞争然后升级为轻量级锁呢？</p>
+<p>线程A第一次执行完同步代码块后，当线程B尝试获取锁的时候，发现是偏向锁，会判断线程A是否仍然存活。<strong>如果线程A仍然存活，</strong>将线程A暂停，此时偏向锁升级为轻量级锁，之后线程A继续执行，线程B自旋。但是<strong>如果判断结果是线程A不存在了</strong>，则线程B持有此偏向锁，锁不升级。</p>
+<p>一旦有第二个线程加入<strong>锁竞争</strong>，偏向锁就升级为<strong>轻量级锁（自旋锁）</strong>。这里要明确一下什么是锁竞争：如果多个线程轮流获取一个锁，但是每次获取锁的时候都很顺利，没有发生阻塞，那么就不存在锁竞争。只有当某线程尝试获取锁的时候，发现该锁已经被占用，只能等待其释放，这才发生了锁竞争。</p>
+<p>在轻量级锁状态下继续锁竞争，没有抢到锁的线程将<strong>自旋</strong>，即不停地循环判断锁是否能够被成功获取。获取锁的操作，其实就是通过CAS修改对象头里的锁标志位。先<strong>比较</strong>当前锁标志位是否为“释放”，如果是则将其<strong>设置</strong>为“锁定”，比较并设置是<strong>原子性</strong>发生的。这就算抢到锁了，然后线程将当前锁的持有者信息修改为自己。</p>
+<p>长时间的自旋操作是非常消耗资源的，一个线程持有锁，其他线程就只能在原地空耗CPU，执行不了任何有效的任务，这种现象叫做<strong>忙等（busy-waiting）</strong>。如果多个线程用一个锁，但是没有发生锁竞争，或者发生了很轻微的锁竞争，那么synchronized就用轻量级锁，允许短时间的忙等现象。这是一种折衷的想法，<strong>短时间的忙等，换取线程在用户态和内核态之间切换的开销。</strong></p>
+<p>显然，此忙等是有限度的（有个计数器记录自旋次数，默认允许循环10次，可以通过虚拟机参数更改）。如果锁竞争情况严重，某个达到最大自旋次数的线程，会将轻量级锁升级为<strong>重量级锁</strong>（依然是CAS修改锁标志位，但不修改持有锁的线程ID）。当后续线程尝试获取锁时，发现被占用的锁是重量级锁，则直接将自己挂起（而不是忙等），等待将来被唤醒。在JDK1.6之前，synchronized直接加重量级锁，很明显现在得到了很好的优化。</p>
+<p>一个锁只能按照 偏向锁、轻量级锁、重量级锁的顺序逐渐升级（也有叫<strong>锁膨胀</strong>的），不允许降级。</p>
 
             </div>
             <hr>
@@ -303,6 +312,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/02/02/%E6%BB%91%E7%AA%97%E6%B3%95%E4%BE%8B%E9%A2%98-1/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">滑窗法例题-1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
