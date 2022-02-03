@@ -4,6 +4,64 @@
   
   
   <entry>
+    <title>链表例题-02</title>
+    <link href="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/"/>
+    <url>/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/</url>
+    
+    <content type="html"><![CDATA[<p>这一份有两题，都是有规律的</p><h1 id="剑指-Offer-II-022-链表中环的入口节点"><a href="#剑指-Offer-II-022-链表中环的入口节点" class="headerlink" title="剑指 Offer II 022. 链表中环的入口节点"></a><a href="https://leetcode-cn.com/problems/c32eOV/">剑指 Offer II 022. 链表中环的入口节点</a></h1><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/image-20220203111659223.png"></p><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/image-20220203111716174.png" alt="题目简介"></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>实际上最简单的思路就是哈希表，就是走一个存一个，存到相同就返回，太没有技术含量了，不讲这个。</p><p>我们使用两个指针，fat 与 slow。它们起始都位于链表的头部。随后，slow 指针每次向后移动一个位置，而 fast 指针向后移动两个位置。如果链表中存在环，则 fast 指针最终将再次与 slow 指针在环中相遇。</p><p>如下图所示，设链表中环外部分的长度为 a。slow 指针进入环后，又走了 b 的距离与 fast 相遇。此时，fast 指针已经走完了环的 n 圈，因此它走过的总距离为 a+n(b+c)+b=a+(n+1)b+nca+n(b+c)+b=a+(n+1)b+nc。</p><p>根据题意，任意时刻，fast 指针走过的距离都为 slow 指针的 2 倍。因此，我们有</p><p><em>a</em>+(<em>n</em>+1)<em>b</em>+<em>nc</em>=2(<em>a</em>+<em>b</em>)⟹<em>a</em>=<em>c</em>+(<em>n</em>−1)(<em>b</em>+<em>c</em>)</p><p>有了 a=c+(n-1)(b+c)a=c+(n−1)(b+c) 的等量关系，我们会发现：从相遇点到入环点的距离加上 n-1n−1 圈的环长，恰好等于从链表头部到入环点的距离。</p><p>因此，当发现 slow 与 fast 相遇时，我们再额外使用一个指针 ptr。起始，它指向链表头部；随后，它和 slow 每次向后移动一个位置。最终，它们会在入环点相遇。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ListNode <span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-keyword">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>        &#125;<br>        ListNode slow = head, fast = head;<br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-keyword">null</span>) &#123;<br>            slow = slow.next;<br>            <span class="hljs-keyword">if</span> (fast.next != <span class="hljs-keyword">null</span>) &#123;<br>                fast = fast.next.next;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (fast == slow) &#123;<br>                ListNode ptr = head;<br>                <span class="hljs-keyword">while</span> (ptr != slow) &#123;<br>                    ptr = ptr.next;<br>                    slow = slow.next;<br>                &#125;<br>                <span class="hljs-keyword">return</span> ptr;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/image-20220203121329716.png" alt="结果"></p><h1 id="剑指-Offer-II-023-两个链表的第一个重合节点"><a href="#剑指-Offer-II-023-两个链表的第一个重合节点" class="headerlink" title="剑指 Offer II 023. 两个链表的第一个重合节点"></a><a href="https://leetcode-cn.com/problems/3u1WK4/">剑指 Offer II 023. 两个链表的第一个重合节点</a></h1><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/image-20220203122035750.png"></p><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/image-20220203122055887.png"></p><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/image-20220203122114388.png" alt="题目简介"></p><h2 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h2><p>有点小办法</p><p>定义两个指针 node1、node2 分别指向 headA 和 headB 的头节点，当两者不等时，同时移动 node1、node2 遍历两个链表，当有一个为空时，让其指向另外一个链表的头，不断移动，最终相遇，相遇节点即为相交节点。</p><p>为什么自己仔细想想就能明白。二者走的路程一样的。</p><h2 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ListNode <span class="hljs-title">getIntersectionNode</span><span class="hljs-params">(ListNode headA, ListNode headB)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (headA == <span class="hljs-keyword">null</span> || headB == <span class="hljs-keyword">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>        &#125;<br>        ListNode pA = headA, pB = headB;<br>        <span class="hljs-keyword">while</span> (pA != pB) &#123;<br>            pA = pA == <span class="hljs-keyword">null</span> ? headB : pA.next;<br>            pB = pB == <span class="hljs-keyword">null</span> ? headA : pB.next;<br>        &#125;<br>        <span class="hljs-keyword">return</span> pA;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h2><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-02/image-20220203122425049.png" alt="结果"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>数据结构与算法</category>
+      
+      <category>双指针</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>leetcode</tag>
+      
+      <tag>链表</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>链表例题-01</title>
+    <link href="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-01/"/>
+    <url>/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-01/</url>
+    
+    <content type="html"><![CDATA[<h1 id="剑指-Offer-II-021-删除链表的倒数第-n-个结点"><a href="#剑指-Offer-II-021-删除链表的倒数第-n-个结点" class="headerlink" title="剑指 Offer II 021. 删除链表的倒数第 n 个结点"></a><a href="https://leetcode-cn.com/problems/SLwz0R/">剑指 Offer II 021. 删除链表的倒数第 n 个结点</a></h1><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-01/image-20220203110732323.png"></p><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-01/image-20220203110752768.png" alt="题目介绍"></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>首先题目中的链表不是双向的，所以要找倒数第 n 的节点，需要一点技巧。</p><p>这里就可以用一个双指针，右边的指针先偷跑 n 个身位，然后和左指针一起跑，那么到终点的时候，就是左指针在倒数 n 位的时候。</p><p>但是我们要删除倒数第 n 个节点，所以得到倒数 n + 1 个节点，意思就是让倒数 n + 1 节点指向倒数 n - 1 节点。</p><p>这里有一个问题，就是如果倒数第 n 个节点就是头指针，这个时候就直接返回 head.next 就好</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> * public class ListNode &#123;</span><br><span class="hljs-comment"> *     int val;</span><br><span class="hljs-comment"> *     ListNode next;</span><br><span class="hljs-comment"> *     ListNode() &#123;&#125;</span><br><span class="hljs-comment"> *     ListNode(int val) &#123; this.val = val; &#125;</span><br><span class="hljs-comment"> *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;</span><br><span class="hljs-comment"> * &#125;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ListNode <span class="hljs-title">removeNthFromEnd</span><span class="hljs-params">(ListNode head, <span class="hljs-keyword">int</span> n)</span> </span>&#123;<br>        ListNode right = head, left = head;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++)&#123;<br>            right = right.next;<br>        &#125;<br>        ListNode temp = left;<br>        <span class="hljs-keyword">while</span>(right != <span class="hljs-keyword">null</span>)&#123;<br>            temp = left;<br>            left = left.next;<br>            right = right.next;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(left == head)&#123;<br>            head = head.next;<br>            <span class="hljs-keyword">return</span> head;<br>        &#125;<br>        temp.next = left.next;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="/2022/02/03/%E9%93%BE%E8%A1%A8%E4%BE%8B%E9%A2%98-01/image-20220203111408348.png" alt="结果"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>数据结构与算法</category>
+      
+      <category>双指针</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>leetcode</tag>
+      
+      <tag>链表</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>滑窗法例题-2</title>
     <link href="/2022/02/02/%E6%BB%91%E7%AA%97%E6%B3%95%E4%BE%8B%E9%A2%98-2/"/>
     <url>/2022/02/02/%E6%BB%91%E7%AA%97%E6%B3%95%E4%BE%8B%E9%A2%98-2/</url>
