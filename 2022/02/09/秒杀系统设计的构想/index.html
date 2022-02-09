@@ -1,0 +1,561 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/imgs/icon1.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="秒杀系统设计的构想设计秒杀系统之前，需要对秒杀系统有一个清晰的认识。 秒杀系统主要为商品（往往是爆款商品）秒杀活动提供支持，这个秒杀活动会限制商品的个数以及秒杀持续时间。 秒杀系统的逻辑很简单，就是下订单减库存。 秒杀系统设计的难点在于：高并发与高可用  秒杀开始的时候，会有大量用户同时参与进来，因此秒杀系统一定要满足 高并发 和 高性能 。 为了保证秒杀整个流程的顺利进行，整个秒杀系统必须要满足">
+<meta property="og:type" content="article">
+<meta property="og:title" content="秒杀系统设计的构想">
+<meta property="og:url" content="http://example.com/2022/02/09/%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9E%84%E6%83%B3/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="秒杀系统设计的构想设计秒杀系统之前，需要对秒杀系统有一个清晰的认识。 秒杀系统主要为商品（往往是爆款商品）秒杀活动提供支持，这个秒杀活动会限制商品的个数以及秒杀持续时间。 秒杀系统的逻辑很简单，就是下订单减库存。 秒杀系统设计的难点在于：高并发与高可用  秒杀开始的时候，会有大量用户同时参与进来，因此秒杀系统一定要满足 高并发 和 高性能 。 为了保证秒杀整个流程的顺利进行，整个秒杀系统必须要满足">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/seckill1.png">
+<meta property="article:published_time" content="2022-02-09T14:16:39.000Z">
+<meta property="article:modified_time" content="2022-02-09T15:01:53.178Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="系统设计">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/imgs/seckill1.png">
+  
+  
+  <title>秒杀系统设计的构想 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CG Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/imgs/bg1.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="秒杀系统设计的构想">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-09 22:16" pubdate>
+        2022年2月9日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      37 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">秒杀系统设计的构想</h1>
+            
+            <div class="markdown-body">
+              <h1 id="秒杀系统设计的构想"><a href="#秒杀系统设计的构想" class="headerlink" title="秒杀系统设计的构想"></a>秒杀系统设计的构想</h1><p>设计秒杀系统之前，需要对秒杀系统有一个清晰的认识。</p>
+<p>秒杀系统主要为商品（往往是爆款商品）秒杀活动提供支持，这个秒杀活动会限制商品的个数以及秒杀持续时间。</p>
+<p>秒杀系统的逻辑很简单，就是下订单减库存。</p>
+<p><strong>秒杀系统设计的难点在于：高并发与高可用</strong></p>
+<ul>
+<li>秒杀开始的时候，会有大量用户同时参与进来，因此秒杀系统一定要满足 <strong>高并发</strong> 和 <strong>高性能</strong> 。</li>
+<li>为了保证秒杀整个流程的顺利进行，整个秒杀系统必须要满足 <strong>高可用</strong> 。</li>
+<li>除此之外，由于商品的库存有限，在面对大量订单的情况下，一定不能超卖，我们还需要保证 <strong>一致性</strong> 。</li>
+</ul>
+<p>知道了秒杀系统的特点之后，我们站在技术层面来思考一下：“设计秒杀系统的过程中需要重点关注哪些问题”。</p>
+<ol>
+<li>参与秒杀的商品属于热点数据，我们该如何处理热点数据？</li>
+<li>商品的库存有限，在面对大量订单的情况下，如何解决超卖的问题？</li>
+<li>如果系统用了消息队列，如何保证消息队列不丢失消息？</li>
+<li>如何保证秒杀系统的高可用？</li>
+<li>如何对项目进行压测？有哪些工具？</li>
+<li>……</li>
+</ol>
+<h2 id="高并发-与-高性能"><a href="#高并发-与-高性能" class="headerlink" title="高并发 与 高性能"></a>高并发 与 高性能</h2><h3 id="热点数据处理"><a href="#热点数据处理" class="headerlink" title="热点数据处理"></a>热点数据处理</h3><p>一段时间内被大量访问的数据就是热点数据，例如爆款商品的数据、新闻热点等等。</p>
+<p>虽然热点数据可能只占有所有数据的0.1%，但是访问量可能是50%以上。不对热点数据作特殊处理，系统崩掉的可能性就更大了。</p>
+<p><strong>热点数据的分类：</strong></p>
+<ul>
+<li><strong>静态热点数据</strong>：可以提前预测到的数据，就比如要秒杀的商品。</li>
+<li><strong>动态热点数据</strong>：不能够提前预测到的热点数据，爆款商品话题之类的，在之前压根不知道这么热门。</li>
+</ul>
+<p>另外，处理热点数据的问题就在于<strong>如何找到这点数据（热key），然后将他们存在 jvm 内存中</strong>。对于并发量一般的热点数据直接存放进缓存，例如 Redis 即可，不过如果是超大并发量，Redis 集群都直接被干掉了。</p>
+<h4 id="如何检测热点数据？"><a href="#如何检测热点数据？" class="headerlink" title="如何检测热点数据？"></a>如何检测热点数据？</h4><p>市面上有很多中间件，例如京东的 hotkey，可以毫秒级别的探测热点数据。</p>
+<p>也可以通过各种方法去 Redis 缓存中定位 Redis 热 Key。例如<a target="_blank" rel="noopener" href="https://www.infoq.cn/article/3l3zaq4h8xpnom2glsyi">这篇文章</a></p>
+<p><img src="/2022/02/09/%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9E%84%E6%83%B3/d116bc03b4a5c71f2f165831fda579fc.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>如何处理热点数据？</strong> 热点数据一定要放在缓存中，并且最好可以写入到 jvm 内存一份（多级缓存），并设置过期时间。一定要设定好淘汰策略，不然内存占用过大， jvm 也会崩掉。</p>
+<p><strong>为什么还要放在 jvm 内存一份？</strong> 因为放在 jvm 内存中的数据访问速度是最快的，不存在什么网络开销。</p>
+<h3 id="流量削峰"><a href="#流量削峰" class="headerlink" title="流量削峰"></a>流量削峰</h3><h4 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h4><p>秒杀开始之后的流量不是很大，我处理不了嘛！那我就先把这些请求放到消息队列中去。然后，咱后端服务再慢慢根据自己的能力去消费这些消息，这样就避免直接把后端服务打垮掉。</p>
+<p><img src="/2022/02/09/%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9E%84%E6%83%B3/10f532532d7de6a53e56ed12e5e5785a.png" srcset="/img/loading.gif" lazyload></p>
+<p>消息队列是一种非常实用的流量削峰手段。只要是涉及到流量削峰，那必然不可缺少消息队列。</p>
+<h4 id="各类验证码等措施"><a href="#各类验证码等措施" class="headerlink" title="各类验证码等措施"></a>各类验证码等措施</h4><p>我们可以在用户发起秒杀请求之前让其进行答题或者输入验证码。</p>
+<p>这种方式一方面可以避免用户请求过于集中，另一方面可以有效解决用户使用脚本作弊。</p>
+<p>回答问题/验证码这一步建议除了对答案的正确性做校验，还需要对用户的提交时间做校验，比如提交时间过短（&lt;1s）的话，大概就是使用脚本来处理的。</p>
+<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><h3 id="集群化"><a href="#集群化" class="headerlink" title="集群化"></a>集群化</h3><p>如果要保证系统中某一个组件的高可用，最简单的方法就是搭建集群，如果 Nginx 集群，Kafka 集群，Redis 集群。</p>
+<p>我们拿 Redis 来举例说明。<strong>如果我们需要保证 Redis 高可用的话，该怎么做呢？</strong></p>
+<p>你直接通过 Redis replication（异步复制） 搞个一主(master)多从(slave)来提高可用性和读吞吐量，slave 的多少取决于你的读吞吐量。</p>
+<p><img src="/2022/02/09/%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9E%84%E6%83%B3/8af6deeba55f9706ffaed7e32f1d6459.png" srcset="/img/loading.gif" lazyload></p>
+<p>这样的方式有一个问题：一旦 master 宕机，slave 晋升成为 master，同继需要修改应用方的主节点地址，还需要命令所有从节点去复制新的主键点，这样就需要人工干预完成。</p>
+<p>不过，这个问题我们可以通过 Sentinel（哨兵） 来解决。Redis Sentinel 是 Redis 官方推荐的高可用性(HA)解决方案。</p>
+<p>Sentinel 是 Redis 的一种运行模式 ，它主要的作用就是对 Redis 运行节点进行监控。当 master 节点出现故障的时候， Sentinel 会帮助我们实现故障转移，确保整个 Redis 系统的可用性。整个过程完全自动，不需要人工介入!</p>
+<p><img src="/2022/02/09/%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9E%84%E6%83%B3/6ce3804c99c03651779e15ff39148faa.png" srcset="/img/loading.gif" lazyload></p>
+<p>Sentinel 也是一个 Redis 进程，只是不对外提供读写服务，通常哨兵要配置成单数。</p>
+<h3 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h3><p>限流是从用户访问压力的角度来考虑如果应对系统故障。限流是为了对服务端的接口接受请求的频率进行限制，防止服务挂掉。</p>
+<p>🌰 举个例子：我们的秒杀接口一秒只能处理 10w 个请求，结果秒杀活动刚开始一下子来了 15w 个请求。这肯定不行啊！我们只能通过限流把 5w 个请求给拦截住，不然系统直接就给整挂掉了！</p>
+<p>限流的话可以直接用 Redis 来做（建议基于 Lua 脚本），也可以使用现成的流量控制组件比如 Sentinel 、Hystrix 、Resilience4J 。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Netflix/Hystrix">Hystrix</a> 是 Netflix 开源的熔断降级组件。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel">Sentinel</a> 是阿里巴巴体提供的面向分布式服务架构的流量控制组件，经历了淘宝近10年双11（11.11）购物节的所有核心场景（比如秒杀活动）的考验。</p>
+<p>Sentinel 主要以流量为切入点，提供 <strong>流量控制</strong>、<strong>熔断降级</strong>、<strong>系统自适应保护</strong>等功能来保护系统的稳定性和可用性。</p>
+<p><img src="/2022/02/09/%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9E%84%E6%83%B3/623fc0f9b9784ff939828d758be2d36d.png" srcset="/img/loading.gif" lazyload></p>
+<p>Spring Cloud Alibaba 用 Sentinel 比较多，我日常也是用 Sentinel 作为流量控制中间件。</p>
+<h3 id="排队"><a href="#排队" class="headerlink" title="排队"></a>排队</h3><p>排队时限流的一个变种。限流是直接拒绝了用户的请求，而排队是让用户等待一段时间。</p>
+<p>排队虽然没有直接拒绝用户，但用户等了很长时间后进入系统，体验并不一定比限流好。</p>
+<p>🌰 举个例子：当请求量达到一个阈值的时候，我们就通知用户让它们排队。等到系统可以继续处理请求之后，再慢慢来处理。</p>
+<h3 id="降级"><a href="#降级" class="headerlink" title="降级"></a>降级</h3><p>降级是从系统功能优先级的角度考虑如何应对系统故障。</p>
+<p>服务降级指的是当服务器压力剧增的情况下，根据当前业务情况及流量对一些服务和页面有策略的降级，以此释放服务器资源以保证核心任务的正常运行。<strong>降级的核心思想就是丢车保帅，优先保证核心业务。</strong>例</p>
+<p>🌰 举个例子：当请求量达到一个阈值的时候，我们对系统中一些非核心的功能直接关闭或者让它们功能降低。这样的话，系统就有更多的资源留给秒杀功能了！</p>
+<h3 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h3><p>熔断和降级是两个比较容易混淆的概念，两者的含义并不相同。降级的目的在于应对系统自身的故障，而熔断的目的在于应对当前系统依赖的外部系统或者第三方系统的故障。</p>
+<p>熔断可以防止因为秒杀交易影响到其他正常服务的提供</p>
+<p>🌰 举个例子： 秒杀功能位于服务 A 上，服务 A 上同时还有其他的一些功能比如商品管理。如果服务 A 上的商品管理接口响应非常慢的话，其他服务直接不再请求服务 A 上的商品管理这个接口，从而有效避免其他服务被拖慢甚至拖死。</p>
+<h2 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h2><h3 id="减库存方案"><a href="#减库存方案" class="headerlink" title="减库存方案"></a>减库存方案</h3><p>常见的减库存方案有：</p>
+<ul>
+<li><strong>下单即减库存</strong> ：只要用户下单了，即使不付款，我们就扣库存。</li>
+<li><strong>付款再减库存</strong> ：当用户付款了之后，我们在减库存。不过， 这种情况可能会造成用户下订单成功，但是付款失败。</li>
+</ul>
+<p>一般情况下都是 <strong>下单减扣库存</strong> ，像现在的购物网站比如京东都是这样来做的。</p>
+<p>不过，我们对业务逻辑作进一步优化，比如超过一定时间不付款订单做优先处理，释放库存。</p>
+<p>对应到代码层面，我们应该如何保证不会超卖呢？</p>
+<p>我们上面也说，我们一般会提前将秒杀商品的信息放到缓存中去。我们可以通过 Redis 对库存进行原子操作。伪代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 第一步：先检查 库存是否充足</span><br>Integer stockNum = (Integer) redisTemplate.get(key);<br><span class="hljs-keyword">if</span> (stockNum &lt; <span class="hljs-number">1</span>) &#123;<br>    ......<br>&#125;<br><span class="hljs-comment">// 第二步：如果库存充足，减少库存（假设只能购买一件）</span><br>Long count = redisTemplate.increment(key, -<span class="hljs-number">1</span>);<br><span class="hljs-keyword">if</span> (count &gt;= <span class="hljs-number">0</span>) &#123;<br>     ......<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>  ......<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>你也可以通过 Lua 脚本来减少多个命令的网络开销并保证多个命令整体的原子性。伪代码如下：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 第一步：先检查 库存是否充足，库存不足，返回 0</span><br><span class="hljs-keyword">local</span> stockNum=<span class="hljs-built_in">tonumber</span>(redis.call(<span class="hljs-string">&quot;get&quot;</span>,key);<br><span class="hljs-keyword">if</span> stockNum&lt;<span class="hljs-number">1</span> <span class="hljs-keyword">then</span><br>      <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><span class="hljs-comment">-- 第二步：如果库存充足，减少库存（假设只能购买一件）,返回 1</span><br><span class="hljs-keyword">else</span><br>    redis.call(<span class="hljs-string">&#x27;DECRBY&#x27;</span>,key,<span class="hljs-number">1</span>);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="接口幂等"><a href="#接口幂等" class="headerlink" title="接口幂等"></a>接口幂等</h3><p>幂等就是不论多接口执行多少次相同的请求，产生的效果都和发出单个请求是一样的。</p>
+<p> 🌰 举个例子：假如咱们的前后端没有保证接口幂等性，我作为用户在秒杀商品的时候，我同时点击了多次秒杀商品按钮，后端处理了多次相同的订单请求，结果导致一个人秒杀了多个商品。这个肯定是不能出现的，属于非常严重的 bug 了！</p>
+<p>保证分布式接口的幂等性对于数据的一致性至关重要，特别是像支付这种涉及到钱的接口。保证幂等性这个<strong>操作并不是说前端做了就可以的，后端同样要做。</strong></p>
+<p>前端保证幂等性的话比较简单，一般通过当用户提交请求后将按钮致灰来做到。后端保证幂等性就稍微麻烦一点，方法也是有很多种，比如：</p>
+<ol>
+<li>同步锁；</li>
+<li>分布式锁；</li>
+<li>业务字段的唯一索性约束，防止重复数据产生。</li>
+<li>……</li>
+</ol>
+<p>拿分布式锁来说，我们通过加锁的方式限制用户在第一次请求未结束之前，无法进行第二次请求。</p>
+<p>分布式锁一般基于 Redis 多一点。如果是用 Redis 来实现的话，比较推荐 Redisson。<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&mid=2247505586&idx=2&sn=7e9c7739b1a2c56849d371144556ff80&chksm=cea19979f9d6106f9b5fdce34a285e31d61981bdd58fe6b3a2fc9da23f21a9b01123d715dd96&token=1297266129&lang=zh_CN#rd">相关阅读</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 1.设置分布式锁</span><br>RLock lock = redisson.getLock(<span class="hljs-string">&quot;lock&quot;</span>);<br><span class="hljs-comment">// 2.占用锁</span><br>lock.lock();<br><span class="hljs-comment">// 3.执行业务</span><br>...<br><span class="hljs-comment">// 4.释放锁</span><br>lock.unlock();<br></code></pre></td></tr></table></figure>
+
+<p>当然了，除了 Redis 之外，像 ZooKeeper 等中间也可以拿来做分布式锁。</p>
+<h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><p>上线之前压力测试是必不可少的。推荐 4 个比较常用的性能测试工具：</p>
+<ol>
+<li><strong>Jmeter</strong> ：Apache JMeter 是 JAVA 开发的性能测试工具。</li>
+<li><strong>LoadRunner</strong>：一款商业的性能测试工具。</li>
+<li><strong>Galtling</strong> ：一款基于 Scala 开发的高性能服务器性能测试工具。</li>
+<li><strong>ab</strong> ：全称为 Apache Bench 。Apache 旗下的一款测试工具，非常实用。</li>
+</ol>
+<p>没记错的话，除了 <strong>LoadRunner</strong> 其他几款性能测试工具都是开源免费的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>一张图来总结一下上面涉及到的一些技术。</p>
+<p><img src="/2022/02/09/%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9E%84%E6%83%B3/0d81157f802acd6a2b2e173a3b84f938.png" srcset="/img/loading.gif" lazyload alt="来源 Java Guide"></p>
+<p>另外，上面涉及到知识点还蛮多的，如果面试官单独挑出一个来深挖还是能够问出很多问题的。</p>
+<p>比如面试官想在消息队里上进行深挖，可能会问：</p>
+<ul>
+<li>常见消息队列的对比</li>
+<li>如何保证消息的消费顺序？</li>
+<li>如何保证消息不丢失？</li>
+<li>如何保证消息不重复消费？</li>
+<li>如何设计一个消息队列？</li>
+<li>……</li>
+</ul>
+<p>再比如面试官想在 Redis 上深挖的话，可能会问：</p>
+<ul>
+<li>Redis 常用的数据结构了解么？</li>
+<li>Redis 如何保证数据不丢失？</li>
+<li>Redis 内存占用过大导致响应速度变慢怎么解决？</li>
+<li>缓存穿透、缓存雪崩了解么？怎么解决？</li>
+<li>……</li>
+</ul>
+<p>因此，要想要真正搞懂秒杀系统的设计，你还需要将其涉及到的一些技术给研究透！</p>
+<p>图片与资源来源 Java Guide，上面这些问题在接下来都会继续总结的。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F/">秒杀系统</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/05/Redis%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-01/">
+                        <span class="hidden-mobile">Redis常见问题-01</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://github.com/jim-che" target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
