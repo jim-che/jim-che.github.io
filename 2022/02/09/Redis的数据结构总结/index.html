@@ -33,8 +33,10 @@
 <meta property="og:image" content="http://example.com/2022/02/09/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/640-20220210215633857">
 <meta property="og:image" content="http://example.com/2022/02/09/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/640.png">
 <meta property="og:image" content="http://example.com/2022/02/09/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/640-20220210220420019">
+<meta property="og:image" content="http://example.com/2022/02/09/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/640-20220211100545693">
+<meta property="og:image" content="http://example.com/2022/02/09/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/640-20220211102023880">
 <meta property="article:published_time" content="2022-02-09T15:06:34.000Z">
-<meta property="article:modified_time" content="2022-02-10T14:11:56.809Z">
+<meta property="article:modified_time" content="2022-02-11T02:24:06.297Z">
 <meta property="article:author" content="jim-che">
 <meta property="article:tag" content="Redis">
 <meta property="article:tag" content="数据结构">
@@ -209,7 +211,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6.6k 字
+      7.5k 字
     </span>
   
 
@@ -218,7 +220,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      55 分钟
+      63 分钟
     </span>
   
 
@@ -387,6 +389,37 @@
 <li>不能保存过多的元素，否则查询效率就会降低；</li>
 <li>新增或修改某个元素时，压缩列表占用的内存空间需要重新分配，甚至可能引发连锁更新的问题。</li>
 </ul>
+<p>因此，Redis 对象（List 对象，Hash 对象，Zset 对象）包含的元素数量很少，或者元素值不大的情况下，才会使用压缩列表作为底层数据结构。</p>
+<h3 id="压缩列表结构设计"><a href="#压缩列表结构设计" class="headerlink" title="压缩列表结构设计"></a>压缩列表结构设计</h3><p>压缩列表是 Redis 为了节约内存而开发的，它是<strong>由连续内存块组成的顺序型数据结构</strong>，有点类似于数组。</p>
+<p><img src="/2022/02/09/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/640-20220211100545693" srcset="/img/loading.gif" lazyload></p>
+<p>压缩列表在表头有三个字段：</p>
+<ul>
+<li><strong>zibytes</strong>：记录整个压缩列表占用的内存字节数</li>
+<li><strong>zltail</strong>：记录压缩列表的「尾部」节点距离其实地址有多少字节，也就是列表尾的偏移量；</li>
+<li><strong>zllen</strong>：记录压缩列表包含的节点数量</li>
+<li><strong>zlend</strong>：标记压缩列表的结束点，固定值 0xFF (255)</li>
+</ul>
+<p>在压缩列表中，如果我们要查找定位第一个元素和最后一个元素，可以通过表头三个字段的长度直接定位，复杂度是 O（1）。而<strong>查找其他元素的时候，只能逐个查找，此时的复杂度就是 O（N）了，因此压缩列表不适合保存过多的元素</strong>。</p>
+<p>另外，压缩列表节点（entry）的构成如下：</p>
+<p><img src="/2022/02/09/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/640-20220211102023880" srcset="/img/loading.gif" lazyload></p>
+<p>压缩列表节点包含三部分内容：</p>
+<ul>
+<li><strong>prevlen</strong>，记录了「前一个节点」的长度；</li>
+<li><strong>encoding</strong>，记录了当前节点实际数据的类型以及长度；</li>
+<li><strong>data</strong>，记录了当前节点的实际数据；</li>
+</ul>
+<p>当我们向压缩列表中插入数据时，压缩列表就会根据数据是字符串还是整数，以及数据的大小，会使用不同空间大小的 prevlen 和 encoding 这两个元素里保存的信息，<strong>这种根据数据大小和类型进行不同的空间大小分配的设计思想，正是 Redis 为了节省内存而采用的</strong>。</p>
+<p>prevlen 和 encoding 是如何根据数据的大小和类型来进行不同的空间大小分配。</p>
+<p>压缩列表中的每个节点中的 prevlen 属性都记录了「前一个节点的长度」，而且 prevlen 属性的空间大小跟前一个节点长度值有关，比如：</p>
+<ul>
+<li>如果<strong>前一个节点的长度小于 254 字节</strong>，那么 prevlen 属性需要用 <strong>1 字节的空间</strong>来保存这个长度值；</li>
+<li>如果<strong>前一个节点的长度大于等于 254 字节</strong>，那么 prevlen 属性需要用 <strong>5 字节的空间</strong>来保存这个长度值；</li>
+</ul>
+<p>encoding 属性的空间大小跟数据是字符串还是整数，以及字符串的长度有关：</p>
+<ul>
+<li>如果<strong>当前节点的数据是整数</strong>，则 encoding 会使用 <strong>1 字节的空间</strong>进行编码。</li>
+<li>如果<strong>当前节点的数据是字符串，根据字符串的长度大小</strong>，encoding 会使用 <strong>1 字节/2字节/5字节的空间</strong>进行编码。</li>
+</ul>
 
             </div>
             <hr>
@@ -418,6 +451,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/02/10/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B-03/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java多线程-03</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

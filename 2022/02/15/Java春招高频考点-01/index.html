@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/imgs/icon1.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="22届Java春招高频考点-From牛客网1. String、StringBuffer、StringBuilder 的区别？简陋回答： String 是不可变的。 StringBuffer 和 StringBuilder 是可变的。 StringBuffer 线程安全而 StringBuilder 线程不安全。 详细回答： String类长度是不可变的，StringBuffer和StringBui">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java春招高频考点-01">
+<meta property="og:url" content="http://example.com/2022/02/15/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-01/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="22届Java春招高频考点-From牛客网1. String、StringBuffer、StringBuilder 的区别？简陋回答： String 是不可变的。 StringBuffer 和 StringBuilder 是可变的。 StringBuffer 线程安全而 StringBuilder 线程不安全。 详细回答： String类长度是不可变的，StringBuffer和StringBui">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-15T13:20:56.000Z">
+<meta property="article:modified_time" content="2022-02-16T05:43:08.012Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="阿里">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Java春招高频考点-01 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CG Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/imgs/bg1.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java春招高频考点-01">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-15 21:20" pubdate>
+        2022年2月15日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      30 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java春招高频考点-01</h1>
+            
+            <div class="markdown-body">
+              <h1 id="22届Java春招高频考点-From牛客网"><a href="#22届Java春招高频考点-From牛客网" class="headerlink" title="22届Java春招高频考点-From牛客网"></a>22届Java春招高频考点-From牛客网</h1><h2 id="1-String、StringBuffer、StringBuilder-的区别？"><a href="#1-String、StringBuffer、StringBuilder-的区别？" class="headerlink" title="1. String、StringBuffer、StringBuilder 的区别？"></a>1. String、StringBuffer、StringBuilder 的区别？</h2><p>简陋回答：</p>
+<p>String 是不可变的。</p>
+<p>StringBuffer 和 StringBuilder 是可变的。</p>
+<p>StringBuffer 线程安全而 StringBuilder 线程不安全。</p>
+<p>详细回答：</p>
+<p>String类长度是不可变的，StringBuffer和StringBuilder类长度是可以改变的；</p>
+<p>StringBuffer类是线程安全的，StringBuilder不是线程安全的；</p>
+<p>String 类型和 StringBuffer 的主要性能区别：String 是不可变的对象, 因此在每次对 String 类型进行改变的时候，都会生成一个新的 String 对象，然后将指针指向新的 String 对象，所以经常改变内容的字符串最好不要用 String ，因为每次生成对象都会对系统性能产生影响，特别当内存中无引用对象多了以后， JVM 的 GC 就会开始工作，性能就会降低。</p>
+<h2 id="2-JDK1-7-和-JDK1-8-有哪些区别"><a href="#2-JDK1-7-和-JDK1-8-有哪些区别" class="headerlink" title="2. JDK1.7 和 JDK1.8 有哪些区别"></a>2. JDK1.7 和 JDK1.8 有哪些区别</h2><p>主要有：</p>
+<ul>
+<li>Interface &amp; functional Interface</li>
+<li>Lambda</li>
+<li>Stream</li>
+<li>Optional</li>
+<li>Date-time-api</li>
+</ul>
+<h3 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h3><p>interface 在 JDK1.7 时，Interface 修改时，实现它的类也必须修改。为了解决接口的修改与现有的实现不兼容的问题。新 interface 的方法可以使用 <code>default</code> 或者 <code>static</code> 修饰，这样就可以有方法题，实现类也不必重写该方法。</p>
+<p>一个 interface 中可以有多个方法被它们修饰，这 2 个修饰符的区别主要也是普通方法和静态方法的区别。</p>
+<ol>
+<li><code>default</code>修饰的方法，是普通实例方法，可以用<code>this</code>调用，可以被子类继承、重写。</li>
+<li><code>static</code>修饰的方法，使用上和一般类静态方法一样。但它不能被子类继承，只能用<code>Interface</code>调用。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">InterfaceNew</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sm</span><span class="hljs-params">()</span> </span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;interface提供的方式实现&quot;</span>);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sm2</span><span class="hljs-params">()</span> </span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;interface提供的方式实现&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title">def</span><span class="hljs-params">()</span> </span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;interface default方法&quot;</span>);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title">def2</span><span class="hljs-params">()</span> </span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;interface default2方法&quot;</span>);<br>    &#125;<br>    <span class="hljs-comment">//须要实现类重写</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span></span>;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">InterfaceNew1</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title">def</span><span class="hljs-params">()</span> </span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;InterfaceNew1 default方法&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果有一个类既实现了 <code>InterfaceNew</code> 接口又实现了 <code>InterfaceNew1</code>接口，它们都有<code>def()</code>，并且 <code>InterfaceNew</code> 接口和 <code>InterfaceNew1</code>接口没有继承关系的话，这时就必须重写<code>def()</code>。不然的话，编译的时候就会报错。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InterfaceNewImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">InterfaceNew</span> , <span class="hljs-title">InterfaceNew1</span></span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        InterfaceNewImpl interfaceNew = <span class="hljs-keyword">new</span> InterfaceNewImpl();<br>        interfaceNew.def();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">def</span><span class="hljs-params">()</span> </span>&#123;<br>        InterfaceNew1.<span class="hljs-keyword">super</span>.def();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>&#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>在 Java 8 ，接口和抽象类有什么区别的？</strong></p>
+<ol>
+<li>接口可以多实现，类只能单继承</li>
+<li>接口的方法是 public abstract 修饰，变量是 public static final 修饰。abstract class 可以用其他修饰符。</li>
+<li>interface 的方法更像是一个扩展插件。而抽象类的方法是继承。</li>
+</ol>
+<p>开始我们也提到，interface 新增<code>default</code>和<code>static</code>修饰的方法，为了解决接口的修改与现有的实现不兼容的问题，并不是为了要替代<code>abstract class</code>。在使用上，该用 abstract class 的地方还是要用 abstract class，不要因为 interface 的新特性而将之替换。</p>
+<h3 id="functional-interface-函数式接口"><a href="#functional-interface-函数式接口" class="headerlink" title="functional interface 函数式接口"></a>functional interface 函数式接口</h3><p><strong>定义</strong>：也称 SAM 接口，即 Single Abstract Method interfaces，有且只有一个抽象方法，但可以有多个非抽象方法的接口。</p>
+<p>在 java 8 中专门有一个包放函数式接口<code>java.util.function</code>，该包下的所有接口都有 <code>@FunctionalInterface</code> 注解，提供函数式编程。</p>
+<p>在其他包中也有函数式接口，其中一些没有<code>@FunctionalInterface</code> 注解，但是只要符合函数式接口的定义就是函数式接口，与是否有</p>
+<p><code>@FunctionalInterface</code>注解无关，注解只是在编译时起到强制规范定义的作用。其在 Lambda 表达式中有广泛的应用。</p>
+<h3 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h3><p>Lambda 可以让代码更加简洁，让 java 也支持简单的函数式编程。</p>
+<blockquote>
+<p>Lambda 表达式是一个匿名函数，java 8 允许把函数作为参数传递进方法</p>
+</blockquote>
+<h3 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h3><p>主要是对于集合的处理效率提高了。Stream 不存储数据，但是可以检索和逻辑处理集合数据，包括筛选、排序、统计、技术等等。就类似于 Sql 语句了。</p>
+<p>它的源数据一般为 <code>Collections</code> 和 <code>Array</code></p>
+<p>流分为串行流和并行流。并行流可以多线程执行。</p>
+<h3 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h3><p>Optional 主要是为了解决 NPE 问题的。</p>
+<p>在<a target="_blank" rel="noopener" href="https://share.weiyun.com/ThuqEbD5">阿里巴巴开发手册关于 Optional 的介绍</a>中这样写到：</p>
+<blockquote>
+<p>防止 NPE，是程序员的基本修养，注意 NPE 产生的场景：</p>
+<p>1） 返回类型为基本数据类型，return 包装数据类型的对象时，自动拆箱有可能产生 NPE。</p>
+<p>反例：public int f() { return Integer 对象}， 如果为 null，自动解箱抛 NPE。</p>
+<p>2） 数据库的查询结果可能为 null。</p>
+<p>3） 集合里的元素即使 isNotEmpty，取出的数据元素也可能为 null。</p>
+<p>4） 远程调用返回对象时，一律要求进行空指针判断，防止 NPE。</p>
+<p>5） 对于 Session 中获取的数据，建议进行 NPE 检查，避免空指针。</p>
+<p>6） 级联调用 obj.getA().getB().getC()；一连串调用，易产生 NPE。</p>
+<p>正例：使用 JDK8 的 Optional 类来防止 NPE 问题。</p>
+</blockquote>
+<p>主要通过 <code>of</code> 与 <code>ofNullable</code> 来判断 value 是否为空。</p>
+<p><code>ofNullable</code> 方法和<code>of</code>方法唯一区别就是当 value 为 null 时，<code>ofNullable</code> 返回的是<code>EMPTY</code>，of 会抛出 <code>NullPointerException</code> 异常。如果需要把 <code>NullPointerException</code> 暴漏出来就用 <code>of</code>，否则就用 <code>ofNullable</code>。</p>
+<p>处理数据，判断数据主要使用 <code>flatMap()</code> 与 <code>map()</code> 方法。</p>
+<p><code>flatMap()</code> 参数返回值如果是 null 会抛 <code>NullPointerException</code>，而 <code>map()</code> 返回<code>EMPTY</code>。</p>
+<h3 id="Date-Time-API"><a href="#Date-Time-API" class="headerlink" title="Date-Time API"></a>Date-Time API</h3><p>JDK1.8 提供了对时间更优秀的处理办法，解决了JDK1.7 的大部分缺陷。</p>
+<p>JDK1.7 对于 Date 的缺陷有以下几点：</p>
+<ul>
+<li>非线程安全</li>
+<li>时区处理麻烦</li>
+<li>格式化、时间计算繁琐</li>
+<li>设计有缺陷，Date 类同时包含日期和时间；还有一个 java.sql.Date，容易混淆。</li>
+</ul>
+<h2 id="Java-中有哪些容器类？"><a href="#Java-中有哪些容器类？" class="headerlink" title="Java 中有哪些容器类？"></a>Java 中有哪些容器类？</h2><p>简单来说，有 <code>Collections</code> 下面的子类和 <code>Map</code> 下面的子类</p>
+<p>Collections 下的主要有 </p>
+<ul>
+<li>List，包括 ArrayList 、LinkedList、Stack、Vector</li>
+<li>Set，包括HashSet、LinkedHashSet、SortedSet、TreeSet</li>
+<li>Queue，包括 ArrayQueue 和 Deque 和 PriorityQueue</li>
+</ul>
+<p>Map 下主要有</p>
+<ul>
+<li>HashMap</li>
+<li>TreeMap</li>
+<li>HashTable</li>
+</ul>
+<p><a href="./%E9%9B%86%E5%90%88%E6%A6%82%E8%BF%B0.md">具体跳转</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%9D%A2%E8%AF%95/">面试</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%98%BF%E9%87%8C/">阿里</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-02/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java春招高频考点-02</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/10/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B-03/">
+                        <span class="hidden-mobile">Java多线程-03</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://github.com/jim-che" target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
