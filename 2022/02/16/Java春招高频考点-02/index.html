@@ -16,19 +16,22 @@
   <meta name="author" content="jim-che">
   <meta name="keywords" content="">
   
-    <meta name="description" content="22届Java春招高频考点-From牛客网HashMap 底层是如何实现的？JDK1.8 和 JDK1.7 的 HashMap 的实现有哪些区别？在JDK1.7 中，HashMap 由数组 + 链表实现。链表主要功能是为了解决哈希冲突，在哈希值计算相同时，连接在哈希桶的链表的尾端。 JDK1.8 在链表的基础上引入的红黑树，在 JDK1.7 中，如果哈希冲突严重，链表会延续很长，这样会造成查找效率">
+    <meta name="description" content="22届Java春招高频考点-From牛客网3. HashMap 底层是如何实现的？JDK1.8 和 JDK1.7 的 HashMap 的实现有哪些区别？过于简单的回答：  在JDK1.7 中，HashMap 由数组 + 链表实现。链表主要功能是为了解决哈希冲突，在哈希值计算相同时，连接在哈希桶的链表的尾端。 JDK1.8 在链表的基础上引入的红黑树，在 JDK1.7 中，如果哈希冲突严重，链表会延">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java春招高频考点-02">
 <meta property="og:url" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-02/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="22届Java春招高频考点-From牛客网HashMap 底层是如何实现的？JDK1.8 和 JDK1.7 的 HashMap 的实现有哪些区别？在JDK1.7 中，HashMap 由数组 + 链表实现。链表主要功能是为了解决哈希冲突，在哈希值计算相同时，连接在哈希桶的链表的尾端。 JDK1.8 在链表的基础上引入的红黑树，在 JDK1.7 中，如果哈希冲突严重，链表会延续很长，这样会造成查找效率">
+<meta property="og:description" content="22届Java春招高频考点-From牛客网3. HashMap 底层是如何实现的？JDK1.8 和 JDK1.7 的 HashMap 的实现有哪些区别？过于简单的回答：  在JDK1.7 中，HashMap 由数组 + 链表实现。链表主要功能是为了解决哈希冲突，在哈希值计算相同时，连接在哈希桶的链表的尾端。 JDK1.8 在链表的基础上引入的红黑树，在 JDK1.7 中，如果哈希冲突严重，链表会延">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-02/image-20200405151029416.70d440cb.png">
+<meta property="og:image" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-02/java8_concurrenthashmap.34a4e6cf.png">
 <meta property="article:published_time" content="2022-02-16T05:43:37.000Z">
-<meta property="article:modified_time" content="2022-02-16T05:55:04.346Z">
+<meta property="article:modified_time" content="2022-02-18T15:17:54.624Z">
 <meta property="article:author" content="jim-che">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="阿里">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-02/image-20200405151029416.70d440cb.png">
   
   
   <title>Java春招高频考点-02 - Blog</title>
@@ -198,7 +201,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      222 字
+      5.3k 字
     </span>
   
 
@@ -207,7 +210,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      2 分钟
+      45 分钟
     </span>
   
 
@@ -239,8 +242,65 @@
             <h1 style="display: none">Java春招高频考点-02</h1>
             
             <div class="markdown-body">
-              <h1 id="22届Java春招高频考点-From牛客网"><a href="#22届Java春招高频考点-From牛客网" class="headerlink" title="22届Java春招高频考点-From牛客网"></a>22届Java春招高频考点-From牛客网</h1><h2 id="HashMap-底层是如何实现的？JDK1-8-和-JDK1-7-的-HashMap-的实现有哪些区别？"><a href="#HashMap-底层是如何实现的？JDK1-8-和-JDK1-7-的-HashMap-的实现有哪些区别？" class="headerlink" title="HashMap 底层是如何实现的？JDK1.8 和 JDK1.7 的 HashMap 的实现有哪些区别？"></a>HashMap 底层是如何实现的？JDK1.8 和 JDK1.7 的 HashMap 的实现有哪些区别？</h2><p>在JDK1.7 中，HashMap 由数组 + 链表实现。链表主要功能是为了解决哈希冲突，在哈希值计算相同时，连接在哈希桶的链表的尾端。</p>
+              <h1 id="22届Java春招高频考点-From牛客网"><a href="#22届Java春招高频考点-From牛客网" class="headerlink" title="22届Java春招高频考点-From牛客网"></a>22届Java春招高频考点-From牛客网</h1><h2 id="3-HashMap-底层是如何实现的？JDK1-8-和-JDK1-7-的-HashMap-的实现有哪些区别？"><a href="#3-HashMap-底层是如何实现的？JDK1-8-和-JDK1-7-的-HashMap-的实现有哪些区别？" class="headerlink" title="3. HashMap 底层是如何实现的？JDK1.8 和 JDK1.7 的 HashMap 的实现有哪些区别？"></a>3. HashMap 底层是如何实现的？JDK1.8 和 JDK1.7 的 HashMap 的实现有哪些区别？</h2><p><strong>过于简单的回答：</strong></p>
+<blockquote>
+<p>在JDK1.7 中，HashMap 由数组 + 链表实现。链表主要功能是为了解决哈希冲突，在哈希值计算相同时，连接在哈希桶的链表的尾端。</p>
 <p>JDK1.8 在链表的基础上引入的红黑树，在 JDK1.7 中，如果哈希冲突严重，链表会延续很长，这样会造成查找效率低下的情况，如果在链表过长的时候将链表转为红黑树就能大大加快查询的效率。</p>
+</blockquote>
+<p><strong>详细回答：</strong></p>
+<p><strong>JDK1.8 之前：</strong></p>
+<p>HashMap 的底层时 <strong>数组和链表</strong> 结合在一起使用的，也就是链表散列。HashMap 通过 key 的 hashcode 经过扰动函数处理后得到 hash 值，然后通过 (n-1) &amp; hash 判断当前元素存放的位置（这里的 n 指的是数组的长度），如果当前位置存有元素的话，就要判断存入的 hash 值以及 key 是否equals，如果相同直接覆盖，如果不相同，就通过拉链法解决冲突。</p>
+<p>这里扰动函数的主要功能是减少哈希冲突，因为很多类 hashcode 方法是自己重写的，可能造成严重的冲突现象导致效率低下。</p>
+<p><strong>JDK1.8 以后：</strong></p>
+<p>JDK1.8 在解决哈希冲突时有了较大的变化，当链表长度大于阈值时（默认为8）时，奖励拿表转化为红黑树，以减少搜索的时间。</p>
+<p>如果当前数组长度小于 64 ，那会选择先对数组进行扩容，而不是转化为红黑树。</p>
+<h2 id="4-HashMap-扩容为什么要扩展为之前的-2-倍？"><a href="#4-HashMap-扩容为什么要扩展为之前的-2-倍？" class="headerlink" title="4. HashMap 扩容为什么要扩展为之前的 2 倍？"></a>4. HashMap 扩容为什么要扩展为之前的 2 倍？</h2><p>HashMap 的容量一直是 2 的幂次方。因为这样的话，在计算哈希值的时候就能通过位运算来更加快速的计算出结果。</p>
+<p>具体为 hash % n = (n-1) &amp; hash，前提就是 n 的 2 的幂次方。</p>
+<h2 id="5-高并发情况使用-Hashmap-会出现哪些问题？如何解决"><a href="#5-高并发情况使用-Hashmap-会出现哪些问题？如何解决" class="headerlink" title="5. 高并发情况使用 Hashmap 会出现哪些问题？如何解决"></a>5. 高并发情况使用 Hashmap 会出现哪些问题？如何解决</h2><p>主要是在 Refresh 时会出现死循环的问题。主要症状为在 get 时进入死循环，CPU 占用100%。</p>
+<p>put之后，在扩容时，如果 key1 本来 next 是 key2，但是扩容完后，key2 的 next 是 key1，这个时候就有形成环路，造成死循环的问题。get 这个桶 key1 后面的所有 key 都会掉入死循环。</p>
+<p>解决方案就是不用 HashMap，这个容器本身就是不支持多线程的，使用 ConcurrentHashMap 可以解决这个问题。</p>
+<h2 id="6-JDK1-7-中-ConcurrentHashMap-的底层结构？"><a href="#6-JDK1-7-中-ConcurrentHashMap-的底层结构？" class="headerlink" title="6. JDK1.7 中 ConcurrentHashMap 的底层结构？"></a>6. JDK1.7 中 ConcurrentHashMap 的底层结构？</h2><p><img src="/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-02/image-20200405151029416.70d440cb.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>ConcurrentHashMap</strong> 是由 <strong>Segment</strong> 数组结构和 <strong>HashEntry</strong> 数组结构组成。</p>
+<p>Java 7 中的 <code>ConcurrentHashMap</code> 的存储结构如上图，<code>ConcurrentHashMap</code> 由很多个 <code>Segment</code> 组合，而每一个 <code>Segment</code> 是一个类似于 HashMap 的结构，所以每一个 <code>HashMap</code> 的内部可以进行扩容。但是 <code>Segment</code> 的个数<strong>一旦初始化就不能改变</strong>，默认 <code>Segment</code> 的个数是 16 个，这就意味着 <code>ConcurrentHashMap</code> 默认最多支持 16 个并发。</p>
+<p>Segment 实现了 <code>ReentrantLock</code>，所以 <code>Segment</code> 是一种可重入锁，扮演锁的角色。<code>HashEntry</code> 用于存储键值对数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Segment</span>&lt;<span class="hljs-title">K</span>,<span class="hljs-title">V</span>&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title">ReentrantLock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span> </span>&#123;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>一个 Segment 包含一个 HashEntry 数组，每个 HashEntry 是一个链表机构的元素，每个 Segment 守护一个 HashEntry 数组里的元素，当对 HashEntry 数组的数据进行修改时，必须首先对应 Segment 的锁。</p>
+<h2 id="7-JDK1-8-对-ConcurrentHashMap-做了哪些改进？"><a href="#7-JDK1-8-对-ConcurrentHashMap-做了哪些改进？" class="headerlink" title="7. JDK1.8 对 ConcurrentHashMap 做了哪些改进？"></a>7. JDK1.8 对 ConcurrentHashMap 做了哪些改进？</h2><p><img src="/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-02/java8_concurrenthashmap.34a4e6cf.png" srcset="/img/loading.gif" lazyload></p>
+<p>JDK1.8 的 ConcurrentHashMap 不再是 Segment数组 + HashEntry 数组 + 链表。而是 <strong>Node 数组 + 链表/红黑树。</strong>当链表达到一定长度时，链表会转化为红黑树。</p>
+<p>ConcurrentHashMap 取消了 Segment 分段锁，采用 <strong>CAS 和 synchronized</strong> 来保证并发安全。<code>synchronized</code> 只锁定当前链表或者红黑二叉树的首节点，这样只要 hash 不冲突，就不会产生并发，效率提升很多。</p>
+<h2 id="8-JDK1-8-中-ConcurrentHashMap-保证并发安全的原理？"><a href="#8-JDK1-8-中-ConcurrentHashMap-保证并发安全的原理？" class="headerlink" title="8. JDK1.8 中 ConcurrentHashMap 保证并发安全的原理？"></a>8. JDK1.8 中 ConcurrentHashMap 保证并发安全的原理？</h2><p>存储结构上面说了。ConcurrentHashMap 和普通的 HashMap 的数据结构是一样的，但是在具体实现的时候考虑到了多线程的问题。具体是采用 <strong>CAS 和 synchronized</strong> 来保证并发安全。</p>
+<p><strong>初始化：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Initializes table, using the size recorded in sizeCtl.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Node&lt;K,V&gt;[] initTable() &#123;<br>    Node&lt;K,V&gt;[] tab; <span class="hljs-keyword">int</span> sc;<br>    <span class="hljs-keyword">while</span> ((tab = table) == <span class="hljs-keyword">null</span> || tab.length == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-comment">//　如果 sizeCtl &lt; 0 ,说明另外的线程执行CAS 成功，正在进行初始化。</span><br>        <span class="hljs-keyword">if</span> ((sc = sizeCtl) &lt; <span class="hljs-number">0</span>)<br>            <span class="hljs-comment">// 让出 CPU 使用权</span><br>            Thread.yield(); <span class="hljs-comment">// lost initialization race; just spin</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (U.compareAndSwapInt(<span class="hljs-keyword">this</span>, SIZECTL, sc, -<span class="hljs-number">1</span>)) &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-keyword">if</span> ((tab = table) == <span class="hljs-keyword">null</span> || tab.length == <span class="hljs-number">0</span>) &#123;<br>                    <span class="hljs-keyword">int</span> n = (sc &gt; <span class="hljs-number">0</span>) ? sc : DEFAULT_CAPACITY;<br>                    <span class="hljs-meta">@SuppressWarnings(&quot;unchecked&quot;)</span><br>                    Node&lt;K,V&gt;[] nt = (Node&lt;K,V&gt;[])<span class="hljs-keyword">new</span> Node&lt;?,?&gt;[n];<br>                    table = tab = nt;<br>                    sc = n - (n &gt;&gt;&gt; <span class="hljs-number">2</span>);<br>                &#125;<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                sizeCtl = sc;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> tab;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以发现 ConcurrentHashMap 的初始化状态是通过自旋和 CAS 操作完成的。里面需要注意的是变量 <code>sizeCtl</code>，它的值决定当前的初始化状态。</p>
+<ol>
+<li>-1 说明正在初始化</li>
+<li>-N 说明有N-1个线程正在进行扩容</li>
+<li>表示 table 初始化大小，如果 table 没有初始化</li>
+<li>表示 table 容量，如果 table　已经初始化。</li>
+</ol>
+<p><strong>put：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> V <span class="hljs-title">put</span><span class="hljs-params">(K key, V value)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> putVal(key, value, <span class="hljs-keyword">false</span>);<br>&#125;<br><br><span class="hljs-comment">/** Implementation for put and putIfAbsent */</span><br><span class="hljs-function"><span class="hljs-keyword">final</span> V <span class="hljs-title">putVal</span><span class="hljs-params">(K key, V value, <span class="hljs-keyword">boolean</span> onlyIfAbsent)</span> </span>&#123;<br>    <span class="hljs-comment">// key 和 value 不能为空</span><br>    <span class="hljs-keyword">if</span> (key == <span class="hljs-keyword">null</span> || value == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NullPointerException();<br>    <span class="hljs-keyword">int</span> hash = spread(key.hashCode());<br>    <span class="hljs-keyword">int</span> binCount = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (Node&lt;K,V&gt;[] tab = table;;) &#123;<br>        <span class="hljs-comment">// f = 目标位置元素</span><br>        Node&lt;K,V&gt; f; <span class="hljs-keyword">int</span> n, i, fh;<span class="hljs-comment">// fh 后面存放目标位置的元素 hash 值</span><br>        <span class="hljs-keyword">if</span> (tab == <span class="hljs-keyword">null</span> || (n = tab.length) == <span class="hljs-number">0</span>)<br>            <span class="hljs-comment">// 数组桶为空，初始化数组桶（自旋+CAS)</span><br>            tab = initTable();<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((f = tabAt(tab, i = (n - <span class="hljs-number">1</span>) &amp; hash)) == <span class="hljs-keyword">null</span>) &#123;<br>            <span class="hljs-comment">// 桶内为空，CAS 放入，不加锁，成功了就直接 break 跳出</span><br>            <span class="hljs-keyword">if</span> (casTabAt(tab, i, <span class="hljs-keyword">null</span>,<span class="hljs-keyword">new</span> Node&lt;K,V&gt;(hash, key, value, <span class="hljs-keyword">null</span>)))<br>                <span class="hljs-keyword">break</span>;  <span class="hljs-comment">// no lock when adding to empty bin</span><br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((fh = f.hash) == MOVED)<br>            tab = helpTransfer(tab, f);<br>        <span class="hljs-keyword">else</span> &#123;<br>            V oldVal = <span class="hljs-keyword">null</span>;<br>            <span class="hljs-comment">// 使用 synchronized 加锁加入节点</span><br>            <span class="hljs-keyword">synchronized</span> (f) &#123;<br>                <span class="hljs-keyword">if</span> (tabAt(tab, i) == f) &#123;<br>                    <span class="hljs-comment">// 说明是链表</span><br>                    <span class="hljs-keyword">if</span> (fh &gt;= <span class="hljs-number">0</span>) &#123;<br>                        binCount = <span class="hljs-number">1</span>;<br>                        <span class="hljs-comment">// 循环加入新的或者覆盖节点</span><br>                        <span class="hljs-keyword">for</span> (Node&lt;K,V&gt; e = f;; ++binCount) &#123;<br>                            K ek;<br>                            <span class="hljs-keyword">if</span> (e.hash == hash &amp;&amp;<br>                                ((ek = e.key) == key ||<br>                                 (ek != <span class="hljs-keyword">null</span> &amp;&amp; key.equals(ek)))) &#123;<br>                                oldVal = e.val;<br>                                <span class="hljs-keyword">if</span> (!onlyIfAbsent)<br>                                    e.val = value;<br>                                <span class="hljs-keyword">break</span>;<br>                            &#125;<br>                            Node&lt;K,V&gt; pred = e;<br>                            <span class="hljs-keyword">if</span> ((e = e.next) == <span class="hljs-keyword">null</span>) &#123;<br>                                pred.next = <span class="hljs-keyword">new</span> Node&lt;K,V&gt;(hash, key,<br>                                                          value, <span class="hljs-keyword">null</span>);<br>                                <span class="hljs-keyword">break</span>;<br>                            &#125;<br>                        &#125;<br>                    &#125;<br>                    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (f <span class="hljs-keyword">instanceof</span> TreeBin) &#123;<br>                        <span class="hljs-comment">// 红黑树</span><br>                        Node&lt;K,V&gt; p;<br>                        binCount = <span class="hljs-number">2</span>;<br>                        <span class="hljs-keyword">if</span> ((p = ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,<br>                                                       value)) != <span class="hljs-keyword">null</span>) &#123;<br>                            oldVal = p.val;<br>                            <span class="hljs-keyword">if</span> (!onlyIfAbsent)<br>                                p.val = value;<br>                        &#125;<br>                    &#125;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (binCount != <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD)<br>                    treeifyBin(tab, i);<br>                <span class="hljs-keyword">if</span> (oldVal != <span class="hljs-keyword">null</span>)<br>                    <span class="hljs-keyword">return</span> oldVal;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    addCount(<span class="hljs-number">1L</span>, binCount);<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>根据 key 计算出 hashcode 。</li>
+<li>判断是否需要进行初始化。</li>
+<li>即为当前 key 定位出的 Node，如果为空表示当前位置可以写入数据，利用 CAS 尝试写入，失败则自旋保证成功。</li>
+<li>如果当前位置的 <code>hashcode == MOVED == -1</code>,则需要进行扩容。</li>
+<li>如果都不满足，则利用 synchronized 锁写入数据。</li>
+<li>如果数量大于 <code>TREEIFY_THRESHOLD</code> 则要执行树化方法，在treeifyBin中会首先判断当前数组长度≥64时才会将链表转换为红黑树。</li>
+</ol>
+<p><strong>get:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> V <span class="hljs-title">get</span><span class="hljs-params">(Object key)</span> </span>&#123;<br>    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; e, p; <span class="hljs-keyword">int</span> n, eh; K ek;<br>    <span class="hljs-comment">// key 所在的 hash 位置</span><br>    <span class="hljs-keyword">int</span> h = spread(key.hashCode());<br>    <span class="hljs-keyword">if</span> ((tab = table) != <span class="hljs-keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="hljs-number">0</span> &amp;&amp;<br>        (e = tabAt(tab, (n - <span class="hljs-number">1</span>) &amp; h)) != <span class="hljs-keyword">null</span>) &#123;<br>        <span class="hljs-comment">// 如果指定位置元素存在，头结点hash值相同</span><br>        <span class="hljs-keyword">if</span> ((eh = e.hash) == h) &#123;<br>            <span class="hljs-keyword">if</span> ((ek = e.key) == key || (ek != <span class="hljs-keyword">null</span> &amp;&amp; key.equals(ek)))<br>                <span class="hljs-comment">// key hash 值相等，key值相同，直接返回元素 value</span><br>                <span class="hljs-keyword">return</span> e.val;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (eh &lt; <span class="hljs-number">0</span>)<br>            <span class="hljs-comment">// 头结点hash值小于0，说明正在扩容或者是红黑树，find查找</span><br>            <span class="hljs-keyword">return</span> (p = e.find(h, key)) != <span class="hljs-keyword">null</span> ? p.val : <span class="hljs-keyword">null</span>;<br>        <span class="hljs-keyword">while</span> ((e = e.next) != <span class="hljs-keyword">null</span>) &#123;<br>            <span class="hljs-comment">// 是链表，遍历查找</span><br>            <span class="hljs-keyword">if</span> (e.hash == h &amp;&amp;<br>                ((ek = e.key) == key || (ek != <span class="hljs-keyword">null</span> &amp;&amp; key.equals(ek))))<br>                <span class="hljs-keyword">return</span> e.val;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>总结一下 get 过程：</p>
+<ol>
+<li>根据 hash 值计算位置。</li>
+<li>查找到指定位置，如果头节点就是要找的，直接返回它的 value.</li>
+<li>如果头节点 hash 值小于 0 ，说明正在扩容或者是红黑树，查找之。</li>
+<li>如果是链表，遍历查找之。</li>
+</ol>
 
             </div>
             <hr>
@@ -272,6 +332,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/02/16/HashMap%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%97%AE%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">HashMap多线程问题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

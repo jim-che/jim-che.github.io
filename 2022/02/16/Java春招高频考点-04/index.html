@@ -1,0 +1,508 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/imgs/icon1.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="22届Java春招高频考点-From牛客网12. 什么是 Fast-fail？fail-fast的字面意思是“快速失败”。当我们在遍历集合元素的时候，经常会使用迭代器，但在迭代器遍历元素的过程中，如果集合的结构被改变的话，就会抛出异常，防止继续遍历。这就是所谓的快速失败机制。 在 HashMap 的源码中有提到，当 Iterator 这个迭代器被创建后，除了迭代器本身的方法可以改变集合的结构外，其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java春招高频考点-04">
+<meta property="og:url" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-04/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="22届Java春招高频考点-From牛客网12. 什么是 Fast-fail？fail-fast的字面意思是“快速失败”。当我们在遍历集合元素的时候，经常会使用迭代器，但在迭代器遍历元素的过程中，如果集合的结构被改变的话，就会抛出异常，防止继续遍历。这就是所谓的快速失败机制。 在 HashMap 的源码中有提到，当 Iterator 这个迭代器被创建后，除了迭代器本身的方法可以改变集合的结构外，其">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-04/IO-%25E6%2593%258D%25E4%25BD%259C%25E6%2596%25B9%25E5%25BC%258F%25E5%2588%2586%25E7%25B1%25BB.png">
+<meta property="og:image" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-04/IO-%25E6%2593%258D%25E4%25BD%259C%25E5%25AF%25B9%25E8%25B1%25A1%25E5%2588%2586%25E7%25B1%25BB.png">
+<meta property="article:published_time" content="2022-02-16T13:01:12.000Z">
+<meta property="article:modified_time" content="2022-02-17T03:21:26.000Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="阿里">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-04/IO-%25E6%2593%258D%25E4%25BD%259C%25E6%2596%25B9%25E5%25BC%258F%25E5%2588%2586%25E7%25B1%25BB.png">
+  
+  
+  <title>Java春招高频考点-04 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CG Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/imgs/bg1.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java春招高频考点-04">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-16 21:01" pubdate>
+        2022年2月16日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      33 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java春招高频考点-04</h1>
+            
+            <div class="markdown-body">
+              <h1 id="22届Java春招高频考点-From牛客网"><a href="#22届Java春招高频考点-From牛客网" class="headerlink" title="22届Java春招高频考点-From牛客网"></a>22届Java春招高频考点-From牛客网</h1><h2 id="12-什么是-Fast-fail？"><a href="#12-什么是-Fast-fail？" class="headerlink" title="12. 什么是 Fast-fail？"></a>12. 什么是 Fast-fail？</h2><p>fail-fast的字面意思是“快速失败”。当我们在遍历集合元素的时候，经常会使用迭代器，但在迭代器遍历元素的过程中，如果集合的结构被改变的话，就会抛出异常，防止继续遍历。这就是所谓的快速失败机制。</p>
+<p>在 HashMap 的源码中有提到，当 <code>Iterator</code> 这个迭代器被创建后，除了迭代器本身的方法可以改变集合的结构外，其他的因素如若<strong>改变了集合的结构</strong>，都被抛出 <code>ConcurrentModificationException</code> 异常。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs vim">Note that the fail-fast behavior of <span class="hljs-keyword">an</span> iterator cannot <span class="hljs-keyword">be</span> guaranteed <span class="hljs-keyword">as</span> it <span class="hljs-keyword">is</span>, generally speaking, impossible <span class="hljs-keyword">to</span> <span class="hljs-keyword">make</span> any hard guarantees in the presence of unsynchronized concurrent modification. Fail-fast iterators <span class="hljs-keyword">throw</span> ConcurrentModificationException <span class="hljs-keyword">on</span> <span class="hljs-keyword">a</span> best-effort basis. Therefore, it would <span class="hljs-keyword">be</span> wrong <span class="hljs-keyword">to</span> <span class="hljs-keyword">write</span> <span class="hljs-keyword">a</span> program that depended <span class="hljs-keyword">on</span> this exception <span class="hljs-keyword">for</span> its correctnes<span class="hljs-variable">s:</span> the fail-fast behavior of iterators should <span class="hljs-keyword">be</span> used <span class="hljs-keyword">only</span> <span class="hljs-keyword">to</span> detect bugs.<br></code></pre></td></tr></table></figure>
+
+<p>意思是：迭代器的 <code>fail-fast</code> 不一定保证多线程就不会出问题。只是做了最大的保证。</p>
+<p><strong>fail-fast,即快速失败机制，它是java集合中的一种错误检测机制，当多个线程（单个线程也是可以滴）,在结构上对集合进行改变时，就有可能会产生fail-fast机制。</strong></p>
+<blockquote>
+<p>这里，我解释下什么是结构上的改变。<br>例如集合上的插入和删除就是结构上的改变，但是，如果是对集合中某个元素进行修改的话，并不是结构上的改变。</p>
+</blockquote>
+<p><strong>fail-fast的工作原理：</strong></p>
+<p>迭代器在执行 <code>next()</code> 等方法的时候，都会调用 <code>checkForComodification()</code> 这个方法，查看 <code>modCount==expectedModCount</code> 如果相等则抛出异常。</p>
+<p>expectedModcount:这个值在对象被创建的时候就被赋予了一个固定的值modCount。也就是说这个值是不变的。也就是说，如果在迭代器遍历元素的时候，如果modCount这个值发生了改变，那么再次遍历时就会抛出异常。</p>
+<p>在对接口进行修改的时候，modCount 就会改变，之前在 ArrayList 扩容分析时也看到了。</p>
+<h2 id="13-什么是序列化，如何实现序列化？"><a href="#13-什么是序列化，如何实现序列化？" class="headerlink" title="13. 什么是序列化，如何实现序列化？"></a>13. 什么是序列化，如何实现序列化？</h2><p>对象序列化的最主要的用处就是在传递和保存对象的时候，保证对象的完整性和可传递性。序列化是把对象转换成有序字节流，以便在网络上传输或者保存在本地文件中。核心作用是对象状态的保存与重建。</p>
+<p>说简单一点，序列化就是将对象写入到 IO 流中。</p>
+<p><strong>意义：序列化机制允许将实现序列化的Java对象转换位字节序列，这些字节序列可以保存在磁盘上，或通过网络传输，以达到以后恢复成原来的对象。序列化机制使得对象可以脱离程序的运行而独立存在。</strong></p>
+<p><strong>使用场景：所有可在网络上传输的对象都必须是可序列化的，</strong>比如RMI（remote method invoke,即远程方法调用），传入的参数或返回的对象都是可序列化的，否则会出错；<strong>所有需要保存到磁盘的java对象都必须是可序列化的。通常建议：程序创建的每个JavaBean类都实现Serializeable接口。</strong></p>
+<p><strong>实现 Serializable 接口可以实现类的序列化，这个接口没有任何需要我们自己实现的类，只要写在那儿就好了。</strong></p>
+<h2 id="14-transient-关键字的作用"><a href="#14-transient-关键字的作用" class="headerlink" title="14. transient 关键字的作用"></a>14. transient 关键字的作用</h2><p>一个类实现了 Serializable 接口后，对象都是被序列化的，我们不需要知道序列化的具体实现，只要实现了，这个类的所有属性和方法都会被自动序列化。但是实际开发中，我们会遇到一种问题就是，有些属性需要被序列化，有些属性不需要序列化。如果一个用户有一些敏感信息（如密码，银行卡号等），为了安全起见，不希望在网络操作（主要涉及到序列化操作，本地序列化缓存也适用）中被传输，这些信息对应的变量就可以加上transient关键字。换句话说，这个字段的生命周期仅存于调用者的内存中而不会写到磁盘里持久化。</p>
+<h2 id="15-Java中有哪些-IO-流？字节流和字符流如何进行转换？"><a href="#15-Java中有哪些-IO-流？字节流和字符流如何进行转换？" class="headerlink" title="15. Java中有哪些 IO 流？字节流和字符流如何进行转换？"></a>15. Java中有哪些 IO 流？字节流和字符流如何进行转换？</h2><ul>
+<li>按照流的流向分，可以分为输入流和输出流；</li>
+<li>按照操作单元划分，可以划分为字节流和字符流；</li>
+<li>按照流的角色划分可以分为节点流和处理流。</li>
+</ul>
+<p>Java IO 流一共涉及 40 多个类，这 40 多个类都是从如下 4 个抽象类中派生出来的。</p>
+<ul>
+<li>InputStream / Reader：所有的输入流的基类，前者是字节输入流，后者是字符输入流。</li>
+<li>OutputStream / Writer：所有输出流的基类，前者是字节输出流，后者是字符输出流。</li>
+</ul>
+<p>按操作方式分类结构图：</p>
+<p><img src="/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-04/IO-%25E6%2593%258D%25E4%25BD%259C%25E6%2596%25B9%25E5%25BC%258F%25E5%2588%2586%25E7%25B1%25BB.png" srcset="/img/loading.gif" lazyload alt="IO-操作方式分类"></p>
+<p>按操作对象分类结构图：</p>
+<p><img src="/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-04/IO-%25E6%2593%258D%25E4%25BD%259C%25E5%25AF%25B9%25E8%25B1%25A1%25E5%2588%2586%25E7%25B1%25BB.png" srcset="/img/loading.gif" lazyload alt="IO-操作对象分类"></p>
+<p><strong>不管是文件读写还是网络发送接收，信息的最小存储单元都是字节，那为什么 I/O 流操作要分字节流和字符流操作呢？</strong></p>
+<p>字符流是由 Java 虚拟机将字节转换得到的，问题在于这个过程还是很耗时的，并且，如果不知道编码类型就很容易出现乱码问题。所以，I/O 流干脆直接提供了一个直接操作字符的接口，方便对字符进行流操作。如果音频文件、图片等媒体文件用字节流比较好，如果涉及到字符的话使用字符流比较好。</p>
+<p><strong>字节流和字符流的相互转换</strong> </p>
+<p>1、从字节流到字符流：InputStreamReader、OutputStreamWriter类可以实现。</p>
+<p>2、从字符流到字节流：可以从字符流中获取char[]数组，转换为String，然后调用String的API函数getBytes() 获取到byte[]，然后就可以通过ByteArrayInputStream、ByteArrayOutputStream来实现到字节流的转换。</p>
+<h2 id="14-Java的反射机制？为什么需要反射？反射主要用于哪些场景？"><a href="#14-Java的反射机制？为什么需要反射？反射主要用于哪些场景？" class="headerlink" title="14. Java的反射机制？为什么需要反射？反射主要用于哪些场景？"></a>14. Java的反射机制？为什么需要反射？反射主要用于哪些场景？</h2><p>反射的主要功能是赋予在代码运行时能够执行类中方法的能力。通过反射可以获取到任意一个类的所有属性与方法，还可以调用这些方法。</p>
+<p><strong>反射的优缺点：</strong></p>
+<ul>
+<li><strong>优点：</strong>可以让代码更灵活，为各种框架提供了开箱即用功能提供了便利。</li>
+<li><strong>缺点：</strong>让我们在运行时又了分析操作类的能力，增加了安全的问题。比如可以无视泛型参数的安全检查，因为泛型的检查发生在编译时期。另外，反射的性能稍微差点，但是对于框架的实际影响并不大。</li>
+</ul>
+<p>虽然在平时在业务代码层面，用到的反射还是比较少的，但是对于我们日常使用的框架而言，反射是无时无刻不在使用的。Spring/Spring Boot、MyBatis 等等框架中都大量使用了反射机制。</p>
+<p><strong>在框架中大量使用的动态代理，也都是基于反射实现的</strong>。JDK proxy 和 cglib 都是的。</p>
+<p>另外，像 Java 中的一大利器 <strong>注解</strong> 的实现也用到了反射。</p>
+<p>为什么你使用 Spring 的时候 ，一个<code>@Component</code>注解就声明了一个类为 Spring Bean 呢？为什么你通过一个 <code>@Value</code>注解就读取到配置文件中的值呢？究竟是怎么起作用的呢？</p>
+<p>这些都是因为你可以基于反射分析类，然后获取到 类/属性/方法/方法 的参数上的注解。你获取到注解之后，就可以做进一步的处理。</p>
+<h2 id="15-通过反射创建实例和-new-一个对象有什么区别？"><a href="#15-通过反射创建实例和-new-一个对象有什么区别？" class="headerlink" title="15. 通过反射创建实例和 new 一个对象有什么区别？"></a>15. 通过反射创建实例和 new 一个对象有什么区别？</h2><p>new只能用于编译期就能确定的类型, 而反射可以在运行时才确定类型并创建其对象。</p>
+<p>扩展<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1392351/java-reflection-why-is-it-so-slow">一个经典的StackOverflow问题</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> </span>&#123;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> </span>&#123;<br>  <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">long</span> <span class="hljs-title">timeDiff</span><span class="hljs-params">(<span class="hljs-keyword">long</span> old)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> System.currentTimeMillis() - old;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>      <br>        <span class="hljs-keyword">long</span> numTrials = (<span class="hljs-keyword">long</span>) Math.pow(<span class="hljs-number">10</span>, <span class="hljs-number">7</span>);<br><br>        <span class="hljs-keyword">long</span> millis;<br><br>        millis = System.currentTimeMillis();<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; i&lt;numTrials; i++) &#123;<br>            <span class="hljs-keyword">new</span> B();<br>        &#125;<br>        System.out.println(<span class="hljs-string">&quot;Normal instaniation took: &quot;</span><br>                 + timeDiff(millis) + <span class="hljs-string">&quot;ms&quot;</span>);<br><br>        millis = System.currentTimeMillis();<br><br>        Class&lt;B&gt; c = B.class;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; i&lt;numTrials; i++) &#123;<br>            c.newInstance();<br>        &#125;<br>      <br>        System.out.println(<span class="hljs-string">&quot;Reflecting instantiation took:&quot;</span> <br>              + timeDiff(millis) + <span class="hljs-string">&quot;ms&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样第一次运行的话，反射和直接 new 的效率可能相差百倍，实际上主要是因为：</p>
+<ol>
+<li><p>编译器无法知道在干什么，无法给你优化。<code>JIT</code> 也是这样。</p>
+</li>
+<li><p>比如发现所有被调用 / 创建的东西（即按名称查找的累、查找匹配的方法等）</p>
+</li>
+<li><p>参数需要通过装箱/拆箱、包装成数组、<code>Exceptions</code>包装在<code>InvocationTargetException</code>s 中并重新抛出等来修饰。</p>
+</li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%98%BF%E9%87%8C/">阿里</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/17/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-05/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java春招高频考点-05</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-03/">
+                        <span class="hidden-mobile">Java春招高频考点-03</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://github.com/jim-che" target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

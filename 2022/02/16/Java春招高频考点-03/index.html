@@ -1,0 +1,475 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/imgs/icon1.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="22届Java春招高频考点-From牛客网9. ArrayList 和 LinkedList 的区别ArrayList 的底层是 Object[ ]，而 LinkedList 是双向链表实现的。 ArrayList 支持随机访问，LinkedList 不支持。 因为ArrayList 有扩容机制，ArrayList 在末尾插入数据的效率和 LinkedList 大体一致。ArrayList 在指定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java春招高频考点-03">
+<meta property="og:url" content="http://example.com/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-03/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="22届Java春招高频考点-From牛客网9. ArrayList 和 LinkedList 的区别ArrayList 的底层是 Object[ ]，而 LinkedList 是双向链表实现的。 ArrayList 支持随机访问，LinkedList 不支持。 因为ArrayList 有扩容机制，ArrayList 在末尾插入数据的效率和 LinkedList 大体一致。ArrayList 在指定">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-16T11:04:56.000Z">
+<meta property="article:modified_time" content="2022-02-16T12:49:19.110Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="阿里">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Java春招高频考点-03 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CG Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/imgs/bg1.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java春招高频考点-03">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-16 19:04" pubdate>
+        2022年2月16日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      36 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java春招高频考点-03</h1>
+            
+            <div class="markdown-body">
+              <h1 id="22届Java春招高频考点-From牛客网"><a href="#22届Java春招高频考点-From牛客网" class="headerlink" title="22届Java春招高频考点-From牛客网"></a>22届Java春招高频考点-From牛客网</h1><h2 id="9-ArrayList-和-LinkedList-的区别"><a href="#9-ArrayList-和-LinkedList-的区别" class="headerlink" title="9. ArrayList 和 LinkedList 的区别"></a>9. ArrayList 和 LinkedList 的区别</h2><p>ArrayList 的底层是 Object[ ]，而 LinkedList 是双向链表实现的。</p>
+<p>ArrayList 支持随机访问，LinkedList 不支持。</p>
+<p>因为ArrayList 有扩容机制，ArrayList 在末尾插入数据的效率和 LinkedList 大体一致。ArrayList 在指定位置插入数据需要将之后的数据都往后移一位，而 LinkedList 按照顺序找到节点然后插入。删除的话，ArrayList 需要将之后的数据往前移一位，而 LinkedList 也只需要找到这个节点进行删除就可以。</p>
+<p>ArrayList 每次扩容都会在后面留有空白区域留之后的插入，所以会造成一定的内存浪费。LinkedList 每个节点都有前后的指针，所以消耗的内存多比 ArrayList 多一点。</p>
+<h2 id="10-LinkedList-的底层数据结构？插入删除元素时的时间复杂度分析？"><a href="#10-LinkedList-的底层数据结构？插入删除元素时的时间复杂度分析？" class="headerlink" title="10. LinkedList 的底层数据结构？插入删除元素时的时间复杂度分析？"></a>10. LinkedList 的底层数据结构？插入删除元素时的时间复杂度分析？</h2><p>LinkedList 在 JDK1.6 时是双向循环链表，在 JDK1.7 时取消了循环，只留下双向链表。</p>
+<p>LinkedList 在成员变量中含有头节点与尾节点，所以在头部插入和尾部插入的时间复杂度都为 O(1)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Unlinks non-null first node f.</span><br><span class="hljs-comment"> * 插入头部</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> E <span class="hljs-title">unlinkFirst</span><span class="hljs-params">(Node&lt;E&gt; f)</span> </span>&#123;<br>    <span class="hljs-comment">// assert f == first &amp;&amp; f != null;</span><br>    <span class="hljs-keyword">final</span> E element = f.item;<br>    <span class="hljs-keyword">final</span> Node&lt;E&gt; next = f.next;<br>    f.item = <span class="hljs-keyword">null</span>;<br>    f.next = <span class="hljs-keyword">null</span>; <span class="hljs-comment">// help GC</span><br>    first = next;<br>    <span class="hljs-keyword">if</span> (next == <span class="hljs-keyword">null</span>)<br>        last = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-keyword">else</span><br>        next.prev = <span class="hljs-keyword">null</span>;<br>    size--;<br>    modCount++;<br>    <span class="hljs-keyword">return</span> element;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Unlinks non-null last node l.</span><br><span class="hljs-comment"> * 插入尾部</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> E <span class="hljs-title">unlinkLast</span><span class="hljs-params">(Node&lt;E&gt; l)</span> </span>&#123;<br>    <span class="hljs-comment">// assert l == last &amp;&amp; l != null;</span><br>    <span class="hljs-keyword">final</span> E element = l.item;<br>    <span class="hljs-keyword">final</span> Node&lt;E&gt; prev = l.prev;<br>    l.item = <span class="hljs-keyword">null</span>;<br>    l.prev = <span class="hljs-keyword">null</span>; <span class="hljs-comment">// help GC</span><br>    last = prev;<br>    <span class="hljs-keyword">if</span> (prev == <span class="hljs-keyword">null</span>)<br>        first = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-keyword">else</span><br>        prev.next = <span class="hljs-keyword">null</span>;<br>    size--;<br>    modCount++;<br>    <span class="hljs-keyword">return</span> element;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>删除方法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">remove</span><span class="hljs-params">(Object o)</span> </span>&#123;<br>  <span class="hljs-comment">// 如果传入参数是null，就遍历找到链表中值为null的，找到直接删掉，并维护好前后节点的指针。</span><br>  <span class="hljs-keyword">if</span> (o == <span class="hljs-keyword">null</span>) &#123;<br>    <span class="hljs-keyword">for</span> (Node&lt;E&gt; x = first; x != <span class="hljs-keyword">null</span>; x = x.next) &#123;<br>      <span class="hljs-keyword">if</span> (x.item == <span class="hljs-keyword">null</span>) &#123;<br>        unlink(x);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>      &#125;<br>    &#125;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-comment">// 还是遍历，知道找到值相同的就删掉</span><br>    <span class="hljs-keyword">for</span> (Node&lt;E&gt; x = first; x != <span class="hljs-keyword">null</span>; x = x.next) &#123;<br>      <span class="hljs-keyword">if</span> (o.equals(x.item)) &#123;<br>        unlink(x);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>      &#125;<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>时间复杂主要体现在找到这个节点，所以复杂度为 O(n)。</p>
+<p><strong>查找算法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 找到这个 index 对应的节点</span><br><span class="hljs-function">Node&lt;E&gt; <span class="hljs-title">node</span><span class="hljs-params">(<span class="hljs-keyword">int</span> index)</span> </span>&#123;<br>  <span class="hljs-comment">// assert isElementIndex(index);</span><br>  <span class="hljs-keyword">if</span> (index &lt; (size &gt;&gt; <span class="hljs-number">1</span>)) &#123;<br>    Node&lt;E&gt; x = first;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; index; i++)<br>      x = x.next;<br>    <span class="hljs-keyword">return</span> x;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    Node&lt;E&gt; x = last;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = size - <span class="hljs-number">1</span>; i &gt; index; i--)<br>      x = x.prev;<br>    <span class="hljs-keyword">return</span> x;<br>  &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> index, E element)</span> </span>&#123;<br>  <span class="hljs-comment">// 检查这个index是否合法</span><br>  checkPositionIndex(index);<br>  <span class="hljs-keyword">if</span> (index == size)<br>    linkLast(element);<br>  <span class="hljs-keyword">else</span><br>    linkBefore(element, node(index));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>node 方法的功能是找到这个 index 的 Node。这里使用了一个技巧，如果 index 小于 size 的一半就从前往后遍历。如果 index 大于 size 的一半就从后往前遍历。返回的就是这个位置节点的 Node，从 0 开始。</p>
+<p>add 方法可以看到，如果这个 index 的大小等于链表的长度，由于链表 index 是从 0 开始，所以这个就意味着插入在最后一个的后面，即称为新的last。否则就插在找到的 Node 的前面一位。</p>
+<p>这个时间复杂度主要是 node 方法，就是 O(n)</p>
+<h2 id="11-ArrayList-的扩容机制"><a href="#11-ArrayList-的扩容机制" class="headerlink" title="11. ArrayList 的扩容机制"></a>11. ArrayList 的扩容机制</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Default initial capacity.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> DEFAULT_CAPACITY = <span class="hljs-number">10</span>;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * The maximum size of array to allocate.</span><br><span class="hljs-comment"> * Some VMs reserve some header words in an array.</span><br><span class="hljs-comment"> * Attempts to allocate larger arrays may result in</span><br><span class="hljs-comment"> * OutOfMemoryError: Requested array size exceeds VM limit</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> MAX_ARRAY_SIZE = Integer.MAX_VALUE - <span class="hljs-number">8</span>;<br></code></pre></td></tr></table></figure>
+
+<p>默认长度为 10。最大长度为 Integer.MAX_VALUE - 8。</p>
+<p><strong>扩容方法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">grow</span><span class="hljs-params">(<span class="hljs-keyword">int</span> minCapacity)</span> </span>&#123;<br>  <span class="hljs-comment">// overflow-conscious code</span><br>  <span class="hljs-keyword">int</span> oldCapacity = elementData.length;<br>  <span class="hljs-keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="hljs-number">1</span>);<br>  <span class="hljs-keyword">if</span> (newCapacity - minCapacity &lt; <span class="hljs-number">0</span>)<br>    newCapacity = minCapacity;<br>  <span class="hljs-keyword">if</span> (newCapacity - MAX_ARRAY_SIZE &gt; <span class="hljs-number">0</span>)<br>    newCapacity = hugeCapacity(minCapacity);<br>  <span class="hljs-comment">// minCapacity is usually close to size, so this is a win:</span><br>  elementData = Arrays.copyOf(elementData, newCapacity);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">hugeCapacity</span><span class="hljs-params">(<span class="hljs-keyword">int</span> minCapacity)</span> </span>&#123;<br>  <span class="hljs-keyword">if</span> (minCapacity &lt; <span class="hljs-number">0</span>) <span class="hljs-comment">// overflow</span><br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> OutOfMemoryError();<br>  <span class="hljs-keyword">return</span> (minCapacity &gt; MAX_ARRAY_SIZE) ?<br>    Integer.MAX_VALUE :<br>  MAX_ARRAY_SIZE;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>grow 是扩容的主要方法，它的作用是将旧容量扩展到它的 1.5 倍。然后将旧数组的数据 copy 到新数组替换到旧数组。虽然默认的最大长度是 Integer.MAX_VALUE - 8，但是如果新的容量大于这个但是小于 Integer.MAX_VALUE 的话，也能创建该容量的 ArrayList。</p>
+<p><strong>添加的一系列方法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">add</span><span class="hljs-params">(E e)</span> </span>&#123;<br>  ensureCapacityInternal(size + <span class="hljs-number">1</span>);  <span class="hljs-comment">// Increments modCount!!</span><br>  elementData[size++] = e;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ensureCapacityInternal</span><span class="hljs-params">(<span class="hljs-keyword">int</span> minCapacity)</span> </span>&#123;<br>  ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">calculateCapacity</span><span class="hljs-params">(Object[] elementData, <span class="hljs-keyword">int</span> minCapacity)</span> </span>&#123;<br>  <span class="hljs-keyword">if</span> (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) &#123;<br>    <span class="hljs-keyword">return</span> Math.max(DEFAULT_CAPACITY, minCapacity);<br>  &#125;<br>  <span class="hljs-keyword">return</span> minCapacity;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ensureExplicitCapacity</span><span class="hljs-params">(<span class="hljs-keyword">int</span> minCapacity)</span> </span>&#123;<br>  modCount++;<br>  <span class="hljs-comment">// overflow-conscious code</span><br>  <span class="hljs-keyword">if</span> (minCapacity - elementData.length &gt; <span class="hljs-number">0</span>)<br>    grow(minCapacity);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>添加首先先判断容量是否充足。这里走 <code>ensureCapacityInternal</code> 方法。</p>
+<p>点进去该方法可以看到先走 <code>calculateCapacity()</code> 方法。</p>
+<p>再点进去可以看到第一步是判断这个数组是否为空数组，如果是就返回 size + 1和 DEFAULT_CAPACITY 的最大值。如果不是空数组就返回 size + 1。</p>
+<p>然后根据染回的参数 <code>ensureExplicitCapacity()</code> 方法。<code>modCount</code> 是这个数组的接口修改的次数，包括扩容或者以错误的方式扰动数组的次数。然后比较 size + 1和现在实际数组，如果 size + 1 &gt; 现在数组的长度，那就进行扩容操作，否则就不扩容。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%98%BF%E9%87%8C/">阿里</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-04/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java春招高频考点-04</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/16/HashMap%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%97%AE%E9%A2%98/">
+                        <span class="hidden-mobile">HashMap多线程问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://github.com/jim-che" target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

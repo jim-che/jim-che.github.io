@@ -1,0 +1,584 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/imgs/icon1.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="22届Java春招高频考点-From牛客网16. 线程池的作用？为什么需要线程池？创建线程为什么比较耗时？线程池的核心参数有哪些？线程池创建一个线程的时机？线程池提供了一种限制和管理资源的能力。每个线程池还维护着一些基本统计信息，例如已完成任务的数量。 线程池的好处：  降低资源消耗。通过重复利用已经创建的线程降低线程创建和销毁造成的消耗。 提高响应速度。当任务到达时，任务可以不需要等待的等待线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java春招高频考点-05">
+<meta property="og:url" content="http://example.com/2022/02/17/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-05/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="22届Java春招高频考点-From牛客网16. 线程池的作用？为什么需要线程池？创建线程为什么比较耗时？线程池的核心参数有哪些？线程池创建一个线程的时机？线程池提供了一种限制和管理资源的能力。每个线程池还维护着一些基本统计信息，例如已完成任务的数量。 线程池的好处：  降低资源消耗。通过重复利用已经创建的线程降低线程创建和销毁造成的消耗。 提高响应速度。当任务到达时，任务可以不需要等待的等待线程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/02/17/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-05/v2-cd9f01834dcc2ad1542e2179616cea41_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/02/17/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-05/v2-ba9867c4c137df5b316ac172e0a00c4a_1440w-5172756.jpg">
+<meta property="article:published_time" content="2022-02-17T06:46:39.000Z">
+<meta property="article:modified_time" content="2022-02-18T08:43:06.587Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="面经">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2022/02/17/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-05/v2-cd9f01834dcc2ad1542e2179616cea41_1440w.jpg">
+  
+  
+  <title>Java春招高频考点-05 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CG Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/imgs/bg1.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java春招高频考点-05">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-17 14:46" pubdate>
+        2022年2月17日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      65 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java春招高频考点-05</h1>
+            
+            <div class="markdown-body">
+              <h1 id="22届Java春招高频考点-From牛客网"><a href="#22届Java春招高频考点-From牛客网" class="headerlink" title="22届Java春招高频考点-From牛客网"></a>22届Java春招高频考点-From牛客网</h1><h2 id="16-线程池的作用？为什么需要线程池？创建线程为什么比较耗时？线程池的核心参数有哪些？线程池创建一个线程的时机？"><a href="#16-线程池的作用？为什么需要线程池？创建线程为什么比较耗时？线程池的核心参数有哪些？线程池创建一个线程的时机？" class="headerlink" title="16. 线程池的作用？为什么需要线程池？创建线程为什么比较耗时？线程池的核心参数有哪些？线程池创建一个线程的时机？"></a>16. 线程池的作用？为什么需要线程池？创建线程为什么比较耗时？线程池的核心参数有哪些？线程池创建一个线程的时机？</h2><p>线程池提供了一种限制和管理资源的能力。每个线程池还维护着一些基本统计信息，例如已完成任务的数量。</p>
+<p><strong>线程池的好处</strong>：</p>
+<ul>
+<li><strong>降低资源消耗。</strong>通过重复利用已经创建的线程降低线程创建和销毁造成的消耗。</li>
+<li><strong>提高响应速度。</strong>当任务到达时，任务可以不需要等待的等待线程创建就能立即执行。</li>
+<li><strong>提高线程的可管理性。</strong>线程时稀缺资源，如果无限制的创建，不仅消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。</li>
+</ul>
+<p>在线程池的好处中也有提到，线程池就可以重复利用已经创建的线程，如果在线程池中执行一个新的线程，线程池会想着如何复用已有的线程，速度一般都是比直接创建线程快的。同时，当任务到达时，任务可以不需要等待的等待线程创建就能立即执行。所以创建线程比使用线程池要慢。</p>
+<p>ThreadPoolExecutor 的源码中已经详细的描述了线程池的核心参数和作用。</p>
+<p><strong>线程池的核心参数有：</strong></p>
+<ul>
+<li><strong>corePoolSize：</strong>类型为 int，核心大小，一般情况下线程池中可以同时运行的线程的数量。</li>
+<li><strong>maximumPoolSize：</strong>类型为 int，线程池可以容纳的最大大小，如果等待队列满了的话，maximumPoolsize 会代替 corePoolSize 成为新的 “线程池可以同时运行的线程的数量”。</li>
+<li><strong>keepAliveTime：</strong>类型为 long，如果线程池中线程的数量是大于 corePoolSize 的，多于的空闲线程会等待 keepAliveTime 后被移除。</li>
+<li><strong>unit：</strong>类型为 TimeUnit 枚举类型，是 keepAliveTime 的单位。比如 keepAliveTime 是 1l，TimeUnit 是秒，那么就是等待 1 秒移除。</li>
+<li><strong>workQueue：</strong>类型为BlockingQueue&lt;Runnable&gt; ，阻塞队列。这个并非为正在工作的队列，而是正在等待的队列。官方的解释就是，在这些线程被执行之前去 hold 住他们。</li>
+<li><strong>handler：</strong>类型为RejectedExecutionHandler，是 ThreadExecutor 提供的枚举类型。是在线程池和等待队列都满了的情况下的处理方案。有四种策略，Spring 创建线程池或者我们不指定特定的处理方案的时候，默认为 <code>ThreadPoolExecutor.AbortPolicy</code>。<ul>
+<li>**<code>ThreadPoolExecutor.AbortPolicy</code>**：抛出 <code>RejectedExecutionException</code>来拒绝新任务的处理。</li>
+<li>**<code>ThreadPoolExecutor.CallerRunsPolicy</code>**：调用执行自己的线程运行任务。您不会任务请求。但是这种策略会降低对于新任务提交速度，影响程序的整体性能。另外，这个策略喜欢增加队列容量。如果您的应用程序可以承受此延迟并且你不能任务丢弃任何一个任务请求的话，你可以选择这个策略。</li>
+<li><strong><code>ThreadPoolExecutor.DiscardPolicy</code>：</strong> 不处理新任务，直接丢弃掉。</li>
+<li><strong><code>ThreadPoolExecutor.DiscardOldestPolicy</code>：</strong> 此策略将丢弃最早的未处理的任务请求。</li>
+</ul>
+</li>
+<li><strong>threadFactory：</strong>类型为 ThreadFactory，在线程池创建一个新线程时使用的工厂。</li>
+</ul>
+<p>线程池在池内线程数量小于 corePoolSize 时，会直接在池内创建线程。如果池内线程数量等于 corePoolSize 了，就像需要创建的线程放进 workQueue，在 workQueue 满了之后，就将 maximumPoolSize 作为新的 corePoolSize，只要池内线程数量小于 maximumPoolSize，就可以有序的从 workQueue 中继续创建线程。如果池内继续满了，WorkQueue 也满了，就会启用 Handler，默认是抛出异常拒绝新的创建请求。同时，池内的线程数大于一开始创建的 corePoolSize 时，线程池将多余的空闲线程在 keepAliveTime 的 unit 之后移除，只要有空位置，就可以继续创建线程。</p>
+<h2 id="17-Java-中如何创建一个线程？实现-Callable-接口和实现-Runnable-的区别？"><a href="#17-Java-中如何创建一个线程？实现-Callable-接口和实现-Runnable-的区别？" class="headerlink" title="17. Java 中如何创建一个线程？实现 Callable 接口和实现 Runnable 的区别？"></a>17. Java 中如何创建一个线程？实现 Callable 接口和实现 Runnable 的区别？</h2><p>创建线程主要要三种方式：</p>
+<p><strong>1. 继承 Thread 类创建线程类</strong></p>
+<ol>
+<li><p>定义 Thread 类的子类，并重写该类的 run 方法，该 run 方法的方法体就代表了线程要完成的任务。</p>
+</li>
+<li><p>创建 Thread 子类的实例，即创建了线程对象。</p>
+</li>
+<li><p>调用线程对象的 start() 方法启动线程。</p>
+</li>
+</ol>
+<p><strong>2. 通过 Runnable 接口创建线程类</strong></p>
+<ol>
+<li><p>定义 Runnable 接口的实现类，并重写该接口的 run() 方法，该 run() 方法的方法体同样是该线程的线程执行体。</p>
+</li>
+<li><p>创建 Runnable 实现类的实例，并以此实例作为 Thread 的 target 来创建 Thread 对象，该 Thread 对象才是真正的线程对象</p>
+</li>
+<li><p>调用线程对象的 start() 方法来启动该线程。</p>
+</li>
+</ol>
+<p><strong>3. 通过 Callable 和 Future 创建线程</strong></p>
+<ol>
+<li>创建 Callable 接口的实现类，实现 call() 方法，该 call 方法作为线程执行体，并且有返回值。</li>
+<li>创建 Callable 实现类的实例，使用 FutureTask 类来包装 Callable 对象，该 FutureTask 对象封装了该 Callable 对象的 call() 方法的返回值。（FutureTask是一个包装器，它通过接受Callable来创建，它同时实现了Future和Runnable接口。）</li>
+<li>使用 FutureTask 对象作为 Thread 对象的 target 创建并启动新线程。</li>
+<li>调用 FutureTask 对象的 get() 方法获得子线程执行之后的返回值。</li>
+</ol>
+<p><strong>实现 Callable 接口和 Runnable 接口的区别？</strong></p>
+<ul>
+<li><code>Runnable</code> 实现的是 <code>run()</code> 方法，而 <code>Callable</code> 实现的是 <code>call()</code> 方法。</li>
+<li><code>Callable</code> 执行后有返回值，而 <code>Runnable</code> 不能有返回值</li>
+<li><code>call()</code> 方法可以抛出异常，<code>run()</code> 方法不可以。</li>
+<li>运行 <code>Callable</code> 任务可以拿到一个 <code>Future</code> 对象，表示异步计算的结果。它提供了检查计算是否完成的方法，以等待计算的完成，并检索计算的结果。通过 <code>Future</code> 对象可以了解任务执行情况，可取消任务的执行，还可获取执行结果。</li>
+</ul>
+<h2 id="18-创建一个线程时，会在哪些区域分配空间？"><a href="#18-创建一个线程时，会在哪些区域分配空间？" class="headerlink" title="18. 创建一个线程时，会在哪些区域分配空间？"></a>18. 创建一个线程时，会在哪些区域分配空间？</h2><p>在 JVM 创建一个线程的时候，就为其分配一个 <strong>Program Counter Register（程序计数器）</strong>，<strong>VM Stack（虚拟机栈）</strong>和 <strong>Native Method Stack（本地方法栈）</strong>，当线程终止的时候，三者所占用的内存空间也会被释放掉。</p>
+<h2 id="19-Java-中线程间通信的方式有哪些？"><a href="#19-Java-中线程间通信的方式有哪些？" class="headerlink" title="19. Java 中线程间通信的方式有哪些？"></a>19. Java 中线程间通信的方式有哪些？</h2><p><strong>1. 利用线程同步实现通信</strong></p>
+<p>利用 synchronized 关键字实现线程同步。</p>
+<p>由于线程A和线程B持有同一个 <code>MyObject</code> 类的对象 <code>object</code>，尽管这两个线程需要调用不同的方法，但是它们是同步执行的，比如：线程B需要等待线程A执行完了 <code>methodA()</code> 方法之后，它才能执行 <code>methodB()</code> 方法。这样，线程A和线程B就实现了 通信。</p>
+<p><strong>2. while 轮询</strong></p>
+<p>就是线程 A 通过 while 不停的循环检测线程 B 的某一个状态是否达到。这样线程 A 肯定是可以了解到线程 B 的，但是这样就造成了忙等的现象。没做什么有意义的工作，还加重 CPU 负担。</p>
+<p><strong>3. wait / notify 机制</strong></p>
+<p>所有类的基类Object 中有 <code>notify()</code> 方法和 <code>wait()</code> 方法。</p>
+<p>就比如要一个参数 i = 5 时，线程 A 才能进行进一步操作。当 A 拿到时间片发现 i &lt; 5，A 可以通过 <code>wait()</code> 方法主动放弃时间片，进入阻塞状态。此时 B 线程正在操作 i，当 i = 5 时，B 线程就可以调用 <code>notify()</code> 方法唤醒 A，让它进入可运行状态。这样 CPU 的利用率就提高了。</p>
+<p><strong>4. 管道通信</strong></p>
+<p>管道是基于“管道流”的通信方式。JDK提供了<code>PipedWriter</code>、 <code>PipedReader</code>、 <code>PipedOutputStream</code>、 <code>PipedInputStream</code>。其中，前面两个是基于字符的，后面两个是基于字节流的。</p>
+<p><strong>管道通信的应用场景：</strong></p>
+<p>这个很好理解。使用管道多半与I/O流相关。当我们一个线程需要先另一个线程发送一个信息（比如字符串）或者文件等等时，就需要使用管道通信了。</p>
+<h2 id="20-保证线程同步的机制有哪些？"><a href="#20-保证线程同步的机制有哪些？" class="headerlink" title="20. 保证线程同步的机制有哪些？"></a>20. 保证线程同步的机制有哪些？</h2><ul>
+<li>同步方法</li>
+<li>同步代码块</li>
+<li>使用 <code>ReentrantLock</code> 重入锁实现线程同步</li>
+<li>使用 特殊域变量 volatile 实现同步。原理是每次重新计算，安全但并非保证完全一致。 </li>
+<li>使用原子变量实现线程同步，原理是乐观锁。</li>
+<li>使用阻塞队列实现线程同步，BlockingQueue，顺带一提，线程池的 workQueue 就是阻塞队列</li>
+</ul>
+<h2 id="21-什么是-ThreadLocal？实现原理？"><a href="#21-什么是-ThreadLocal？实现原理？" class="headerlink" title="21. 什么是 ThreadLocal？实现原理？"></a>21. 什么是 ThreadLocal？实现原理？</h2><p><code>ThreadLocal</code> 主要解决的问题是让每个线程绑定自己的值，相当于为线程存放数据的私有盒子。</p>
+<p>如果创建了一个 <code>ThreadLocal</code> 变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是 <code>ThreadLocal</code> 变量名的由来。他们可以使用 <code>get()</code> 和 <code>set()</code> 方法获取默认值或将其更改为当前线程所存的副本的值，从而避免了线程安全问题。</p>
+<p><strong>ThreadLocal 实现原理：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Thread</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>&#123;<br>    <span class="hljs-comment">//......</span><br>    <span class="hljs-comment">//与此线程有关的ThreadLocal值。由ThreadLocal类维护</span><br>    ThreadLocal.ThreadLocalMap threadLocals = <span class="hljs-keyword">null</span>;<br><br>    <span class="hljs-comment">//与此线程有关的InheritableThreadLocal值。由InheritableThreadLocal类维护</span><br>    ThreadLocal.ThreadLocalMap inheritableThreadLocals = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-comment">//......</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>Thread</code> 源码中有一个 <code>ThreadLocals</code> 和一个 inheritableThreadLocals 变量，它们都是 <code>ThreadLocalMap</code> 类型的变量。可以把 <code>ThreadLocalMap</code> 理解为 <code>ThreadLocal</code> 类实现的定制化的 <code>HashMap</code>。默认情况下这两个变量都是 null，只有当前线程调用 <code>ThreadLocal</code> 类的 <code>set</code> 或 <code>get</code> 方法时才创建它们，实际上调用这两个方法的时候，我们调用的就是 <code>ThreadLocalMap</code> 类对应的 <code>get()</code> 和 <code>set()</code>。</p>
+<p><code>ThreadLocalMap</code>是<code>ThreadLocal</code>的静态内部类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">set</span><span class="hljs-params">(T value)</span> </span>&#123;<br>    Thread t = Thread.currentThread();<br>    ThreadLocalMap map = getMap(t);<br>    <span class="hljs-keyword">if</span> (map != <span class="hljs-keyword">null</span>)<br>        map.set(<span class="hljs-keyword">this</span>, value);<br>    <span class="hljs-keyword">else</span><br>        createMap(t, value);<br>&#125;<br><span class="hljs-function">ThreadLocalMap <span class="hljs-title">getMap</span><span class="hljs-params">(Thread t)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> t.threadLocals;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>通过上面这些内容，我们足以通过猜测得出结论：<strong>最终的变量是放在了当前线程的 <code>ThreadLocalMap</code> 中，并不是存在 <code>ThreadLocal</code> 上，<code>ThreadLocal</code> 只是 <code>ThreadLocalMap</code> 的封装，传递了变量值。</strong><code>ThreadLocal</code> 类中可以通过 <code>Thread.currentThread()</code> 获取到当前线程的对象后，直接通过 <code>getMap(Thread t)</code> 方法访问到该线程的 <code>ThreadLocalMap</code> 对象。</p>
+<p><strong>每个<code>Thread</code>中都具备一个<code>ThreadLocalMap</code>，而<code>ThreadLocalMap</code>可以存储以<code>ThreadLocal</code>为 key ，Object 对象为 value 的键值对。</strong></p>
+<p>比如我们在同一个线程中声明了两个 <code>ThreadLocal</code> 对象的话， <code>Thread</code>内部都是使用仅有的那个<code>ThreadLocalMap</code> 存放数据的，<code>ThreadLocalMap</code>的 key 就是 <code>ThreadLocal</code>对象，value 就是 <code>ThreadLocal</code> 对象调用<code>set</code>方法设置的值。</p>
+<h2 id="22-什么是-AQS？AQS-有什么用？常见的基于-AQS-的组件有哪些？"><a href="#22-什么是-AQS？AQS-有什么用？常见的基于-AQS-的组件有哪些？" class="headerlink" title="22. 什么是 AQS？AQS 有什么用？常见的基于 AQS 的组件有哪些？"></a>22. 什么是 AQS？AQS 有什么用？常见的基于 AQS 的组件有哪些？</h2><p>AQS 的全称为（<code>AbstractQueuedSynchronizer</code>），这个类在<code>java.util.concurrent.locks</code>包下面。</p>
+<p>AQS 是一个用来构建锁和同步器的框架，使用 AQS 能够简单高效地构造出大量应用的泛型同步器，比如 <code>ReentrantLock</code>，<code>Semaphore</code>，其他的诸如 <code>ReentrantReadWriteLock</code>，<code>SynchronousQueue</code>，<code>FutureTask</code> 等等都是基于 AQS的。我们利用 AQS 也能构造出自己需要的同步器。</p>
+<h2 id="23-Java-内存模型"><a href="#23-Java-内存模型" class="headerlink" title="23. Java 内存模型"></a>23. Java 内存模型</h2><p>说起并发就要说起 Java 的内存模型。Java 内存模型抽象了线程和主内存之间的关系，就比如说线程之间的共享变量必须存储在主内存中。Java 内存模型的主要作用是为了屏蔽系统和硬件的差异，避免一套代码在不同的平台下有不同的作用。</p>
+<p>JDK1.2 之前，Java 的内存模型实现总是从 <strong>主存</strong> 读取变量，是不需要进行特别注意的。而现在，线程可以把变量保存在<strong>本地内存</strong>（如寄存器）中，而不是直接在主存中进行读写。这样就可能造成一个线程在主存中修改了一个变量的值，另外一个线程还继续使用寄存器中的变量值拷贝，造成<strong>数据不一致</strong>。</p>
+<h2 id="24-指令重排序是什么？"><a href="#24-指令重排序是什么？" class="headerlink" title="24. 指令重排序是什么？"></a>24. 指令重排序是什么？</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PossibleReordering</span> </span>&#123;<br><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> x = <span class="hljs-number">0</span>, y = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> a = <span class="hljs-number">0</span>, b = <span class="hljs-number">0</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException </span>&#123;<br>    Thread one = <span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> Runnable() &#123;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>            a = <span class="hljs-number">1</span>;<br>            x = b;<br>        &#125;<br>    &#125;);<br>    <br>    Thread other = <span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> Runnable() &#123;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>            b = <span class="hljs-number">1</span>;<br>            y = a;<br>        &#125;<br>    &#125;);<br>    one.start();other.start();<br>    one.join();other.join();<br>    System.out.println(“(” + x + “,” + y + “)”);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>参考<a target="_blank" rel="noopener" href="https://tech.meituan.com/2014/09/23/java-memory-reordering.html">美团技术文档</a></p>
+<p>在实际运行中，代码指令可能并不是严格按照代码语句顺序执行的。像以上代码得到（1，0）、（0，1）、（1，1）都不奇怪。但是得到（0，0）就说明代码指令被重排了。</p>
+<p>大多数现代微处理器都会采用将指令乱序执行（out-of-order execution，简称OoOE或OOE）的方法，在条件允许的情况下，直接运行当前有能力立即执行的后续指令，避开获取下一条指令所需数据时造成的等待。通过乱序执行的技术，处理器可以大大提高执行效率。</p>
+<p>除了处理器，常见的Java运行时环境的 JIT 编译器也会做指令重排序操作，即生成的机器指令与字节码指令顺序不一致。</p>
+<h2 id="25-happens-before规则是什么？作用？有哪些规则？"><a href="#25-happens-before规则是什么？作用？有哪些规则？" class="headerlink" title="25. happens-before规则是什么？作用？有哪些规则？"></a>25. happens-before规则是什么？作用？有哪些规则？</h2><p>JMM 在设计的时候，定义了如下策略：</p>
+<ol>
+<li>对于会改变程序执行结果的重排序，JMM 要求编译器和处理器必须禁止这种排序</li>
+<li>对于不回改变程序执行结果的重排序，JMM 对编译器和处理器不做要求。（JMM 允许这样的重排序）</li>
+</ol>
+<p><img src="/2022/02/17/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-05/v2-cd9f01834dcc2ad1542e2179616cea41_1440w.jpg" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">double</span> pi = <span class="hljs-number">3.14</span>; <span class="hljs-comment">// A</span><br><span class="hljs-keyword">double</span> r = <span class="hljs-number">1.0</span>; <span class="hljs-comment">// B</span><br><span class="hljs-keyword">double</span> area = pi * r * r; <span class="hljs-comment">// C</span><br></code></pre></td></tr></table></figure>
+
+<p>比如这段代码不保证 A happens before B ，因为对结果没有影响。JMM 为了满足编译器和处理器的约束尽可能少，它遵循的规则是：<strong>只要不改变程序的执行结果，编译器和处理器想怎么优化怎么优化。</strong></p>
+<p>例如，如果编译器经过细致的分析后，认定一个锁只会被单个线程访问，那么这个锁可以被消除。再如，如果编译器经过细致的分析后，认定一个volatile变量只会被单个线程访问，那么编译器可以把这个volatile变量当作一个普通变量来对待。这些优化既不会改变程序的执行结果，又能提高程序的执行效率。</p>
+<p><strong>happens-before 规则：</strong></p>
+<p>大意是<strong>前一个操作的结果对后续操作是可见的</strong>。</p>
+<p>JMM 为程序员提供的视角就是按照顺序执行的，且满足一个操作 happens-before 于另一个操作，那么第一个操作的执行结果将对第二个执行结果可见，而且第一个操作的执行顺序排在第二个顺序之前。注意，这是 <strong>JMM向程序员做出的保证</strong>。</p>
+<p>但是上面也有说到，JMM 在觉得指令重拍并不会改变执行结构的时候，会尽可能提高程序的并行度。</p>
+<p><strong>1. 程序顺序规则</strong></p>
+<p><strong>一个线程中，按照程序顺序，前后的操作 Happens-Before 与后续的任意操作。</strong></p>
+<p><strong>2. 监视器锁规则</strong></p>
+<p><strong>对一个锁的解锁，happens-before 于随后对这个锁的加锁</strong></p>
+<p>这个规则中说的锁其实就是Java里的 synchronized。例如下面的代码，在进入同步块之前，会自动加锁，而在代码块执行完会自动释放锁，加锁以及释放锁都是编译器帮我们实现的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) &#123; <span class="hljs-comment">//此处自动加锁</span><br>  <span class="hljs-comment">// x是共享变量,初始值=10</span><br>  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.x &lt; <span class="hljs-number">12</span>) &#123;<br>    <span class="hljs-keyword">this</span>.x = <span class="hljs-number">12</span>; <br>  &#125;  <br>&#125; <span class="hljs-comment">//此处自动解锁</span><br></code></pre></td></tr></table></figure>
+
+<p>所以结合锁规则，可以理解为：假设 x 的初始值是 10，线程 A 执行完代码块后 x 的值会变成 12（执行完自动释放锁），线程 B 进入代码块时，能够看到线程 A 对 x 的写操作，也就是线程 B 能够看到 x==12。这个也是符合我们直觉的，非常好理解。</p>
+<p><strong>3. volatile 变量规则</strong></p>
+<p><strong>对于 volatile 变量的写操作，Happens-Before 于后续对这个变量的读操作。</strong></p>
+<p><strong>4. 传递性</strong></p>
+<p><strong>如果 A happens-before B，且 B happens-before C，那么 A happens-before C。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">VolatileExample</span> </span>&#123;<br>  <span class="hljs-keyword">int</span> x = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">boolean</span> v = <span class="hljs-keyword">false</span>;<br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">writer</span><span class="hljs-params">()</span> </span>&#123;<br>    x = <span class="hljs-number">42</span>;<br>    v = <span class="hljs-keyword">true</span>;<br>  &#125;<br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">reader</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (v == <span class="hljs-keyword">true</span>) &#123;<br>      <span class="hljs-comment">// 这里x会是多少呢？</span><br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/17/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-05/v2-ba9867c4c137df5b316ac172e0a00c4a_1440w-5172756.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>意思是，如果线程 B 能够读到 v = true，那么 x = 42 也是对它可见的。</p>
+<p><strong>5. start() 规则</strong></p>
+<p><strong>这条是关于线程启动的。它是指主线程 A 启动子线程 B 后，子线程 B 能够看到主线程在启动子线程 B 前的操作。</strong></p>
+<p><strong>6. join() 规则</strong></p>
+<p><strong>如果线程A执行操作ThreadB.join()并成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。</strong></p>
+<h2 id="26-volatile关键字的作用？实现原理？"><a href="#26-volatile关键字的作用？实现原理？" class="headerlink" title="26. volatile关键字的作用？实现原理？"></a>26. volatile关键字的作用？实现原理？</h2><p>volatile 可以防止指令重排序，还可以保证变量的可见行。每次读取这个变量都从主存读取而非寄存器。</p>
+<p>编译结束后通过 javap 可以看到 volatile 修饰的变量用 <code>ACC_VOLATILE</code> 修饰，这里就可以供后续操作次变量的时候判断访问标志是否为 <code>ACC_VOLATILE</code>。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/18/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-06/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java春招高频考点-06</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/16/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-04/">
+                        <span class="hidden-mobile">Java春招高频考点-04</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://github.com/jim-che" target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

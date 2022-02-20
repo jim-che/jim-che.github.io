@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/imgs/icon1.png">
+  <link rel="icon" href="/imgs/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jim-che">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="22届Java春招高频考点-From牛客网31. 运行时数据分区：31.1 什么是 TLAB？作用？TLAB 是线程本地分配缓冲区，这是一个线程专用的内存分配区域。 Java 中 new 的对象都是在堆上分配，准确来说，大部分对象在堆上的 TLAB 分配，还有一部分在栈上分配或者是堆上直接分配，可能 Edene 区也可能年老代。 同时，对于一些的 GC 算法，还可能直接在老年代上面分配，例如 G1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java春招高频考点-07">
+<meta property="og:url" content="http://example.com/2022/02/19/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-07/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="22届Java春招高频考点-From牛客网31. 运行时数据分区：31.1 什么是 TLAB？作用？TLAB 是线程本地分配缓冲区，这是一个线程专用的内存分配区域。 Java 中 new 的对象都是在堆上分配，准确来说，大部分对象在堆上的 TLAB 分配，还有一部分在栈上分配或者是堆上直接分配，可能 Edene 区也可能年老代。 同时，对于一些的 GC 算法，还可能直接在老年代上面分配，例如 G1">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-19T02:59:51.000Z">
+<meta property="article:modified_time" content="2022-02-20T07:53:56.150Z">
+<meta property="article:author" content="jim-che">
+<meta property="article:tag" content="面经">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Java春招高频考点-07 - Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CG Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/imgs/bg1.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java春招高频考点-07">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-19 10:59" pubdate>
+        2022年2月19日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      29 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java春招高频考点-07</h1>
+            
+            <div class="markdown-body">
+              <h1 id="22届Java春招高频考点-From牛客网"><a href="#22届Java春招高频考点-From牛客网" class="headerlink" title="22届Java春招高频考点-From牛客网"></a>22届Java春招高频考点-From牛客网</h1><h2 id="31-运行时数据分区："><a href="#31-运行时数据分区：" class="headerlink" title="31. 运行时数据分区："></a>31. 运行时数据分区：</h2><h3 id="31-1-什么是-TLAB？作用？"><a href="#31-1-什么是-TLAB？作用？" class="headerlink" title="31.1 什么是 TLAB？作用？"></a>31.1 什么是 TLAB？作用？</h3><p>TLAB 是线程本地分配缓冲区，这是一个线程专用的内存分配区域。</p>
+<p>Java 中 new 的对象都是在堆上分配，准确来说，大部分对象在堆上的 <strong>TLAB 分配</strong>，还有一部分在<strong>栈上分配</strong>或者是<strong>堆上直接分配，可能 Edene 区也可能年老代。</strong> 同时，对于一些的 GC 算法，还可能直接在老年代上面分配，例如 G1 GC 中的 humongous allocations（大对象分配），就是对象在超过 Region 一半大小的时候，直接在老年代的连续空间分配。</p>
+<p>这里只关心 TLAB 分配。</p>
+<p>对于单线程应用，每次分配内存，会记录上次分配对象内存指针末尾的指针，之后分配对象就会从这个指针开始检索分配。这个机制叫做 <strong>bump-the- pointer（撞针）</strong>。对于多线程来说，内存分配需要考虑线程安全。最简单的方法就是全局锁，但是这样性能就会比较差。为了优化这个性能，考虑每个线程分配一个私有内存池。然后使用撞针的机制进行内存分配。这个私有的内存池就是 TLAB，只有 TLAB 满了，再去申请内存的时候，需要扩充 TLAB 或者使用新的 TLAB，这时候才需要锁。</p>
+<h3 id="31-2-JVM-将数据区域划分为哪些部分，分别存储哪些内容？"><a href="#31-2-JVM-将数据区域划分为哪些部分，分别存储哪些内容？" class="headerlink" title="31.2 JVM 将数据区域划分为哪些部分，分别存储哪些内容？"></a>31.2 JVM 将数据区域划分为哪些部分，分别存储哪些内容？</h3><p>线程私有：</p>
+<p><strong>程序计数器</strong>：</p>
+<p>字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。</p>
+<p>在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。</p>
+<p>另外，程序计数器是唯一不会发生 OOM 的内存区域</p>
+<p><strong>虚拟机栈：</strong></p>
+<p>主要存储局部变量表。<strong>局部变量表主要存放了编译期可知的各种数据类型</strong>（boolean、byte、char、short、int、float、long、double）、<strong>对象引用</strong>（reference 类型，它不同于对象本身，可能是一个指向对象起始地址的引用指针，也可能是指向一个代表对象的句柄或其他与此对象相关的位置）。</p>
+<p><strong>本地方法栈：</strong></p>
+<p>本地方法栈为用到的 <strong>Native 方法</strong>服务。在 HotSpot 虚拟机与徐宜忌站和卫衣。</p>
+<p><strong>堆：</strong></p>
+<p>存放对象实例，几乎所有的对象实例以及数组都在这里分配内存。</p>
+<p><strong>方法区：</strong></p>
+<p>存储虚拟机加载的类信息、常量、静态变量。在 JDK1.8 以后已经替换为元空间了。</p>
+<p><strong>运行时常量池：</strong></p>
+<p>是方法区的一部分，Class 文件除了类的版本、字段、方法、接口等信息外，还有常量池表。</p>
+<p>常量池表用于存放编译器见生成的各种字面量和符号引用。</p>
+<p>JDK1.7 之前运行时常量池逻辑包含字符串常量池，此时 hotspot 虚拟机堆方法区的时间为永久代。</p>
+<p>JDK1.7 字符串常量被从方法区拿到了堆中。其他运行时常量池还在方法区，也就是 hotspot 有就带。</p>
+<p>JDK1.8 hotspot 移除了永久代，使用元空间代替。这个时候字符串常量还在堆中，运行时常量池还在方法区，知识实现方式从永久代变成了元空间。</p>
+<p><strong>直接内存：</strong></p>
+<p>直接内存不是 JVM 的一部分，但是也被频繁使用。</p>
+<p>JDK1.4 中新加入的 <strong>NIO(New Input/Output) 类</strong>，引入了一种基于<strong>通道（Channel）与缓存区（Buffer）的 I/O 方式，它可以直接使用 Native 函数库直接分配堆外内存，然后通过一个存储在 Java 堆中的 DirectByteBuffer 对象作为这块内存的引用进行操作。这样就能在一些场景中显著提高性能。</strong></p>
+<h3 id="31-2-哪些区域是私有的，哪些是线程共有的"><a href="#31-2-哪些区域是私有的，哪些是线程共有的" class="headerlink" title="31.2 哪些区域是私有的，哪些是线程共有的"></a>31.2 哪些区域是私有的，哪些是线程共有的</h3><p>程序计数器，虚拟机栈，本地方法栈是私有的。</p>
+<p>堆，方法区，运行时常量池，直接内存是共有的。</p>
+<h2 id="32-垃圾回收机制："><a href="#32-垃圾回收机制：" class="headerlink" title="32 垃圾回收机制："></a>32 垃圾回收机制：</h2><h3 id="32-1-JVM运行时数据分区有哪些？分别存储哪些？有什么特点？"><a href="#32-1-JVM运行时数据分区有哪些？分别存储哪些？有什么特点？" class="headerlink" title="32.1 JVM运行时数据分区有哪些？分别存储哪些？有什么特点？"></a>32.1 JVM运行时数据分区有哪些？分别存储哪些？有什么特点？</h3><p>答案同上</p>
+<h3 id="32-2-垃圾回收主要回收哪些区域？"><a href="#32-2-垃圾回收主要回收哪些区域？" class="headerlink" title="32.2 垃圾回收主要回收哪些区域？"></a>32.2 垃圾回收主要回收哪些区域？</h3><p>垃圾回收主要回收堆上的区域。</p>
+<h3 id="32-3-如何判断一个对象是否可以回收"><a href="#32-3-如何判断一个对象是否可以回收" class="headerlink" title="32.3 如何判断一个对象是否可以回收"></a>32.3 如何判断一个对象是否可以回收</h3><p><strong>引用计数法：</strong></p>
+<p>给对象加一个引用计数器，每有一个地方引用就加 1，引用失效就减 1。计数器为 0 就代表不被引用了。</p>
+<p>但是这个方法不能解决对象之间循环引用的问题。</p>
+<p><strong>可达性分析算法：</strong></p>
+<p>通过一系列称为 “GC Roots” 的对象作为起点，从这些节点开始向下搜索。如果一个对象到任何一个 GC Roots 没有任何引用链的话，则证明此对象不可达，需要回收。</p>
+<p>可以作为 GC Roots 的对象有：</p>
+<ul>
+<li>虚拟机栈中引用的对象</li>
+<li>本地方法栈中引用的对象</li>
+<li>方法区中静态属性引用的对象</li>
+<li>方法区中常量引用的变量</li>
+<li>所有被同步锁持有的对象</li>
+</ul>
+<h3 id="32-4-可达性分析发现一个对象不在引用链上，那它一定会被回收吗？"><a href="#32-4-可达性分析发现一个对象不在引用链上，那它一定会被回收吗？" class="headerlink" title="32.4 可达性分析发现一个对象不在引用链上，那它一定会被回收吗？"></a>32.4 可达性分析发现一个对象不在引用链上，那它一定会被回收吗？</h3><p>不一定。即使是可达性分析中不可达的对象，也并非一定要被回收。要回收一个对象至少要经历三次标记过程：可达性分析法中不可达对象被第一次标记并且进行一次筛选，筛选的条件是此对象是否有必要执行 <code>finalize</code> 方法。当对象没有覆盖 <code>finalize</code> 方法，或者 <code>finalize</code> 方法已经被虚拟机调用过，虚拟机将这两种情况视为没必要执行。</p>
+<p>被判定为需要执行的对象将会被放在一个队列中进行第二次标记，除非这个对象与引用链上的任何一个对象建立关联，否则就会被真的回收。</p>
+<h3 id="32-5-常用的垃圾回收算法有哪些？"><a href="#32-5-常用的垃圾回收算法有哪些？" class="headerlink" title="32.5 常用的垃圾回收算法有哪些？"></a>32.5 常用的垃圾回收算法有哪些？</h3><p><strong>标记-清除算法：</strong></p>
+<p>首先标记出不需要回收的对象，在标记完成后统一回收没有被标记的对象。</p>
+<p>这个算法缺点为：<strong>效率低，空间利用率低（产生大量碎片）</strong>。</p>
+<p><strong>标记-复制算法：</strong></p>
+<p>现将内存分为大小相同的两块，每次使用一块，使用完后把还存活的对象复制到另一边，然后再把那块空间一次性清理掉。</p>
+<p><strong>标记-整理算法：</strong></p>
+<p>与标记清除类似，但是后续步骤是讲存活对象往一端移动，然后直接清理掉边界以外的内存。</p>
+<p><strong>分代收集算法：</strong></p>
+<p>这种算法的思想就是，根据对象存活周期的不同将内存分为几块，一般将 java 堆分为新生代和老生代，根据各个年代的特点选择合适的垃圾回收算法。</p>
+<p>比如在新生代，每次回收都有大量的对象死去，所以可以选择<strong>“标记-复制”</strong>算法，只要付出少量对象的复制成本就可以完成垃圾回收。而在老生代的对象存活几率是比较高的，而且没有额外的空间对它进行分配担保，所以必须选择<strong>“标记-清除” 或者是 “标记-整理”</strong>。</p>
+<h3 id="32-6-G1-回收器采用了什么样的回收算法"><a href="#32-6-G1-回收器采用了什么样的回收算法" class="headerlink" title="32.6 G1 回收器采用了什么样的回收算法"></a>32.6 G1 回收器采用了什么样的回收算法</h3><p>G1 从整理来开是基于“标记-整理算法”的，从局部上来看是基于“标记-复制算法的”。</p>
+<p>G1 收集器的运作大致分为一下几个步骤：</p>
+<ul>
+<li>初始标记</li>
+<li>并发标记</li>
+<li>最终标记</li>
+<li>筛选回收</li>
+</ul>
+<p>G1 收集器在后台维护了一个优先列表，每次根据允许收集的时间，优先选择回收价值最大的 Region。这种 Region 划分内存空间以及有优先级的区域回收方式，保证了 G1 收集器在有限时间内可以尽可能高的提升收集效率。</p>
+<h3 id="32-7-什么时候回触发-Full-GC？"><a href="#32-7-什么时候回触发-Full-GC？" class="headerlink" title="32.7 什么时候回触发 Full GC？"></a>32.7 什么时候回触发 Full GC？</h3><p>空间分配担保机制。JVM 要确保在 Minor GC 之前，老年代还有容纳新生代所有对象的剩余空间。</p>
+<p>《深入理解 Java虚拟机》中对空间分配担保的描述如下：</p>
+<p>JDK6 之前，在发生 Minor GC 之前，虚拟机必须先检查老年代最大可用连续空间是否大于新声代所有对象空间综合，如果条件不成立，就会查看 <code>-XX:HandlePromotionFailure</code> 参数的设置值是否允许担保失败。如果允许，就会继续检查老年代最大可用连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，会尝试一次 Minor GC，尽管有风险。如果下雨，或者参数设置不允许，就要进行一次 Full GC。JDK 6 Update 24 之后的规则变为只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小，就会进行 Minor GC，否则将进行 Full GC。</p>
+<p>此外，按照HotSpot VM 的 serial GC 的实现来看，触发条件为：</p>
+<ul>
+<li>young GC：当young gen 中的 eden 区分配满的时候触发。注意 young GC 中有部分存活对象会晋升到old gen，所以young GC 后 old gen 的占用量通常会有所提升。</li>
+<li>full GC：当准备要触发一次young GC 时，如果发现统计数据说之前 young GC 的平均晋升大小比目前 old gen 剩余空间大，则不会触发 young GC 而是转为触发 full GC。或者，如果有 perm gen 的话，要在 perm gen 分配空间但已经没有足够空间时，也会触发一次 full GC；或者 System.gc()、heap dump 带 GC，默认也是触发 full GC。</li>
+</ul>
+<h2 id="33-服务器运行过程中频繁发生Full-GC，可能存在哪些问题？如何排查？"><a href="#33-服务器运行过程中频繁发生Full-GC，可能存在哪些问题？如何排查？" class="headerlink" title="33 服务器运行过程中频繁发生Full GC，可能存在哪些问题？如何排查？"></a>33 服务器运行过程中频繁发生Full GC，可能存在哪些问题？如何排查？</h2><p>触发 Full GC 的处罚条件大致情况一下有几种情况：</p>
+<ol>
+<li>程序执行了 System.gc() // 建议 jvm 执行 full gc，并不一定执行</li>
+<li>执行了 jmap -histo:live pid 命令</li>
+<li>在执行 minor gc 的时候进行一系列检查</li>
+<li>使用了大对象</li>
+<li>在程序长期持有对象的引用。</li>
+</ol>
+<p>4 和 5 可能是最有可能的</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/18/Java%E6%98%A5%E6%8B%9B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9-06/">
+                        <span class="hidden-mobile">Java春招高频考点-06</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://github.com/jim-che" target="_blank" rel="nofollow noopener"><span>CG</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>DMX</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
